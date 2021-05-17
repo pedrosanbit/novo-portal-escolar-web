@@ -4,7 +4,7 @@
     }
     else if ($_GET["login"]=="logado") { 
         if($_GET["tipo"]=="admin"){
-            header("location:sucesso.html");
+            header("location:admin.html");
         }
         else if($_GET["tipo"]=="prof"){
             header("location:sucesso.html");
@@ -55,7 +55,7 @@
 		<div class="container-fluid gradiente" id="gradiente">
 			<div class="container text-white ">
 				<div class="row">
-					<div class="col-md-6 col-sm-12 mb-2 align-self-center">
+					<div class="col-md-6 col-sm-12 mt-1 mb-2 align-self-center">
 						<h1>Bem-vindo!</h1>
 						O Portal Escolar do Colégio Técnico de Limeira é um projeto desenvolvido por alunos do curso de informática para que estudantes, professores e outros funcionários da escola possam acompanhar o ano letivo e gerenciar seu saldo do Cartão de Identidade Institucional da UNICAMP.
 					</div>
@@ -88,7 +88,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="container mb-4" id="texto-explicativo">
+		<div class="container mb-5" id="texto-explicativo">
 			<div class="row text-center">
 				<div class="col-md-4 col-sm-12">
 					<div style="font-size: 5rem"><i class="far fa-clipboard"></i></div>
@@ -103,8 +103,7 @@
 					O usuário pode adicionar crédito ao seu Cartão de Identidade Institucional direto do Portal, por meio de transações on-line, e utiliza-lo nas dependências do colégio.
 				</div>
 			</div>
-		</div>
-		<br>
+		</div>		
 		<div class="container-fluid bg-primary" id="rodape">
 			<br>
 			<div class="container text-white">
