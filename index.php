@@ -4,7 +4,7 @@
     }
     else if ($_GET["login"]=="logado") { 
         if($_GET["tipo"]=="admin"){
-            header("location:admin.html");
+            header("location:admin.php");
         }
         else if($_GET["tipo"]=="prof"){
             header("location:sucesso.html");
