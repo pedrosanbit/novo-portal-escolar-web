@@ -5,8 +5,6 @@
     else if ($_GET["login"]=="logado") { 
         if($_GET["tipo"]=="admin"){
             header("location:admin.html");
-
-            header("location:sucesso.html");
         }
         else if($_GET["tipo"]=="prof"){
             header("location:sucesso.html");
@@ -58,7 +56,6 @@
 			<div class="container text-white ">
 				<div class="row">
 					<div class="col-md-6 col-sm-12 mt-1 mb-2 align-self-center">
-					<div class="col-md-6 col-sm-12 mb-2 align-self-center">
 						<h1>Bem-vindo!</h1>
 						O Portal Escolar do Colégio Técnico de Limeira é um projeto desenvolvido por alunos do curso de informática para que estudantes, professores e outros funcionários da escola possam acompanhar o ano letivo e gerenciar seu saldo do Cartão de Identidade Institucional da UNICAMP.
 					</div>
@@ -76,7 +73,7 @@
     								<div id="esqueceuSenha" class="form-text"><a href="#">Esqueceu sua senha?</a></div>
  								</div>
   								<div class="mb-3 form-check">
-    								<input name="manterUsuario" type="checkbox" class="form-check-input" id="checkLembrar">
+    								<input name="ManterUser" type="checkbox" class="form-check-input" id="checkLembrar">
     								<label class="form-check-label" for="checkLembrar">Lembrar usuário</label>
   								</div>
   								<div class="text-center">
@@ -92,7 +89,6 @@
 			</div>
 		</div>
 		<div class="container mb-5" id="texto-explicativo">
-		<div class="container mb-4" id="texto-explicativo">
 			<div class="row text-center">
 				<div class="col-md-4 col-sm-12">
 					<div style="font-size: 5rem"><i class="far fa-clipboard"></i></div>
@@ -107,75 +103,36 @@
 					O usuário pode adicionar crédito ao seu Cartão de Identidade Institucional direto do Portal, por meio de transações on-line, e utiliza-lo nas dependências do colégio.
 				</div>
 			</div>
-		</div>		
 		</div>
-		<br>
-		<div class="container-fluid bg-primary" id="rodape">
-			<br>
+		<div class="container-fluid bg-primary pt-4" id="rodape">
 			<div class="container text-white">
 				<div class="row">
-					<div class="col-md-6 col-sm-12">
+					<div class="col-md-6 col-sm-12 mb-4">
 						<div class="row">
 							<div class="col-md-6">
 								<b>Contato</b>
 								<br>
 								<i class="fas fa-at"></i><span> </span><a href="https://www.cotil.unicamp.br/" class="text-white" style="text-decoration: none;">cotil.unicamp.br</a><br>
-								<i class="fas fa-phone"></i> (19) 2113-3303<br>
+								<i class="fas fa-phone"></i> (19) 2113-3303
 							</div>
 							<div class="col-md-6">
 								<br>
-								<i class="fab fa-instagram"></i><span> </span><a href="" class="text-white" style="text-decoration: none;">@unicamp.cotil</a><br>
-								<i class="fab fa-youtube"></i><span> </span><a href="" class="text-white" style="text-decoration: none;">/UNICAMPCOTIL</a><br>
-								<i class="fab fa-facebook-f"></i><span> </span><a href="" class="text-white" style="text-decoration: none;">/lanuitrestaurante</a><br><br>
+								<i class="fab fa-instagram"></i><span> </span><a href="https://www.instagram.com/unicamp.cotil/" class="text-white" style="text-decoration: none;">@unicamp.cotil</a><br>
+								<i class="fab fa-youtube"></i><span> </span><a href="https://www.youtube.com/c/UNICAMPCOTIL" class="text-white" style="text-decoration: none;">/UNICAMPCOTIL</a><br>
+								<i class="fab fa-facebook-f"></i><span> </span><a href="https://www.facebook.com/unicamp.cotil" class="text-white" style="text-decoration: none;">/unicamp.cotil</a><br>
 							</div>
 						</div>
 					</div>
-					<div class="col-md-6 col-sm-12">
-						<b>Localização</b><br>
-						<i class="fas fa-map-marker-alt"></i> Rua Paschoal Marmo, 1888 – Jardim Nova Itália – <br>
-						Limeira/SP – CEP: 13484-332
+					<div class="col-md-6 col-sm-12 mb-4">
+						<div class="w-75">
+							<b>Localização</b><br>
+							<i class="fas fa-map-marker-alt"></i> Rua Paschoal Marmo, 1888 – Jardim Nova Itália – Limeira/SP – CEP: 13484-332
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<script type="text/javascript">
-			var darkSwitch = document.getElementById("darkSwitch");
-			window.addEventListener("load", function () {
-  				if (darkSwitch)
-    				iniciarDark();
-			});
-
-			function iniciarDark() {
-				var darkThemeSelected = localStorage.getItem("darkTheme") !== null && localStorage.getItem("darkTheme") === "on";
-				darkSwitch.checked = darkThemeSelected;
-				if(darkThemeSelected)
-					setTema();
-			}
-
-			function setTema() {
-				if(darkSwitch.checked) {
-					toggleDarkMode();
-					localStorage.setItem("darkTheme", "on");
-				}
-				else {
-					toggleDarkMode();
-					localStorage.removeItem("darkTheme");
-				}
-			}
-
-			function toggleDarkMode() {
-				document.body.classList.toggle("bg-dark");
-				document.getElementById('navbar').classList.toggle("bg-dark");
-				document.getElementById('navbar').classList.toggle("border-bottom");
-				document.getElementById('navbar').classList.toggle("border-primary");
-				document.getElementById('lua').classList.toggle("fas");
-				document.getElementById('gradiente').classList.toggle("gradiente-dark");
-				document.getElementById('texto-explicativo').classList.toggle("text-white");
-				document.getElementById('rodape').classList.toggle("bg-dark");
-				document.getElementById('rodape').classList.toggle("border-top");
-				document.getElementById('rodape').classList.toggle("border-primary");
-			}
-		</script>
+		<script type="text/javascript" src="js/index.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
 	</body>
 </html>
