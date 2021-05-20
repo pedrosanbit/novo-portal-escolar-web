@@ -2,14 +2,15 @@
 	if ($_SERVER["REQUEST_METHOD"] === 'POST') {
 		include("conexaoBD.php");
 
-        try {            
+        try {
+            $confirmacao;            
             $ra = $_POST["ra"];
             $nome = $_POST["nome"];
             $rg = $_POST["rg"];
             $email= $_POST["email"];
 
             if ((trim($ra) == "") || (trim($nome) == "")  || (trim($rg) == "")) {
-                echo "<span id='warning'>RA, RG e nome são obrigatórios!</span>";
+                //echo "<span id='warning'>RA, RG e nome são obrigatórios!</span>";
             } else {
                 $stmt = $pdo->prepare("select * from AlunosTCC where raAluno = :ra");
                 $stmt->bindParam(':ra', $ra);
@@ -25,9 +26,10 @@
                     $stmt->bindParam(':email', $email);
                     $stmt->execute();
 
-                    echo "<span id='sucess'>Aluno Cadastrado!</span>";
+                    
+                    $confirmacao = 1;
                 } else {
-                    echo "<span id='error'>Ra já existente!</span>";
+                    $confirmacao = 0;
                 }
             }
 
@@ -107,7 +109,7 @@
             <div class="tab-pane fade" id="nav-alunos" role="tabpanel" aria-labelledby="nav-aluno-tab">
                 <nav class="ms-5 mt-2" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="admin.html">Alunos</a></li>
+                        <li class="breadcrumb-item"><a href="admin.php">Alunos</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Cadastro</li>
                     </ol>
                 </nav>
@@ -128,9 +130,16 @@
                         </div>
                         <br>
                         <label for="email" class="form-label">Email:</label>
-                        <input class="form-control" type="text" id="email" name="email">
-                        <br>
-                        <div class="text-center">
+                        <input class="form-control mb-3" type="text" id="email" name="email">
+                        <?php
+                            if(isset($confirmacao)) {
+                                if($confirmacao == 1)
+                                    echo "<span class='text-success'>Aluno Cadastrado!</span>";
+                                else if($confirmacao == 0)
+                                    echo "<span class='text-danger'>RA ou RG já cadastrados.</span>";
+                            }
+                        ?>
+                        <div class="text-center mt-4">
                             <button type="submit" class="btn btn-primary rounded-pill text-white w-25"><b>Cadastrar</b></button>
                         </div>
                         <hr>

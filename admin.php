@@ -7,6 +7,11 @@
 		<link rel="icon" href="logoUnicampAzul.png">
 		<!--link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous"-->
 		<link rel="stylesheet" href="custom.css">
+    <style type="text/css">
+      th, td {
+        padding-left: 1rem;
+      }
+    </style>
 		<script src="https://kit.fontawesome.com/ebb5206ba7.js" crossorigin="anonymous"></script>
 	</head>
 	<body>
@@ -64,96 +69,110 @@
   			</div>
   			<div class="tab-pane fade" id="nav-alunos" role="tabpanel" aria-labelledby="nav-aluno-tab">
   				<div class="container mt-3">
-  					Conteúdo Alunos
-  					<br><br>
-
   					<form method="post">
-                        <!--label for="nome" class="form-label">Mostrar alunos da turma:</label>
-                        <select class="form-select" aria-label="Default select example">
-  							<option selected value="AlfAZ">Alfabética A-Z</option>
-  							<option value="AlfZA">Alfabética Z-A</option>
-  							<option value="RAcresc">RA crescente</option>
-  							<option value="RAdecresc">RA decrescente</option>
-						</select>
-						<br-->
-                        <label for="nome" class="form-label">Ordem:</label>
-                        <select class="form-select" name="ordemConsulta" aria-label="Default select example">
-  							<option selected value="AlfAZ">Alfabética A-Z</option>
-  							<option value="AlfZA">Alfabética Z-A</option>
-  							<option value="RAcresc">RA crescente</option>
-  							<option value="RAdecresc">RA decrescente</option>
-						</select>
-						<br>
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-primary rounded-pill text-white w-25"><b>Consultar Alunos</b></button>
-                        </div>
-                        <hr>
-                    </form>
-                    <?php
-		if ($_SERVER["REQUEST_METHOD"] === 'POST') {
-		include("conexaoBD.php");
+              <div class="row">
+                <div class="col-md-3">
+                  <label for="raAluno" class="form-label">RA:</label>
+                  <input class="form-control" type="text" id="raAluno" name="raAluno" maxlength="6">
+                </div>
+                <div class="col-md-6">
+                  <label for="nomeAluno" class="form-label">Nome:</label>
+                  <input class="form-control" type="text" id="nomeAluno" name="nomeAluno">
+                </div>
+                <div class="col-md-3">
+                  <label for="ordemConsulta" class="form-label">Ordem:</label>
+                  <select class="form-select" id="ordemConsulta" name="ordemConsulta" aria-label="Default select example">
+                    <option selected value="AlfAZ">Alfabética A-Z</option>
+                    <option value="AlfZA">Alfabética Z-A</option>
+                    <option value="RAcresc">RA crescente</option>
+                    <option value="RAdecresc">RA decrescente</option>
+                  </select>
+                </div>
+              </div>
+              <div class="mt-4 text-center">
+                <button type="submit" class="btn btn-primary rounded-pill text-white"><b>Consultar Alunos</b></button>
+              </div>
+              <?php
+                if($_SERVER["REQUEST_METHOD"] === "POST") {
+                  include("conexaoBD.php");
+                  $comando = "select * from AlunosTCC";
+                  if(isset($_POST["raAluno"]) && (trim($_POST["raAluno"]) != "")) {
+                    $ra = $_POST["raAluno"];
+                    $comando .= " where raAluno= :ra";
+                  }
+                  else if(isset($_POST["nomeAluno"]) && (trim($_POST["nomeAluno"]) != "")) {
+                    $nome = $_POST["nomeAluno"];
+                    $nome = ucfirst(strtolower($nome));
+                    $nome = "%" . $nome . "%";
+                    $comando .= " where nomeAluno like :nome";
+                  }
+                  $ordem = $_POST["ordemConsulta"];
+                  switch($ordem) {
+                    case 'AlfAZ':
+                      $stmt = $pdo->prepare($comando . " order by nomeAluno asc");
+                      if(isset($ra)) $stmt->bindParam(':ra', $ra);
+                      if(isset($nome)) $stmt->bindParam(':nome', $nome);
+                      imprimeTabela($stmt);
+                      break;
+                    case 'AlfZA' :
+                      $stmt = $pdo->prepare($comando . " order by nomeAluno desc");
+                      if(isset($ra)) $stmt->bindParam(':ra', $ra);
+                      if(isset($nome)) $stmt->bindParam(':nome', $nome);
+                      imprimeTabela($stmt);
+                      break;
+                    case 'RAcresc':
+                      $stmt = $pdo->prepare($comando . " order by raAluno asc");
+                      if(isset($ra)) $stmt->bindParam(':ra', $ra);
+                      if(isset($nome)) $stmt->bindParam(':nome', $nome);
+                      imprimeTabela($stmt);
+                      break;
+                    case 'RAdecresc':
+                      $stmt = $pdo->prepare($comando . " order by raAluno desc");
+                      if(isset($ra)) $stmt->bindParam(':ra', $ra);
+                      if(isset($nome)) $stmt->bindParam(':nome', $nome);
+                      imprimeTabela($stmt);
+                      break;
+                  }
+                }
 
-		$ordem=$_POST["ordemConsulta"];
-
-		switch ($ordem) {
-			case 'AlfAZ':
-				$stmt = $pdo->prepare("select * from AlunosTCC order by nomeAluno asc");
-				imprimeTabela($stmt);
-				break;
-			
-			case 'AlfZA':
-				$stmt = $pdo->prepare("select * from AlunosTCC order by nomeAluno desc");
-				imprimeTabela($stmt);
-				break;
-
-			case 'RAcresc':
-				$stmt = $pdo->prepare("select * from AlunosTCC order by raAluno asc");
-				imprimeTabela($stmt);
-				break;
-
-			case 'RAdecresc':
-				$stmt = $pdo->prepare("select * from AlunosTCC order by raAluno desc");
-				imprimeTabela($stmt);
-				break;
-		}
-	}
-
-	function imprimeTabela($var){
-		$stmt=$var;
-		try {
-             echo "<table border='1px'>";
-             echo "<tr><th>RA</th><th>Nome</th><th>RG</th></tr>";
-
-             //buscando dados
-             $stmt->execute();
-
-             while ($row = $stmt->fetch()) {
-                 echo "<tr>";
-                 echo "<td>" . $row['raAluno'] . "</td>";
-                 echo "<td>" . $row['nomeAluno'] . "</td>";
-                 echo "<td>" . $row['rgAluno'] . "</td>";
-                 echo "</tr>";
-             }
-
-             echo "</table><br>";
-
-
-         } catch (PDOException $e) {
-             echo 'Error: ' . $e->getMessage();
-         }
-         finally{
-         	$pdo=null;
-         }
-	}
-?>
-
+                function imprimeTabela($var) {
+                  $stmt = $var;
+                  try {
+                    echo "<div class='table-responsive mt-4 mb-4'>
+                            <table id='tableConsulta' class='table table-sm table-striped table-hover'>
+                              <thead>
+                                <th>RA</th>
+                                <th>Nome</th>
+                                <th>RG</th>
+                              </thead>
+                              <tbody>";
+                    $stmt->execute();
+                    while($row = $stmt->fetch()) {
+                      echo "<tr>";
+                      echo "<td>" . $row['raAluno'] . "</td>";
+                      echo "<td>" . $row['nomeAluno'] . "</td>";
+                      echo "<td>" . $row['rgAluno'] . "</td>";
+                      echo "</tr>";
+                    }
+                    echo "</tbody></table></div>";
+                  }
+                  catch(PDOException $e) {
+                    echo 'Error: ' . $e->getMessage();
+                  }
+                  finally {
+                    $pdo = null;
+                  }
+                }
+              ?>
+              <hr>
+            </form>
   					<a href="CadastroAluno.php" class="btn btn-primary btn-lg rounded-pill text-white" role="button">
   						<i class="fas fa-user-plus"></i> Cadastrar Alunos
   					</a>
   				</div>
   			</div>
 		</div>
-		<script type="text/javascript" src="js/admin.js"></script>
+		<script src="js/admin.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
 	</body>
 </html>
