@@ -144,6 +144,7 @@
                                 <th>RA</th>
                                 <th>Nome</th>
                                 <th>RG</th>
+                                <th>Ações</th>
                               </thead>
                               <tbody>";
                     $stmt->execute();
@@ -152,6 +153,7 @@
                       echo "<td>" . $row['raAluno'] . "</td>";
                       echo "<td>" . $row['nomeAluno'] . "</td>";
                       echo "<td>" . $row['rgAluno'] . "</td>";
+                      echo "<td>" . "<a href='editAluno.php'><i class='fas fa-user-edit me-2'></i></a>" . "<i class='fas fa-user-minus ms-2'></i>" . "</td>";
                       echo "</tr>";
                     }
                     echo "</tbody></table></div>";
