@@ -33,7 +33,11 @@
             }
 
         } catch(PDOException $e) {
-            echo 'Error: ' . $e->getMessage();
+        	if($e->errorInfo[1]==1062){
+        		$confirmacao=3;
+        	}
+        	else
+            	echo 'Error: ' . $e->getMessage();
         }
 
         $pdo = null;
@@ -132,12 +136,20 @@
                         <input class="form-control mb-3" type="text" id="email" name="email">
                         <?php
                             if(isset($confirmacao)) {
-                                if($confirmacao == 1)
-                                    echo "<span class='text-success'>Aluno Cadastrado!</span>";
-                                else if($confirmacao == 0)
-                                    echo "<span class='text-danger'>RA ou RG já cadastrados.</span>";
-                                else if($confirmacao == 2)
-                                    echo "<span class='text-warning'>RA, RG e nome são obrigatórios.</span>";
+                            	switch ($confirmacao) {
+                            		case 0:
+                            			echo "<span class='text-danger'>RA já cadastrado.</span>";
+                            			break;
+                            		case 1:
+                            			echo "<span class='text-success'>Aluno Cadastrado!</span>";
+                            			break;
+                            		case 2:
+                            			echo "<span class='text-warning'>RA, RG e nome são obrigatórios.</span>";
+                            			break;
+                            		case 3:
+                            			echo "<span class='text-danger'>RG já cadastrado!</span>";
+                            			break;
+                            	}
                             }
                         ?>
                         <div class="text-center mt-4">
