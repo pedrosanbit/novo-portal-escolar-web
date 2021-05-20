@@ -10,7 +10,7 @@
             $email= $_POST["email"];
 
             if ((trim($ra) == "") || (trim($nome) == "")  || (trim($rg) == "")) {
-                //echo "<span id='warning'>RA, RG e nome são obrigatórios!</span>";
+                $confirmacao = 2;
             } else {
                 $stmt = $pdo->prepare("select * from AlunosTCC where raAluno = :ra");
                 $stmt->bindParam(':ra', $ra);
@@ -25,8 +25,7 @@
                     $stmt->bindParam(':rg', $rg);
                     $stmt->bindParam(':email', $email);
                     $stmt->execute();
-
-                    
+                   
                     $confirmacao = 1;
                 } else {
                     $confirmacao = 0;
@@ -137,6 +136,8 @@
                                     echo "<span class='text-success'>Aluno Cadastrado!</span>";
                                 else if($confirmacao == 0)
                                     echo "<span class='text-danger'>RA ou RG já cadastrados.</span>";
+                                else if($confirmacao == 2)
+                                    echo "<span class='text-warning'>RA, RG e nome são obrigatórios.</span>";
                             }
                         ?>
                         <div class="text-center mt-4">
