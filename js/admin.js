@@ -43,6 +43,17 @@ function toggleDarkMode() {
 	alunosTab.classList.toggle("text-white");
 	activeTab.classList.toggle("bg-dark");
 	activeTab.classList.toggle("text-white");
+	document.getElementById('nomeAluno').classList.toggle("border-white");
+	document.getElementById('nomeAluno').classList.toggle("bg-dark");
+	document.getElementById('nomeAluno').classList.toggle("text-white");
+	document.getElementById('raAluno').classList.toggle("border-white");
+	document.getElementById('raAluno').classList.toggle("bg-dark");
+	document.getElementById('raAluno').classList.toggle("text-white");
+	document.getElementById('ordemConsulta').classList.toggle("border-white");
+	document.getElementById('ordemConsulta').classList.toggle("bg-dark");
+	document.getElementById('ordemConsulta').classList.toggle("text-white");
+	if(document.getElementById('tableConsulta'))
+		document.getElementById('tableConsulta').classList.toggle("table-dark");
 }
 
 function startActiveTab() {
