@@ -65,10 +65,35 @@
                 <nav class="ms-5 mt-2" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="admin.php">Alunos</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">#Nome do Fulaninho</li>
+                        <li class="breadcrumb-item active" aria-current="page">#Nome do Fulaninho</li> <!--USAR GET-->
                     </ol>
                 </nav>
                 <div class="container mt-3">
+                    <form method="post">
+                        <label for="nome" class="form-label">Nome:</label>
+                        <input class="form-control" type="text" id="nome" name="nome" placeholder="O nome atual é x"> <!--USAR GET-->
+                        <br>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-12">
+                                <label for="ra" class="form-label">RA:</label>
+                            <input class="form-control" type="text" id="ra" name="ra" maxlength="6" placeholder="O RA atual é x"> <!--USAR GET-->
+                            </div>
+                            <div class="col-md-6 col-sm-12">
+                                <label for="rg" class="form-label">RG (somente números):</label>
+                                <input class="form-control" type="text" id="rg" name="rg" maxlength="9" placeholder="O RG atual é x"> <!--USAR GET-->
+                            </div>
+                        </div>
+                        <br>
+                        <label for="email" class="form-label">Email:</label>
+                        <input class="form-control mb-3" type="text" id="email" name="email" placeholder="O e-mail atual é x"> <!--USAR GET-->
+                        
+                        <!--PHP-->
+
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-primary rounded-pill text-white"><b>Alterar Dados</b></button>
+                        </div>
+                        <hr>
+                    </form>
                 </div>
             </div>
         </div>
