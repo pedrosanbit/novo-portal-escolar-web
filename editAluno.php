@@ -1,3 +1,102 @@
+<?php
+    include("conexaoBD.php");
+    $stmt = $pdo->prepare("select * from AlunosTCC where raAluno = :ra");
+    $stmt->bindParam(':ra', $_GET["ra"]);
+    $stmt->execute();
+    $row=$stmt->rowCount();
+
+    if($row>0){
+        $row= $stmt->fetch();
+        $nome=$row['nomeAluno'];
+        $rg=$row['rgAluno'];
+        $ra=$row['raAluno'];
+        $email=$row['emailAluno'];
+    }
+    $pdo=null;
+
+    if ($_SERVER["REQUEST_METHOD"] === 'POST') {
+        $raAlterado=0;
+        $confirmacao=0;
+        $msg;
+        include("conexaoBD.php");
+        $rgNovo=$_POST['rg'];
+        $nomeNovo=$_POST['nome'];
+        $raNovo=$_POST['ra'];
+        $emailNovo=$_POST['email'];
+
+        $stmt = $pdo->prepare("select * from AlunosTCC where raAluno = :ra");
+        $stmt->bindParam(':ra', $_GET["ra"]);
+        $stmt->execute();
+        $row=$stmt->rowCount();
+
+        if($row==1){
+            $row= $stmt->fetch();
+            if($nomeNovo!=$row['nomeAluno']){
+                $stmt= $pdo->prepare("update AlunosTCC set nomeAluno = :nomeNovo where raAluno= :ra");
+                $stmt->bindParam(':ra', $_GET["ra"]);
+                $stmt->bindParam(':nomeNovo', $nomeNovo);
+                $stmt->execute();
+            }
+            if($emailNovo!=$row['emailAluno']){
+                $stmt= $pdo->prepare("update AlunosTCC set emailAluno = :emailNovo where raAluno= :ra");
+                $stmt->bindParam(':ra', $_GET["ra"]);
+                $stmt->bindParam(':emailNovo', $emailNovo);
+                $stmt->execute();
+            }
+            if($rgNovo!=$row['rgAluno']){
+                    $stmt = $pdo->prepare("select * from AlunosTCC where rgAluno = :rg");
+                    $stmt->bindParam(':rg', $rgNovo);
+                    $stmt->execute();
+                    $rows = $stmt->rowCount();
+                    if ($rows <= 0) {
+                        $stmt= $pdo->prepare("update AlunosTCC set rgAluno = :rgNovo where raAluno= :ra");
+                        $stmt->bindParam(':ra',$_GET['ra']);
+                        $stmt->bindParam(':rgNovo',$rgNovo);
+                        $stmt->execute();
+                    }
+                    else{
+                        $msg= "RG já cadastrado.";
+                        $confirmacao+=1;
+                    }
+            }
+            if($raNovo!=$row['raAluno']){
+                    $stmt = $pdo->prepare("select * from AlunosTCC where raAluno = :ra");
+                    $stmt->bindParam(':ra', $raNovo);
+                    $stmt->execute();
+                    $rows = $stmt->rowCount();
+                    if ($rows <= 0) {
+                        $stmt= $pdo->prepare("update AlunosTCC set raAluno = :raNovo where raAluno= :ra");
+                        $stmt->bindParam(':ra',$_GET['ra']);
+                        $stmt->bindParam(':raNovo',$raNovo);
+                        $stmt->execute();
+                        $raAlterado=1;
+                    }
+                    else{
+                        $msg= "RA já cadastrado.";
+                        $confirmacao+=1;
+                    }
+            }
+            if($confirmacao==0){
+                if($raAlterado==0)
+                    header("location:editAluno.php?ra=".$_GET['ra']);
+                else
+                    header("location:editAluno.php?ra=".$raNovo);
+            }
+            else if($confirmacao==1){
+                echo $msg;
+            }
+            else if($confirmacao==2){
+                echo "RA e RG já cadastrados.";
+            }
+            $pdo=null;
+            
+        }
+
+    }
+?>
+
+
+
 <html>
     <head>
         <meta charset="utf-8">
@@ -65,27 +164,27 @@
                 <nav class="ms-5 mt-2" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="admin.php">Alunos</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">#Nome do Fulaninho</li> <!--USAR GET-->
+                        <?php echo "<li class='breadcrumb-item active' aria-current='page'>". $nome. "</li> "; ?> <!--USAR GET-->
                     </ol>
                 </nav>
                 <div class="container mt-3">
                     <form method="post">
                         <label for="nome" class="form-label">Nome:</label>
-                        <input class="form-control" type="text" id="nome" name="nome" placeholder="O nome atual é x"> <!--USAR GET-->
+                        <?php echo "<input value='" .$nome. "' class='form-control' type='text' id='nome' name='nome'>"; ?> <!--USAR GET-->
                         <br>
                         <div class="row">
                             <div class="col-md-6 col-sm-12">
                                 <label for="ra" class="form-label">RA:</label>
-                            <input class="form-control" type="text" id="ra" name="ra" maxlength="6" placeholder="O RA atual é x"> <!--USAR GET-->
+                                <?php echo "<input value='" .$ra. "' class='form-control' type='text' id='ra' name='ra' maxlength='6'>"; ?><!--USAR GET-->
                             </div>
                             <div class="col-md-6 col-sm-12">
                                 <label for="rg" class="form-label">RG (somente números):</label>
-                                <input class="form-control" type="text" id="rg" name="rg" maxlength="9" placeholder="O RG atual é x"> <!--USAR GET-->
+                                <?php echo "<input value='" .$rg. "' class='form-control' type='text' id='rg' name='rg' maxlength='9'>"; ?>  <!--USAR GET-->
                             </div>
                         </div>
                         <br>
                         <label for="email" class="form-label">Email:</label>
-                        <input class="form-control mb-3" type="text" id="email" name="email" placeholder="O e-mail atual é x"> <!--USAR GET-->
+                        <?php echo "<input value='" .$email. "' class='form-control mb-3' type='text' id='email' name='email'>"; ?> <!--USAR GET-->
                         
                         <!--PHP-->
 
