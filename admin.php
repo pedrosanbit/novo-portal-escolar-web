@@ -153,7 +153,7 @@
                       echo "<td>" . $row['raAluno'] . "</td>";
                       echo "<td>" . $row['nomeAluno'] . "</td>";
                       echo "<td>" . $row['rgAluno'] . "</td>";
-                      echo "<td>" . "<a href='editAluno.php'><i class='fas fa-user-edit me-2'></i></a>" . "<i class='fas fa-user-minus ms-2'></i>" . "</td>";
+                      echo "<td class='text-md-start text-center'>" . "<a href='editAluno.php?ra=" . $row['raAluno'] . "'><i class='fas fa-user-edit me-2 ms-md-0 ms-2'></i></a>" . "<i class='fas fa-user-minus ms-md-2'></i>" . "</td>";
                       echo "</tr>";
                     }
                     echo "</tbody></table></div>";
