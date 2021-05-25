@@ -54,6 +54,10 @@ function toggleDarkMode() {
 	document.getElementById('ordemConsulta').classList.toggle("text-white");
 	if(document.getElementById('tableConsulta'))
 		document.getElementById('tableConsulta').classList.toggle("table-dark");
+	var modals = document.getElementsByClassName('modal-content');
+	for(var i=0; i < modals.length; i++)
+		modals[i].classList.toggle("bg-dark");
+	//document.getElementById('modalContentExcluirAluno').classList.toggle("bg-dark");
 }
 
 function startActiveTab() {
