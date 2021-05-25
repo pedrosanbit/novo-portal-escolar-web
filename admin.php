@@ -1,3 +1,17 @@
+<?php
+  if($_SERVER["REQUEST_METHOD"] !== "POST") {
+    if(isset($_GET['msg'])) {
+      $msg = $_GET['msg'];
+      if($msg == 1) {
+        echo "<script type='text/javascript'>
+            alert('Aluno excluído.');
+          </script>";
+        $msg = 0;
+      }
+    }
+  }
+?>
+
 <!DOCTYPE html>
 <html>
 	<head>
@@ -193,7 +207,7 @@
           
   			</div>
 		</div>
-		<script src="js/admin.js"></script>
+		<script src="admin.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
 	</body>
 </html>
