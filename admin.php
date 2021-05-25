@@ -153,8 +153,26 @@
                       echo "<td>" . $row['raAluno'] . "</td>";
                       echo "<td>" . $row['nomeAluno'] . "</td>";
                       echo "<td>" . $row['rgAluno'] . "</td>";
-                      echo "<td class='text-md-start text-center'>" . "<a href='editAluno.php?ra=" . $row['raAluno'] . "'><i class='fas fa-user-edit me-2 ms-md-0 ms-2'></i></a>" . "<i class='fas fa-user-minus text-danger ms-md-2' data-bs-toggle='modal' data-bs-target='#modalExcluirAluno'></i>" . "</td>";
+                      echo "<td class='text-md-start text-center'>" . "<a href='editAluno.php?ra=" . $row['raAluno'] . "'><i class='fas fa-user-edit me-2 ms-md-0 ms-2'></i></a>" . "<i class='fas fa-user-minus text-danger ms-md-2' data-bs-toggle='modal' data-bs-target='#modalExcluirAluno". $row['raAluno'] ."'></i>" . "</td>";
                       echo "</tr>";
+                      echo "
+                      <div class='modal fade' id='modalExcluirAluno". $row['raAluno'] ."' tabindex='-1' aria-labelledby='modalExcluirAlunoLabel' aria-hidden='true'>
+                        <div class='modal-dialog'>
+                          <div class='modal-content' id='modalContentExcluirAluno'>
+                            <div class='modal-header'>
+                              <h5 class='modal-title' id='modalExcluirAlunoLabel'>Remover Aluno</h5>
+                                <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                            </div>
+                          <div class='modal-body'>
+                            Tem certeza que deseja remover ". $row['nomeAluno'] ."?
+                          </div>
+                          <div class='modal-footer'>
+                            <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cancelar</button>
+                            <form method='post' action='excluirAluno.php'><button name='ra' value='". $row['raAluno'] ."' type='submit' class='btn btn-outline-danger'>Remover aluno</button></form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>";
                     }
                     echo "</tbody></table></div>";
                   }
@@ -172,25 +190,7 @@
   						<i class="fas fa-user-plus"></i> Cadastrar Alunos
   					</a>
   				</div>
-
-          <!-- Modal -->
-          <div class="modal fade" id="modalExcluirAluno" tabindex="-1" aria-labelledby="modalExcluirAlunoLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content" id="modalContentExcluirAluno">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="modalExcluirAlunoLabel">Remover Aluno</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  Tem certeza que deseja remover #Não sei como fazer o PHP daqui#
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                  <button type="button" class="btn btn-outline-danger">Remover aluno</button>
-                </div>
-              </div>
-            </div>
-          </div>
+          
   			</div>
 		</div>
 		<script src="js/admin.js"></script>
