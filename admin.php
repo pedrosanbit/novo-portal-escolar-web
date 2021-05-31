@@ -85,7 +85,7 @@
   				<div class="container mt-3">
   					<form method="post">
               <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-2">
                   <label for="raAluno" class="form-label">RA:</label>
                   <input class="form-control" type="text" id="raAluno" name="raAluno" maxlength="6">
                 </div>
@@ -93,7 +93,14 @@
                   <label for="nomeAluno" class="form-label">Nome:</label>
                   <input class="form-control" type="text" id="nomeAluno" name="nomeAluno">
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
+                  <label for="turmaAluno" class="form-label">Turma:</label>
+                  <select class="form-select" id="turmaAluno" name="turmaAluno" aria-label="Default select example">
+                    <?php
+                    ?>
+                  </select>
+                </div>
+                <div class="col-md-2">
                   <label for="ordemConsulta" class="form-label">Ordem:</label>
                   <select class="form-select" id="ordemConsulta" name="ordemConsulta" aria-label="Default select example">
                     <option selected value="AlfAZ">Alfabética A-Z</option>

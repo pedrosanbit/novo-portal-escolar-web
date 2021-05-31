@@ -49,6 +49,9 @@ function toggleDarkMode() {
 	document.getElementById('raAluno').classList.toggle("border-white");
 	document.getElementById('raAluno').classList.toggle("bg-dark");
 	document.getElementById('raAluno').classList.toggle("text-white");
+	document.getElementById('turmaAluno').classList.toggle("border-white");
+	document.getElementById('turmaAluno').classList.toggle("bg-dark");
+	document.getElementById('turmaAluno').classList.toggle("text-white");
 	document.getElementById('ordemConsulta').classList.toggle("border-white");
 	document.getElementById('ordemConsulta').classList.toggle("bg-dark");
 	document.getElementById('ordemConsulta').classList.toggle("text-white");
