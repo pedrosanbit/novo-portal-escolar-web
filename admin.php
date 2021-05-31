@@ -116,7 +116,7 @@
                   }
                   else if(isset($_POST["nomeAluno"]) && (trim($_POST["nomeAluno"]) != "")) {
                     $nome = $_POST["nomeAluno"];
-                    $nome = ucfirst(strtolower($nome));
+                    $nome = ucwords(strtolower($nome));
                     $nome = "%" . $nome . "%";
                     $comando .= " where nomeAluno like :nome";
                   }
@@ -207,7 +207,7 @@
           
   			</div>
 		</div>
-		<script src="js/admin.js"></script>
+		<script src="javascript/admin.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
 	</body>
 </html>
