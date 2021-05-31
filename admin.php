@@ -95,10 +95,27 @@
                 </div>
                 <div class="col-md-2">
                   <label for="turmaAluno" class="form-label">Turma:</label>
-                  <select class="form-select" id="turmaAluno" name="turmaAluno" aria-label="Default select example">
-                    <?php
+                      <?php
+                      include("conexaoBD.php");
+                      try{
+                        $stmt= $pdo->prepare("select * from TurmasTCC");
+                        $stmt->execute();
+
+                        echo "<select class='form-select' id='turmaAluno' name='turmaAluno' aria-label='Default select example'>";
+                        echo "<option value='null'></option>";
+                        while($row= $stmt->fetch()){
+                          echo "<option value='". $row["codTurma"] ."'>".$row["nomeTurma"]."</option>";
+                        }
+                        echo "</select>";       
+                      }
+                      catch(PDOException $e){
+                        echo 'Error: ' . $e->getMessage();
+                      }
+                      finally{
+                        $pdo=null;
+                      }  
                     ?>
-                  </select>
+                  
                 </div>
                 <div class="col-md-2">
                   <label for="ordemConsulta" class="form-label">Ordem:</label>
@@ -117,6 +134,7 @@
                 if($_SERVER["REQUEST_METHOD"] === "POST") {
                   include("conexaoBD.php");
                   $comando = "select * from AlunosTCC";
+                  
                   if(isset($_POST["raAluno"]) && (trim($_POST["raAluno"]) != "")) {
                     $ra = $_POST["raAluno"];
                     $comando .= " where raAluno= :ra";
@@ -127,30 +145,39 @@
                     $nome = "%" . $nome . "%";
                     $comando .= " where nomeAluno like :nome";
                   }
+                  else if(isset($_POST["turmaAluno"]) && $_POST["turmaAluno"]!="null"){
+                    $codturma=$_POST["turmaAluno"];
+                    $comando= "select a.raAluno, rgAluno, nomeAluno from AlunosTCC a inner join AlunoTurmaTCC b on a.raAluno = b.raAluno inner join TurmasTCC t on t.codTurma = b.codTurma where t.codTurma = :codTurma";
+                  }
+
                   $ordem = $_POST["ordemConsulta"];
                   switch($ordem) {
                     case 'AlfAZ':
                       $stmt = $pdo->prepare($comando . " order by nomeAluno asc");
                       if(isset($ra)) $stmt->bindParam(':ra', $ra);
                       if(isset($nome)) $stmt->bindParam(':nome', $nome);
+                      if(isset($codturma)) $stmt->bindParam(':codTurma',$codturma);
                       imprimeTabela($stmt);
                       break;
                     case 'AlfZA' :
                       $stmt = $pdo->prepare($comando . " order by nomeAluno desc");
                       if(isset($ra)) $stmt->bindParam(':ra', $ra);
                       if(isset($nome)) $stmt->bindParam(':nome', $nome);
+                      if(isset($codturma)) $stmt->bindParam(':codTurma',$codturma);
                       imprimeTabela($stmt);
                       break;
                     case 'RAcresc':
                       $stmt = $pdo->prepare($comando . " order by raAluno asc");
                       if(isset($ra)) $stmt->bindParam(':ra', $ra);
                       if(isset($nome)) $stmt->bindParam(':nome', $nome);
+                      if(isset($codturma)) $stmt->bindParam(':codTurma',$codturma);
                       imprimeTabela($stmt);
                       break;
                     case 'RAdecresc':
                       $stmt = $pdo->prepare($comando . " order by raAluno desc");
                       if(isset($ra)) $stmt->bindParam(':ra', $ra);
                       if(isset($nome)) $stmt->bindParam(':nome', $nome);
+                      if(isset($codturma)) $stmt->bindParam(':codTurma',$codturma);
                       imprimeTabela($stmt);
                       break;
                   }
