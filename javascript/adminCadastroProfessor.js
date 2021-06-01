@@ -49,9 +49,21 @@ function toggleDarkMode() {
 	document.getElementById("nome").classList.toggle("border-white");
 	document.getElementById("nome").classList.toggle("bg-dark");
 	document.getElementById("nome").classList.toggle("text-white");
-	document.getElementById("email").classList.toggle("border-white");
-	document.getElementById("email").classList.toggle("bg-dark");
-	document.getElementById("email").classList.toggle("text-white");
+	document.getElementById('nomeAluno').classList.toggle("border-white");
+	document.getElementById('nomeAluno').classList.toggle("bg-dark");
+	document.getElementById('nomeAluno').classList.toggle("text-white");
+	document.getElementById('raAluno').classList.toggle("border-white");
+	document.getElementById('raAluno').classList.toggle("bg-dark");
+	document.getElementById('raAluno').classList.toggle("text-white");
+	document.getElementById('turmaAluno').classList.toggle("border-white");
+	document.getElementById('turmaAluno').classList.toggle("bg-dark");
+	document.getElementById('turmaAluno').classList.toggle("text-white");
+	document.getElementById('ordemConsulta').classList.toggle("border-white");
+	document.getElementById('ordemConsulta').classList.toggle("bg-dark");
+	document.getElementById('ordemConsulta').classList.toggle("text-white");
+	document.getElementById("rf").classList.toggle("border-white");
+	document.getElementById("rf").classList.toggle("bg-dark");
+	document.getElementById("rf").classList.toggle("text-white");
 }
 
 function startActiveTab() {
