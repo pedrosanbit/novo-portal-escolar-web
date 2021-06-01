@@ -43,36 +43,15 @@ function toggleDarkMode() {
 	alunosTab.classList.toggle("text-white");
 	activeTab.classList.toggle("bg-dark");
 	activeTab.classList.toggle("text-white");
-	document.getElementById('nomeProfessor').classList.toggle("border-white");
-	document.getElementById('nomeProfessor').classList.toggle("bg-dark");
-	document.getElementById('nomeProfessor').classList.toggle("text-white");
-	document.getElementById('rfProfessor').classList.toggle("border-white");
-	document.getElementById('rfProfessor').classList.toggle("bg-dark");
-	document.getElementById('rfProfessor').classList.toggle("text-white");
-	document.getElementById('turmaProfessor').classList.toggle("border-white");
-	document.getElementById('turmaProfessor').classList.toggle("bg-dark");
-	document.getElementById('turmaProfessor').classList.toggle("text-white");
-	document.getElementById('disciplinaProfessor').classList.toggle("border-white");
-	document.getElementById('disciplinaProfessor').classList.toggle("bg-dark");
-	document.getElementById('disciplinaProfessor').classList.toggle("text-white");
-	document.getElementById('nomeAluno').classList.toggle("border-white");
-	document.getElementById('nomeAluno').classList.toggle("bg-dark");
-	document.getElementById('nomeAluno').classList.toggle("text-white");
-	document.getElementById('raAluno').classList.toggle("border-white");
-	document.getElementById('raAluno').classList.toggle("bg-dark");
-	document.getElementById('raAluno').classList.toggle("text-white");
-	document.getElementById('turmaAluno').classList.toggle("border-white");
-	document.getElementById('turmaAluno').classList.toggle("bg-dark");
-	document.getElementById('turmaAluno').classList.toggle("text-white");
-	document.getElementById('ordemConsulta').classList.toggle("border-white");
-	document.getElementById('ordemConsulta').classList.toggle("bg-dark");
-	document.getElementById('ordemConsulta').classList.toggle("text-white");
-	if(document.getElementById('tableConsulta'))
-		document.getElementById('tableConsulta').classList.toggle("table-dark");
-	var modals = document.getElementsByClassName('modal-content');
-	for(var i=0; i < modals.length; i++)
-		modals[i].classList.toggle("bg-dark");
-	//document.getElementById('modalContentExcluirAluno').classList.toggle("bg-dark");
+	document.getElementById("rg").classList.toggle("border-white");
+	document.getElementById("rg").classList.toggle("bg-dark");
+	document.getElementById("rg").classList.toggle("text-white");
+	document.getElementById("nome").classList.toggle("border-white");
+	document.getElementById("nome").classList.toggle("bg-dark");
+	document.getElementById("nome").classList.toggle("text-white");
+	document.getElementById("email").classList.toggle("border-white");
+	document.getElementById("email").classList.toggle("bg-dark");
+	document.getElementById("email").classList.toggle("text-white");
 }
 
 function startActiveTab() {

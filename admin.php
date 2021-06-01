@@ -79,7 +79,58 @@
   				Conteúdo Turmas
   			</div>
   			<div class="tab-pane fade" id="nav-professores" role="tabpanel" aria-labelledby="nav-professor-tab">
-  				Conteúdo Professores
+  				<div class="container mt-3">
+            <form method="post">
+              <div class="row">
+                <div class="col-md-2">
+                  <label for="rfProfessor" class="form-label">RF:</label>
+                  <input class="form-control" type="text" id="rfProfessor" name="rfProfessor" maxlength="6">
+                </div>
+                <div class="col-md-6">
+                  <label for="nomeProfessor" class="form-label">Nome:</label>
+                  <input class="form-control" type="text" id="nomeProfessor" name="nomeProfessor">
+                </div>
+                <div class="col-md-2">
+                  <label for="turmaProfessor" class="form-label">Turma:</label>
+                  <select class='form-select' id='turmaProfessor' name='turmaProfessor' aria-label='Default select example'>
+                    <?php include("selectTurmas.php"); ?>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <label for="disciplinaProfessor" class="form-label">Disciplina:</label>
+                  <select class="form-select" id="disciplinaProfessor" name="disciplinaProfessor" aria-label='Default select example'>
+                    <?php
+                      include("conexaoBD.php");
+                      try{
+                        $stmt= $pdo->prepare("select * from DisciplinasTCC");
+                        $stmt->execute();
+                        
+                        echo "<option value='null'></option>";
+                        while($row= $stmt->fetch()){
+                          echo "<option value='". $row["codDisciplina"] ."'>".$row["nomeDisciplina"]."</option>";
+                        }
+                        echo "</select>";       
+                      }
+                      catch(PDOException $e){
+                        echo 'Error: ' . $e->getMessage();
+                      }
+                      finally{
+                        $pdo=null;
+                      }  
+                    ?>
+                  </select>
+                </div>
+              </div>
+              <div class="mt-4 text-center">
+                <button type="submit" class="btn btn-primary rounded-pill text-white"><b>Consultar Professores</b></button>
+              </div>
+              <?php include("consultaProfessor.php"); ?>
+              <hr>
+            </form>
+            <a href="CadastroProfessor.php" class="btn btn-primary btn-lg rounded-pill text-white" role="button">
+              <i class="fas fa-user-plus"></i> Cadastrar Professores
+            </a>
+          </div>
   			</div>
   			<div class="tab-pane fade" id="nav-alunos" role="tabpanel" aria-labelledby="nav-aluno-tab">
   				<div class="container mt-3">
@@ -95,27 +146,8 @@
                 </div>
                 <div class="col-md-2">
                   <label for="turmaAluno" class="form-label">Turma:</label>
-                      <?php
-                      include("conexaoBD.php");
-                      try{
-                        $stmt= $pdo->prepare("select * from TurmasTCC");
-                        $stmt->execute();
-
-                        echo "<select class='form-select' id='turmaAluno' name='turmaAluno' aria-label='Default select example'>";
-                        echo "<option value='null'></option>";
-                        while($row= $stmt->fetch()){
-                          echo "<option value='". $row["codTurma"] ."'>".$row["nomeTurma"]."</option>";
-                        }
-                        echo "</select>";       
-                      }
-                      catch(PDOException $e){
-                        echo 'Error: ' . $e->getMessage();
-                      }
-                      finally{
-                        $pdo=null;
-                      }  
-                    ?>
-                  
+                  <select class='form-select' id='turmaAluno' name='turmaAluno' aria-label='Default select example'>
+                    <?php include("selectTurmas.php"); ?>
                 </div>
                 <div class="col-md-2">
                   <label for="ordemConsulta" class="form-label">Ordem:</label>
@@ -130,115 +162,13 @@
               <div class="mt-4 text-center">
                 <button type="submit" class="btn btn-primary rounded-pill text-white"><b>Consultar Alunos</b></button>
               </div>
-              <?php
-                if($_SERVER["REQUEST_METHOD"] === "POST") {
-                  include("conexaoBD.php");
-                  $comando = "select * from AlunosTCC";
-                  
-                  if(isset($_POST["raAluno"]) && (trim($_POST["raAluno"]) != "")) {
-                    $ra = $_POST["raAluno"];
-                    $comando .= " where raAluno= :ra";
-                  }
-                  else if(isset($_POST["nomeAluno"]) && (trim($_POST["nomeAluno"]) != "")) {
-                    $nome = $_POST["nomeAluno"];
-                    $nome = ucwords(strtolower($nome));
-                    $nome = "%" . $nome . "%";
-                    $comando .= " where nomeAluno like :nome";
-                  }
-                  else if(isset($_POST["turmaAluno"]) && $_POST["turmaAluno"]!="null"){
-                    $codturma=$_POST["turmaAluno"];
-                    $comando= "select a.raAluno, rgAluno, nomeAluno from AlunosTCC a inner join AlunoTurmaTCC b on a.raAluno = b.raAluno inner join TurmasTCC t on t.codTurma = b.codTurma where t.codTurma = :codTurma";
-                  }
-
-                  $ordem = $_POST["ordemConsulta"];
-                  switch($ordem) {
-                    case 'AlfAZ':
-                      $stmt = $pdo->prepare($comando . " order by nomeAluno asc");
-                      if(isset($ra)) $stmt->bindParam(':ra', $ra);
-                      if(isset($nome)) $stmt->bindParam(':nome', $nome);
-                      if(isset($codturma)) $stmt->bindParam(':codTurma',$codturma);
-                      imprimeTabela($stmt);
-                      break;
-                    case 'AlfZA' :
-                      $stmt = $pdo->prepare($comando . " order by nomeAluno desc");
-                      if(isset($ra)) $stmt->bindParam(':ra', $ra);
-                      if(isset($nome)) $stmt->bindParam(':nome', $nome);
-                      if(isset($codturma)) $stmt->bindParam(':codTurma',$codturma);
-                      imprimeTabela($stmt);
-                      break;
-                    case 'RAcresc':
-                      $stmt = $pdo->prepare($comando . " order by raAluno asc");
-                      if(isset($ra)) $stmt->bindParam(':ra', $ra);
-                      if(isset($nome)) $stmt->bindParam(':nome', $nome);
-                      if(isset($codturma)) $stmt->bindParam(':codTurma',$codturma);
-                      imprimeTabela($stmt);
-                      break;
-                    case 'RAdecresc':
-                      $stmt = $pdo->prepare($comando . " order by raAluno desc");
-                      if(isset($ra)) $stmt->bindParam(':ra', $ra);
-                      if(isset($nome)) $stmt->bindParam(':nome', $nome);
-                      if(isset($codturma)) $stmt->bindParam(':codTurma',$codturma);
-                      imprimeTabela($stmt);
-                      break;
-                  }
-                }
-
-                function imprimeTabela($var) {
-                  $stmt = $var;
-                  try {
-                    echo "<div class='table-responsive mt-4 mb-4'>
-                            <table id='tableConsulta' class='table table-sm table-striped table-hover'>
-                              <thead>
-                                <th>RA</th>
-                                <th>Nome</th>
-                                <th>RG</th>
-                                <th>Ações</th>
-                              </thead>
-                              <tbody>";
-                    $stmt->execute();
-                    while($row = $stmt->fetch()) {
-                      echo "<tr>";
-                      echo "<td>" . $row['raAluno'] . "</td>";
-                      echo "<td>" . $row['nomeAluno'] . "</td>";
-                      echo "<td>" . $row['rgAluno'] . "</td>";
-                      echo "<td class='text-md-start text-center'>" . "<a href='editAluno.php?ra=" . $row['raAluno'] . "'><i class='fas fa-user-edit me-2 ms-md-0 ms-2'></i></a>" . "<i class='fas fa-user-minus text-danger ms-md-2' data-bs-toggle='modal' data-bs-target='#modalExcluirAluno". $row['raAluno'] ."'></i>" . "</td>";
-                      echo "</tr>";
-                      echo "
-                      <div class='modal fade' id='modalExcluirAluno". $row['raAluno'] ."' tabindex='-1' aria-labelledby='modalExcluirAlunoLabel' aria-hidden='true'>
-                        <div class='modal-dialog'>
-                          <div class='modal-content' id='modalContentExcluirAluno'>
-                            <div class='modal-header'>
-                              <h5 class='modal-title' id='modalExcluirAlunoLabel'>Remover Aluno</h5>
-                                <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
-                            </div>
-                          <div class='modal-body'>
-                            Tem certeza que deseja remover ". $row['nomeAluno'] ."?
-                          </div>
-                          <div class='modal-footer'>
-                            <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cancelar</button>
-                            <form method='post' action='excluirAluno.php'><button name='ra' value='". $row['raAluno'] ."' type='submit' class='btn btn-outline-danger'>Remover aluno</button></form>
-                          </div>
-                        </div>
-                      </div>
-                    </div>";
-                    }
-                    echo "</tbody></table></div>";
-                  }
-                  catch(PDOException $e) {
-                    echo 'Error: ' . $e->getMessage();
-                  }
-                  finally {
-                    $pdo = null;
-                  }
-                }
-              ?>
+              <?php include("consultaAluno.php"); ?>
               <hr>
             </form>
   					<a href="CadastroAluno.php" class="btn btn-primary btn-lg rounded-pill text-white" role="button">
   						<i class="fas fa-user-plus"></i> Cadastrar Alunos
   					</a>
-  				</div>
-          
+  				</div>        
   			</div>
 		</div>
 		<script src="javascript/admin.js"></script>
