@@ -1,11 +1,3 @@
-<?php
-  session_start();
-  if(!isset($_SESSION['login'])) {
-    if($_SESSION['tipo'] != 'admin')
-      header('location:index.php');
-  }
-?>
-
 <!DOCTYPE html>
 <html>
   <head>
@@ -57,6 +49,59 @@
         <a class="nav-link text-dark" href="adminAlunos.php"><i class="fas fa-user"></i> Alunos</a>
       </li>
     </ul>
+    <div class="container mt-3"> <!--incioooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo-->
+      <form method="post">
+        <div class="row">
+          <div class="col-md-2">
+            <label for="codTurma" class="form-label">Código da Turma:</label>
+            <input class="form-control" type="text" id="codTurma" name="codTurma" maxlength="6">
+          </div>
+          <div class="col-md-6">
+            <label for="nomeTurma" class="form-label">Nome da Turma:</label>
+            <input class="form-control" type="text" id="nomeTurma" name="nomeTurma">
+          </div>
+          <div class="col-md-2">
+            <label for="curso" class="form-label">Curso:</label>
+            <select class='form-select' id='curso' name='curso' aria-label='Default select example'>
+              <?php include("selectCursos.php"); ?>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label for="periodo" class="form-label">Período:</label>
+            <select class="form-select" id="periodo" name="periodo" aria-label='Default select example'>
+              <?php
+                include("conexaoBD.php");
+                try{
+                  $stmt= $pdo->prepare("select * from TurmasTCC");
+                  $stmt->execute();
+                        
+                  echo "<option value='null'></option>";
+                  while($row= $stmt->fetch()){
+                    echo "<option value='". $row["codTurma"] ."'>".$row["periodo"]."</option>";
+                  }
+                  echo "</select>";       
+                }
+                catch(PDOException $e){
+                  echo 'Error: ' . $e->getMessage();
+                }
+                finally{
+                  $pdo=null;
+                }  
+              ?>
+            </select>
+          </div>
+        </div>
+        <div class="mt-4 text-center">
+          <button type="submit" class="btn btn-primary rounded-pill text-white"><b>Consultar Turmas</b></button>
+        </div>
+        <?php include("consultaProfessor.php"); ?>
+        <hr>
+      </form>
+      <a href="CadastroTurma.php" class="btn btn-primary btn-lg rounded-pill text-white" role="button">
+        <i class="fas fa-user-plus"></i> Cadastrar Turmas
+      </a>
+    </div>
+
     <script src="javascript/admin.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
   </body>
