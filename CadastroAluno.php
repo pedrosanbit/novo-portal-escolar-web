@@ -112,7 +112,7 @@
             <div class="tab-pane fade" id="nav-alunos" role="tabpanel" aria-labelledby="nav-aluno-tab">
                 <nav class="ms-5 mt-2" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="admin.php">Alunos</a></li>
+                        <li class="breadcrumb-item"><a href="adminAlunos.php">Alunos</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Cadastro</li>
                     </ol>
                 </nav>
