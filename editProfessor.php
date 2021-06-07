@@ -114,8 +114,54 @@
                 </form>
             </div>
         </nav>
-        <nav>
-            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link text-dark" aria-current="page" href="admin.php"><i class="fas fa-home"></i> Início</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="adminCursos.php"><i class="fas fa-graduation-cap"></i> Cursos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="adminDisciplinas.php"><i class="fas fa-book"></i> Disciplinas</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="adminTurmas.php"><i class="fas fa-users"></i> Turmas</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active text-primary" id="nav-active" href="adminProfessores.php"><b><i class="fas fa-chalkboard-teacher"></i> Professores</b></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="adminAlunos.php"><i class="fas fa-user"></i> Alunos</a>
+            </li>
+        </ul>
+        <nav class="ms-5 mt-2" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="adminProfessores.php">Professores</a></li>
+                <?php echo "<li class='breadcrumb-item active' aria-current='page'>". $nome. "</li> "; ?> 
+            </ol>
+        </nav>
+        <div class="container mt-3">
+            <form method="post">
+                <label for="nome" class="form-label">Nome:</label>
+                <?php echo "<input value='" .$nome. "' class='form-control' type='text' id='nome' name='nome'>"; ?> 
+                <br>
+                <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                        <label for="rf" class="form-label">RF:</label>
+                        <?php echo "<input value='" .$rf. "' class='form-control' type='text' id='rf' name='rf' maxlength='6'>"; ?>
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <label for="rg" class="form-label">RG (somente números):</label>
+                        <?php echo "<input value='" .$rg. "' class='form-control' type='text' id='rg' name='rg' maxlength='9'>"; ?>  
+                    </div>
+                </div>
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary rounded-pill text-white"><b>Alterar Dados</b></button>
+                </div>
+                <hr>
+            </form>
+        </div>
+            <!--div class="nav nav-tabs" id="nav-tab" role="tablist">
                 <button class="nav-link active text-dark" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-inicio" type="button" role="tab" aria-controls="nav-inicio" aria-selected="true" onclick="toggleActiveTab();">
                     <i class="fas fa-home"></i> Início
                 </button>
@@ -153,22 +199,22 @@
                 <nav class="ms-5 mt-2" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="adminProfessores.php">Professores</a></li>
-                        <?php echo "<li class='breadcrumb-item active' aria-current='page'>". $nome. "</li> "; ?> <!--USAR GET-->
+                        <?php echo "<li class='breadcrumb-item active' aria-current='page'>". $nome. "</li> "; ?> 
                     </ol>
                 </nav>
                 <div class="container mt-3">
                     <form method="post">
                         <label for="nome" class="form-label">Nome:</label>
-                        <?php echo "<input value='" .$nome. "' class='form-control' type='text' id='nome' name='nome'>"; ?> <!--USAR GET-->
+                        <?php echo "<input value='" .$nome. "' class='form-control' type='text' id='nome' name='nome'>"; ?> 
                         <br>
                         <div class="row">
                             <div class="col-md-6 col-sm-12">
                                 <label for="rf" class="form-label">RF:</label>
-                                <?php echo "<input value='" .$rf. "' class='form-control' type='text' id='rf' name='rf' maxlength='6'>"; ?><!--USAR GET-->
+                                <?php echo "<input value='" .$rf. "' class='form-control' type='text' id='rf' name='rf' maxlength='6'>"; ?>
                             </div>
                             <div class="col-md-6 col-sm-12">
                                 <label for="rg" class="form-label">RG (somente números):</label>
-                                <?php echo "<input value='" .$rg. "' class='form-control' type='text' id='rg' name='rg' maxlength='9'>"; ?>  <!--USAR GET-->
+                                <?php echo "<input value='" .$rg. "' class='form-control' type='text' id='rg' name='rg' maxlength='9'>"; ?>  
                             </div>
                         </div>
                         <div class="text-center mt-4">
@@ -180,7 +226,7 @@
             </div>
             <div class="tab-pane fade" id="nav-alunos" role="tabpanel" aria-labelledby="nav-aluno-tab">
             </div>
-        </div>
+        </div-->
         <script type="text/javascript" src="javascript/admin.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
     </body>
