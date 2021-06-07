@@ -1,9 +1,4 @@
 <?php
-  session_start();
-  if(!isset($_SESSION['login'])) {
-    if($_SESSION['tipo'] != 'admin')
-      header('location:index.php');
-  }
   if($_SERVER["REQUEST_METHOD"] !== "POST") {
     if(isset($_GET['msg'])) {
       $msg = $_GET['msg'];

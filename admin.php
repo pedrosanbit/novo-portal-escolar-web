@@ -1,11 +1,3 @@
-<?php
-  session_start();
-  if(!isset($_SESSION['login'])) {
-    if($_SESSION['tipo'] != 'admin')
-      header('location:index.php');
-  }
-?>
-
 <!DOCTYPE html>
 <html>
 	<head>
@@ -57,7 +49,6 @@
         <a class="nav-link text-dark" href="adminAlunos.php"><i class="fas fa-user"></i> Alunos</a>
       </li>
     </ul>
-    <a href="logout.php">Logout</a>
     <script src="javascript/admin.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
   </body>
