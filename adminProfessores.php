@@ -4,8 +4,18 @@
     if($_SESSION['tipo'] != 'admin')
       header('location:index.php');
   }
+  if($_SERVER["REQUEST_METHOD"] !== "POST") {
+    if(isset($_GET['msg'])) {
+      $msg = $_GET['msg'];
+      if($msg == 1) {
+        echo "<script type='text/javascript'>
+            alert('Professor excluído.');
+          </script>";
+        $msg = 0;
+      }
+    }
+  }
 ?>
-
 <!DOCTYPE html>
 <html>
   <head>
