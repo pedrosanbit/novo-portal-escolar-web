@@ -1,11 +1,3 @@
-<?php
-  session_start();
-  if(!isset($_SESSION['login'])) {
-    if($_SESSION['tipo'] != 'admin')
-      header('location:index.php');
-  }
-?>
-
 <!DOCTYPE html>
 <html>
   <head>
@@ -57,6 +49,58 @@
         <a class="nav-link text-dark" href="adminAlunos.php"><i class="fas fa-user"></i> Alunos</a>
       </li>
     </ul>
+    <div class="container mt-3">
+      <form method="post">
+        <div class="row">
+          <div class="col-md-2">
+            <label for="codDisciplina" class="form-label">Código da Disciplina:</label>
+            <input class="form-control" type="text" id="codDisciplina" name="codDisciplina" maxlength="6">
+          </div>
+          <div class="col-md-6">
+            <label for="nomeDisciplina" class="form-label">Nome da Disciplina:</label>
+            <input class="form-control" type="text" id="nomeDisciplina" name="nomeDisciplina">
+          </div>
+          <div class="col-md-2">
+            <label for="turmaDisciplina" class="form-label">Turma:</label>
+            <select class='form-select' id='turmaDisciplina' name='turmaDisciplina' aria-label='Default select example'>
+              <?php include("selectTurmas.php"); ?>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label for="professorDisciplina" class="form-label">Professor:</label>
+            <select class="form-select" id="professorDisciplina" name="professorDisciplina" aria-label='Default select example'>
+              <?php
+                include("conexaoBD.php");
+                try{
+                  $stmt= $pdo->prepare("select * from ProfessoresTCC");
+                  $stmt->execute();
+                        
+                  echo "<option value='null'></option>";
+                  while($row= $stmt->fetch()){
+                    echo "<option value='". $row["rfProfessor"] ."'>".$row["nomeProfessor"]."</option>";
+                  }
+                  echo "</select>";       
+                }
+                catch(PDOException $e){
+                  echo 'Error: ' . $e->getMessage();
+                }
+                finally{
+                  $pdo=null;
+                }  
+              ?>
+            </select>
+          </div>
+        </div>
+        <div class="mt-4 text-center">
+          <button type="submit" class="btn btn-primary rounded-pill text-white"><b>Consultar Disciplinas</b></button>
+        </div>
+        <?php include("consultaDisciplina.php"); ?>
+        <hr>
+      </form>
+      <a href="CadastroDisciplina.php" class="btn btn-primary btn-lg rounded-pill text-white" role="button">
+        <i class="fas fa-user-plus"></i> Cadastrar Disciplinas
+      </a>
+    </div>
     <script src="javascript/admin.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
   </body>

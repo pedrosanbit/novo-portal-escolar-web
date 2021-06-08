@@ -4,26 +4,24 @@
 
         try {
             $confirmacao;            
-            $codTurma = $_POST["codTurma"];
-            $nomeTurma = $_POST["nomeTurma"];
-            $curso = $_POST["curso"];
-            $periodo = $_POST["periodo"];
+            $codDisciplina = $_POST["codDisciplina"];
+            $nomeDisciplina = $_POST["nomeDisciplina"];
+            $cargaHoraria = $_POST["cargaHoraria"];
 
-            if ((trim($codTurma) == "") || (trim($nomeTurma) == "")  || (trim($curso) == "") || (trim($periodo) == "")) {
+            if ((trim($codDisciplina) == "") || (trim($nomeDisciplina) == "")  || (trim($cargaHoraria) == "")) {
                 $confirmacao = 2;
             } else {
-                $stmt = $pdo->prepare("select * from TurmasTCC where codTurma = :codTurma");
-                $stmt->bindParam(':codTurma', $codTurma);
+                $stmt = $pdo->prepare("select * from DisciplinasTCC where codDisciplina = :codDisciplina");
+                $stmt->bindParam(':codDisciplina', $codDisciplina);
                 $stmt->execute();
 
                 $rows = $stmt->rowCount();
 
                 if ($rows <= 0) {
-                    $stmt = $pdo->prepare("insert into TurmasTCC (codTurma, nomeTurma, curso, periodo) values(:codTurma, :nomeTurma, :curso, :periodo)");
-                    $stmt->bindParam(':codTurma', $codTurma);
-                    $stmt->bindParam(':nomeTurma', $nomeTurma);
-                    $stmt->bindParam(':curso', $curso);
-                    $stmt->bindParam(':periodo', $periodo);
+                    $stmt = $pdo->prepare("insert into DisciplinasTCC (codDisciplina, nomeDisciplina, cargaHoraria) values(:codDisciplina, :nomeDisciplina, :cargaHoraria)");
+                    $stmt->bindParam(':codDisciplina', $codDisciplina);
+                    $stmt->bindParam(':nomeDisciplina', $nomeDisciplina);
+                    $stmt->bindParam(':cargaHoraria', $cargaHoraria);
                     $stmt->execute();
                    
                     $confirmacao = 1;
@@ -75,10 +73,10 @@
                 <a class="nav-link text-dark" href="#"><i class="fas fa-graduation-cap"></i> Cursos</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-dark" href="#"><i class="fas fa-book"></i> Disciplinas</a>
+                <a class="nav-link active text-primary" id="nav-active" href="#"><b><i class="fas fa-book"></i> Disciplinas</b></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active text-primary" id="nav-active" href="#"><b><i class="fas fa-users"></i> Turmas</b></a>
+                <a class="nav-link text-dark" href="#"><i class="fas fa-users"></i> Turmas</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-dark" href="#"><i class="fas fa-chalkboard-teacher"></i> Professores</a>
@@ -89,36 +87,23 @@
         </ul>
         <nav class="ms-5 mt-2" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="adminTurmas.php">Turmas</a></li>
+                <li class="breadcrumb-item"><a href="adminDisciplinas.php">Disciplinas</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Cadastro</li>
             </ol>
         </nav>
         <div class="container mt-3">
             <form method="post">
-                <!--<label for="nomeTurma" class="form-label">Nome da Turma:</label>
-                <input class="form-control" type="text" id="nomeTurma" name="nomeTurma" value="TINFD-1">
-                <br>!-->
-
-                <div class="row">
-                    <div class="col-md-6 col-sm-12">
-                        <label for="nomeTurma" class="form-label">Nome da Turma:</label>
-                        <input class="form-control" type="text" id="nomeTurma" name="nomeTurma" maxlength="7" value="TINFD-1">
-                    </div>
-                    <div class="col-md-6 col-sm-12">
-                        <label for="codTurma" class="form-label">Código da Turma:</label>
-                        <input class="form-control" type="text" id="codTurma" name="codTurma" maxlength="11" value="TINFD1-2021">
-                    </div>
-                </div>
+                <label for="nomeDisciplina" class="form-label">Nome da Disciplina:</label>
+                <input class="form-control" type="text" id="nomeDisciplina" name="nomeDisciplina">
                 <br>
                 <div class="row">
                     <div class="col-md-6 col-sm-12">
-                        <label for="curso" class="form-label">Curso:</label>
-                        <input class="form-control" type="text" id="curso" name="curso" maxlength="1" value="4">
+                        <label for="codDisciplina" class="form-label">Código da Disciplina:</label>
+                        <input class="form-control" type="text" id="codDisciplina" name="codDisciplina" maxlength="10">
                     </div>
-
                     <div class="col-md-6 col-sm-12">
-                        <label for="periodo" class="form-label">Período:</label>
-                        <input class="form-control" type="text" id="periodo" name="periodo" maxlength="4" value="2021">
+                        <label for="cargaHoraria" class="form-label">Carga Horária:</label>
+                        <input class="form-control" type="text" id="cargaHoraria" name="cargaHoraria" maxlength="1">
                     </div>
                 </div>
                 <br>
@@ -126,13 +111,13 @@
                     if(isset($confirmacao)) {
                         switch ($confirmacao) {
                             case 0:
-                                echo "<span class='text-danger'>Código da turma já cadastrado.</span>";
+                                echo "<span class='text-danger'>Código de Disciplina já cadastrado!.</span>";
                                 break;
                             case 1:
-                                echo "<span class='text-success'>Turma Cadastrada!</span>";
+                                echo "<span class='text-success'>Disciplina Cadastrada!</span>";
                                 break;
                             case 2:
-                                echo "<span class='text-warning'>Código da Turma, Nome da Turma, Curso e Período devem ser preenchidos.</span>";
+                                echo "<span class='text-warning'>Código, nome e carga horária são obrigatórios.</span>";
                                 break;
                         }
                     }
