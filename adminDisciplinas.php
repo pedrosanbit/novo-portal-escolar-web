@@ -1,3 +1,11 @@
+<?php
+  session_start();
+  if(!isset($_SESSION['login']))
+      header('location:index.php');
+  else if($_SESSION['tipo'] != 'admin')
+    header('location:index.php');
+?>
+
 <!DOCTYPE html>
 <html>
   <head>
