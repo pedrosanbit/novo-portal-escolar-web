@@ -1,9 +1,9 @@
 <?php
   session_start();
-  if(!isset($_SESSION['login'])) {
-    if($_SESSION['tipo'] != 'admin')
+  if(!isset($_SESSION['login']))
       header('location:index.php');
-  }
+  else if($_SESSION['tipo'] != 'admin')
+    header('location:index.php');
 ?>
 
 <!DOCTYPE html>
@@ -57,6 +57,52 @@
         <a class="nav-link text-dark" href="adminAlunos.php"><i class="fas fa-user"></i> Alunos</a>
       </li>
     </ul>
+    <div class="container mt-3">
+      <form method="post">
+        <div class="row">
+          <div class="col-md-5">
+            <label for="codCurso" class="form-label">Código do Curso:</label>
+            <input class="form-control" type="text" id="codCurso" name="codCurso" maxlength="6">
+          </div>
+          <div class="col-md-5">
+            <label for="nomeCurso" class="form-label">Nome do Curso:</label>
+            <input class="form-control" type="text" id="nomeCurso" name="nomeCurso">
+          </div>
+          <div class="col-md-2">
+            <label for="cursoProfessor" class="form-label">Professor:</label>
+            <select class="form-select" id="cursoProfessor" name="cursoProfessor" aria-label='Default select example'>
+              <?php
+                include("conexaoBD.php");
+                try{
+                  $stmt= $pdo->prepare("select * from ProfessoresTCC");
+                  $stmt->execute();
+                        
+                  echo "<option value='null'></option>";
+                  while($row= $stmt->fetch()){
+                    echo "<option value='". $row["rfProfessor"] ."'>".$row["nomeProfessor"]."</option>";
+                  }
+                  echo "</select>";       
+                }
+                catch(PDOException $e){
+                  echo 'Error: ' . $e->getMessage();
+                }
+                finally{
+                  $pdo=null;
+                }  
+              ?>
+            </select>
+          </div>
+        </div>
+        <div class="mt-4 text-center">
+          <button type="submit" class="btn btn-primary rounded-pill text-white"><b>Consultar Cursos</b></button>
+        </div>
+        <?php include("consultaCurso.php"); ?>
+        <hr>
+      </form>
+      <a href="CadastroCurso.php" class="btn btn-primary btn-lg rounded-pill text-white" role="button">
+        <i class="fas fa-user-plus"></i> Cadastrar Cursos
+      </a>
+    </div>
     <script src="javascript/admin.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
   </body>
