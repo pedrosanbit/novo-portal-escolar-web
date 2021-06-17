@@ -1,9 +1,21 @@
 <?php
   session_start();
   if(!isset($_SESSION['login']))
-      header('location:index.php');
+    header('location:index.php');
   else if($_SESSION['tipo'] != 'admin')
     header('location:index.php');
+
+  if($_SERVER["REQUEST_METHOD"] !== "POST") {
+    if(isset($_GET['msg'])) {
+      $msg = $_GET['msg'];
+      if($msg == 1) {
+        echo "<script type='text/javascript'>
+            alert('Turma excluída.');
+          </script>";
+        $msg = 0;
+      }
+    }
+  }
 ?>
 
 <!DOCTYPE html>
@@ -57,7 +69,7 @@
         <a class="nav-link text-dark" href="adminAlunos.php"><i class="fas fa-user"></i> Alunos</a>
       </li>
     </ul>
-    <div class="container mt-3"> <!--incioooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo-->
+    <div class="container mt-3"> 
       <form method="post">
         <div class="row">
           <div class="col-md-2">
@@ -80,12 +92,12 @@
               <?php
                 include("conexaoBD.php");
                 try{
-                  $stmt= $pdo->prepare("select * from TurmasTCC");
+                  $stmt= $pdo->prepare("select distinct periodo from TurmasTCC");
                   $stmt->execute();
                         
                   echo "<option value='null'></option>";
                   while($row= $stmt->fetch()){
-                    echo "<option value='". $row["codTurma"] ."'>".$row["periodo"]."</option>";
+                    echo "<option value='". $row["periodo"] ."'>".$row["periodo"]."</option>";
                   }
                   echo "</select>";       
                 }
@@ -102,9 +114,9 @@
         <div class="mt-4 text-center">
           <button type="submit" class="btn btn-primary rounded-pill text-white"><b>Consultar Turmas</b></button>
         </div>
-        <?php include("consultaProfessor.php"); ?>
-        <hr>
       </form>
+      <?php include("consultaTurma.php"); ?>
+      <hr>
       <a href="CadastroTurma.php" class="btn btn-primary btn-lg rounded-pill text-white" role="button">
         <i class="fas fa-user-plus"></i> Cadastrar Turmas
       </a>

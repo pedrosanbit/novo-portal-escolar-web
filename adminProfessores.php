@@ -1,9 +1,10 @@
 <?php
   session_start();
-  if(!isset($_SESSION['login'])) {
-    if($_SESSION['tipo'] != 'admin')
+  if(!isset($_SESSION['login']))
       header('location:index.php');
-  }
+  else if($_SESSION['tipo'] != 'admin')
+    header('location:index.php');
+  
   if($_SERVER["REQUEST_METHOD"] !== "POST") {
     if(isset($_GET['msg'])) {
       $msg = $_GET['msg'];
@@ -112,9 +113,9 @@
         <div class="mt-4 text-center">
           <button type="submit" class="btn btn-primary rounded-pill text-white"><b>Consultar Professores</b></button>
         </div>
+      </form>
         <?php include("consultaProfessor.php"); ?>
         <hr>
-      </form>
       <a href="CadastroProfessor.php" class="btn btn-primary btn-lg rounded-pill text-white" role="button">
         <i class="fas fa-user-plus"></i> Cadastrar Professores
       </a>

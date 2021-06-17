@@ -4,8 +4,8 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
 	include("conexaoBD.php");
 
 	try{
-		$stmt=$pdo->prepare("DELETE from AlunosTCC WHERE raAluno= :ra");
-		$stmt->bindParam(":ra",$_POST["ra"]);
+		$stmt=$pdo->prepare("DELETE from TurmasTCC WHERE codTurma= :codTurma");
+		$stmt->bindParam(":codTurma",$_POST["codTurma"]);
 		$stmt->execute();
 		$msg = 1;
 	}
@@ -14,7 +14,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
 	}
 	finally{
 		$pdo=null;
-		header("location: adminAlunos.php?msg=" . $msg);
+		header("location: adminTurmas.php?msg=" . $msg);
 	}
 }
 ?>
