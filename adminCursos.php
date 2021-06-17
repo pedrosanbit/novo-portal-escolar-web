@@ -4,6 +4,17 @@
       header('location:index.php');
   else if($_SESSION['tipo'] != 'admin')
     header('location:index.php');
+  if($_SERVER["REQUEST_METHOD"] !== "POST") {
+    if(isset($_GET['msg'])) {
+      $msg = $_GET['msg'];
+      if($msg == 1) {
+        echo "<script type='text/javascript'>
+            alert('Curso excluído.');
+          </script>";
+        $msg = 0;
+      }
+    }
+  }
 ?>
 
 <!DOCTYPE html>
@@ -96,9 +107,9 @@
         <div class="mt-4 text-center">
           <button type="submit" class="btn btn-primary rounded-pill text-white"><b>Consultar Cursos</b></button>
         </div>
+        </form>
         <?php include("consultaCurso.php"); ?>
         <hr>
-      </form>
       <a href="CadastroCurso.php" class="btn btn-primary btn-lg rounded-pill text-white" role="button">
         <i class="fas fa-user-plus"></i> Cadastrar Cursos
       </a>
