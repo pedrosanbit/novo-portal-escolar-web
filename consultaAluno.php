@@ -85,7 +85,7 @@
                     </div>
                     <div class='modal-footer'>
                       <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cancelar</button>
-                      <form method='get' action='excluirAluno.php'><button name='ra' value='". $row['raAluno'] ."' type='submit' class='btn btn-outline-danger'>Remover aluno</button></form>
+                      <form method='post' action='excluirAluno.php'><button name='ra' value='". $row['raAluno'] ."' type='submit' class='btn btn-outline-danger'>Remover aluno</button></form>
                     </div>
                   </div>
                 </div>
