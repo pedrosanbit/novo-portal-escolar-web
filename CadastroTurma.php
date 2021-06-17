@@ -1,4 +1,10 @@
 <?php
+    session_start();
+    if(!isset($_SESSION['login']))
+        header('location:index.php');
+    else if($_SESSION['tipo'] != 'admin')
+        header('location:index.php');
+        
 	if ($_SERVER["REQUEST_METHOD"] === 'POST') {
 		include("conexaoBD.php");
 
@@ -102,23 +108,23 @@
                 <div class="row">
                     <div class="col-md-6 col-sm-12">
                         <label for="nomeTurma" class="form-label">Nome da Turma:</label>
-                        <input class="form-control" type="text" id="nomeTurma" name="nomeTurma" maxlength="7" value="TINFD-1">
+                        <input class="form-control" type="text" id="nomeTurma" name="nomeTurma" maxlength="7">
                     </div>
                     <div class="col-md-6 col-sm-12">
                         <label for="codTurma" class="form-label">Código da Turma:</label>
-                        <input class="form-control" type="text" id="codTurma" name="codTurma" maxlength="11" value="TINFD1-2021">
+                        <input class="form-control" type="text" id="codTurma" name="codTurma" maxlength="11">
                     </div>
                 </div>
                 <br>
                 <div class="row">
                     <div class="col-md-6 col-sm-12">
                         <label for="curso" class="form-label">Curso:</label>
-                        <input class="form-control" type="text" id="curso" name="curso" maxlength="1" value="4">
+                        <input class="form-control" type="text" id="curso" name="curso" maxlength="1">
                     </div>
 
                     <div class="col-md-6 col-sm-12">
                         <label for="periodo" class="form-label">Período:</label>
-                        <input class="form-control" type="text" id="periodo" name="periodo" maxlength="4" value="2021">
+                        <input class="form-control" type="text" id="periodo" name="periodo" maxlength="4">
                     </div>
                 </div>
                 <br>

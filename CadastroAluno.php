@@ -1,4 +1,10 @@
 <?php
+    session_start();
+    if(!isset($_SESSION['login']))
+        header('location:index.php');
+    else if($_SESSION['tipo'] != 'admin')
+        header('location:index.php');
+
 	if ($_SERVER["REQUEST_METHOD"] === 'POST') {
 		include("conexaoBD.php");
 
