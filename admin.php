@@ -1,4 +1,4 @@
-<?php
+ <?php
   session_start();
   if(!isset($_SESSION['login']))
     header('location:index.php');
@@ -57,7 +57,22 @@
         <a class="nav-link text-dark" href="adminAlunos.php"><i class="fas fa-user"></i> Alunos</a>
       </li>
     </ul>
-    <a href="logout.php">Logout</a>
+
+    <h1> Bem vindo ao Portal!</h1>
+    <br>
+    <a href="logout.php">->Logout</a>
+    <br><br>
+    <a href="adminCursos.php"> ->Cursos</a>
+    <br><br>
+    <a href="adminDisciplinas.php"> ->Disciplinas</a>
+    <br><br>
+    <a href="adminTurmas.php"> ->Turmas</a>
+    <br><br>
+    <a href="adminProfessores.php"> ->Professores</a>
+    <br><br>
+    <a href="adminAlunos.php"> ->Alunos</a>
+    <br><br>
+
     <script src="javascript/admin.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
   </body>
