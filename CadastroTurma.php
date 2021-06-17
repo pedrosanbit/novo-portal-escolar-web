@@ -75,22 +75,22 @@
         </nav>
         <ul class="nav nav-tabs">
             <li class="nav-item">
-                <a class="nav-link text-dark" aria-current="page" href="#"><i class="fas fa-home"></i> Início</a>
+                <a class="nav-link text-dark" aria-current="page" href="admin.php"><i class="fas fa-home"></i> Início</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-dark" href="#"><i class="fas fa-graduation-cap"></i> Cursos</a>
+                <a class="nav-link text-dark" href="adminCursos.php"><i class="fas fa-graduation-cap"></i> Cursos</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-dark" href="#"><i class="fas fa-book"></i> Disciplinas</a>
+                <a class="nav-link text-dark" href="adminDisciplinas.php"><i class="fas fa-book"></i> Disciplinas</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active text-primary" id="nav-active" href="#"><b><i class="fas fa-users"></i> Turmas</b></a>
+                <a class="nav-link active text-primary" id="nav-active" href="adminTurmas.php"><b><i class="fas fa-users"></i> Turmas</b></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-dark" href="#"><i class="fas fa-chalkboard-teacher"></i> Professores</a>
+                <a class="nav-link text-dark" href="adminProfessores.php"><i class="fas fa-chalkboard-teacher"></i> Professores</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-dark" href="#"><i class="fas fa-user"></i> Alunos</a>
+                <a class="nav-link text-dark" href="adminAlunos.php"><i class="fas fa-user"></i> Alunos</a>
             </li>
         </ul>
         <nav class="ms-5 mt-2" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
@@ -119,7 +119,8 @@
                 <div class="row">
                     <div class="col-md-6 col-sm-12">
                         <label for="curso" class="form-label">Curso:</label>
-                        <input class="form-control" type="text" id="curso" name="curso" maxlength="1">
+                        <select class='form-select' id='curso' name='curso' aria-label='Default select example'>
+                        <?php include("selectCursos.php"); ?>
                     </div>
 
                     <div class="col-md-6 col-sm-12">
