@@ -4,6 +4,17 @@
       header('location:index.php');
   else if($_SESSION['tipo'] != 'admin')
     header('location:index.php');
+  if($_SERVER["REQUEST_METHOD"] !== "POST") {
+    if(isset($_GET['msg'])) {
+      $msg = $_GET['msg'];
+      if($msg == 1) {
+        echo "<script type='text/javascript'>
+            alert('Disciplina excluída.');
+          </script>";
+        $msg = 0;
+      }
+    }
+  }
 ?>
 
 <!DOCTYPE html>
@@ -102,9 +113,9 @@
         <div class="mt-4 text-center">
           <button type="submit" class="btn btn-primary rounded-pill text-white"><b>Consultar Disciplinas</b></button>
         </div>
+        </form>
         <?php include("consultaDisciplina.php"); ?>
         <hr>
-      </form>
       <a href="CadastroDisciplina.php" class="btn btn-primary btn-lg rounded-pill text-white" role="button">
         <i class="fas fa-user-plus"></i> Cadastrar Disciplinas
       </a>

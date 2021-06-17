@@ -199,22 +199,22 @@
                 <nav class="ms-5 mt-2" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="adminProfessores.php">Professores</a></li>
-                        <?php echo "<li class='breadcrumb-item active' aria-current='page'>". $nome. "</li> "; ?> 
+                        <?php //echo "<li class='breadcrumb-item active' aria-current='page'>". $nome. "</li> "; ?> 
                     </ol>
                 </nav>
                 <div class="container mt-3">
                     <form method="post">
                         <label for="nome" class="form-label">Nome:</label>
-                        <?php echo "<input value='" .$nome. "' class='form-control' type='text' id='nome' name='nome'>"; ?> 
+                        <?php //echo "<input value='" .$nome. "' class='form-control' type='text' id='nome' name='nome'>"; ?> 
                         <br>
                         <div class="row">
                             <div class="col-md-6 col-sm-12">
                                 <label for="rf" class="form-label">RF:</label>
-                                <?php echo "<input value='" .$rf. "' class='form-control' type='text' id='rf' name='rf' maxlength='6'>"; ?>
+                                <?php //echo "<input value='" .$rf. "' class='form-control' type='text' id='rf' name='rf' maxlength='6'>"; ?>
                             </div>
                             <div class="col-md-6 col-sm-12">
                                 <label for="rg" class="form-label">RG (somente números):</label>
-                                <?php echo "<input value='" .$rg. "' class='form-control' type='text' id='rg' name='rg' maxlength='9'>"; ?>  
+                                <?php //echo "<input value='" .$rg. "' class='form-control' type='text' id='rg' name='rg' maxlength='9'>"; ?>  
                             </div>
                         </div>
                         <div class="text-center mt-4">
