@@ -71,22 +71,22 @@
         </nav>
         <ul class="nav nav-tabs">
             <li class="nav-item">
-                <a class="nav-link text-dark" aria-current="page" href="#"><i class="fas fa-home"></i> Início</a>
+                <a class="nav-link text-dark" aria-current="page" href="admin.php"><i class="fas fa-home"></i> Início</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-dark" href="#"><i class="fas fa-graduation-cap"></i> Cursos</a>
+                <a class="nav-link text-dark" href="adminCursos.php"><i class="fas fa-graduation-cap"></i> Cursos</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-dark" href="#"><i class="fas fa-book"></i> Disciplinas</a>
+                <a class="nav-link text-dark" href="adminDisciplinas.php"><i class="fas fa-book"></i> Disciplinas</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-dark" href="#"><i class="fas fa-users"></i> Turmas</a>
+                <a class="nav-link text-dark" href="adminTurmas.php"><i class="fas fa-users"></i> Turmas</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active text-primary" id="nav-active" href="#"><b><i class="fas fa-chalkboard-teacher"></i> Professores</b></a>
+                <a class="nav-link active text-primary" id="nav-active" href="adminProfessores.php"><b><i class="fas fa-chalkboard-teacher"></i> Professores</b></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-dark" href="#"><i class="fas fa-user"></i> Alunos</a>
+                <a class="nav-link text-dark" href="adminAlunos.php"><i class="fas fa-user"></i> Alunos</a>
             </li>
         </ul>
         <nav class="ms-5 mt-2" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">

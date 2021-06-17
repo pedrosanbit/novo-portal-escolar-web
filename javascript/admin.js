@@ -47,8 +47,9 @@ function toggleDarkMode() {
 		selects[i].classList.toggle('bg-dark');
 		selects[i].classList.toggle('text-white');
 	}
-	if(document.getElementById('tableConsulta'))
-		document.getElementById('tableConsulta').classList.toggle("table-dark");
+	var tabelas = document.getElementsByTagName('table')
+	for(var i=0; i < tabelas.length; i++)
+		tabelas[i].classList.toggle("table-dark");
 	var modals = document.getElementsByClassName('modal-content');
 	for(var i=0; i < modals.length; i++)
 		modals[i].classList.toggle("bg-dark");

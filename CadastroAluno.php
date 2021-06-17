@@ -1,4 +1,10 @@
 <?php
+    session_start();
+    if(!isset($_SESSION['login']))
+        header('location:index.php');
+    else if($_SESSION['tipo'] != 'admin')
+        header('location:index.php');
+
 	if ($_SERVER["REQUEST_METHOD"] === 'POST') {
 		include("conexaoBD.php");
 
@@ -71,45 +77,26 @@
                 </form>
             </div>
         </nav>
-        <nav>
-            <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <button class="nav-link active text-dark" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-inicio" type="button" role="tab" aria-controls="nav-inicio" aria-selected="true" onclick="toggleActiveTab();">
-                    <i class="fas fa-home"></i> Início
-                </button>
-                <button class="nav-link text-dark" id="nav-curso-tab" data-bs-toggle="tab" data-bs-target="#nav-cursos" type="button" role="tab" aria-controls="nav-cursos" aria-selected="false" onclick="toggleActiveTab();">
-                    <i class="fas fa-graduation-cap"></i> Cursos
-                </button>
-                <button class="nav-link text-dark" id="nav-disciplina-tab" data-bs-toggle="tab" data-bs-target="#nav-disciplinas" type="button" role="tab" aria-controls="nav-disciplinas" aria-selected="false" onclick="toggleActiveTab();">
-                    <i class="fas fa-book"></i> Disciplinas
-                </button>
-                <button class="nav-link text-dark" id="nav-turmas-tab" data-bs-toggle="tab" data-bs-target="#nav-turmas" type="button" role="tab" aria-controls="nav-turmas" aria-selected="false" onclick="toggleActiveTab();">
-                    <i class="fas fa-users"></i> Turmas
-                </button>
-                <button class="nav-link text-dark" id="nav-professor-tab" data-bs-toggle="tab" data-bs-target="#nav-professores" type="button" role="tab" aria-controls="nav-professores" aria-selected="false" onclick="toggleActiveTab();">
-                    <i class="fas fa-chalkboard-teacher"></i> Professores
-                </button>
-                <button class="nav-link text-dark" id="nav-aluno-tab" data-bs-toggle="tab" data-bs-target="#nav-alunos" type="button" role="tab" aria-controls="nav-alunos" aria-selected="false" onclick="toggleActiveTab();">
-                    <i class="fas fa-user"></i> Alunos
-                </button>
-            </div>
-        </nav>
-        <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active" id="nav-inicio" role="tabpanel" aria-labelledby="nav-home-tab">
-                Conteúdo Início
-            </div>
-            <div class="tab-pane fade" id="nav-cursos" role="tabpanel" aria-labelledby="nav-curso-tab">
-                Conteúdo Cursos
-            </div>
-            <div class="tab-pane fade" id="nav-disciplinas" role="tabpanel" aria-labelledby="nav-disciplina-tab">
-                Conteúdo Disciplinas
-            </div>
-            <div class="tab-pane fade" id="nav-turmas" role="tabpanel" aria-labelledby="nav-turmas-tab">
-                Conteúdo Turmas
-            </div>
-            <div class="tab-pane fade" id="nav-professores" role="tabpanel" aria-labelledby="nav-professor-tab">
-                Conteúdo Professores
-            </div>
-            <div class="tab-pane fade" id="nav-alunos" role="tabpanel" aria-labelledby="nav-aluno-tab">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link text-dark" aria-current="page" href="admin.php"><i class="fas fa-home"></i> Início</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="adminCursos.php"><i class="fas fa-graduation-cap"></i> Cursos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="adminDisciplinas.php"><i class="fas fa-book"></i> Disciplinas</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="adminTurmas.php"><i class="fas fa-users"></i> Turmas</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="adminProfessores.php"><i class="fas fa-chalkboard-teacher"></i> Professores</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active text-primary" id="nav-active" href="adminAlunos.php"><b><i class="fas fa-user"></i> Alunos</b></a>
+            </li>
+        </ul>
                 <nav class="ms-5 mt-2" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="adminAlunos.php">Alunos</a></li>
@@ -158,9 +145,7 @@
                         <hr>
                     </form>
                 </div>
-            </div>
-        </div>
-        <script src="javascript/adminCadastroAluno.js"></script>
+        <script src="javascript/admin.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
     </body>
 </html>

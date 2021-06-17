@@ -82,12 +82,12 @@
                 else
                     header("location:editAluno.php?ra=".$raNovo);
             }
-            else if($confirmacao==1){
+            /*else if($confirmacao==1){
                 echo $msg;
             }
             else if($confirmacao==2){
                 echo "RA e RG já cadastrados.";
-            }
+            }*/
             $pdo=null;
             
         }
@@ -167,84 +167,20 @@
                 <br>
                 <label for="email" class="form-label">Email:</label>
                 <?php echo "<input value='" .$email. "' class='form-control mb-3' type='text' id='email' name='email'>"; ?>
+                <?php
+                    if(isset($confirmacao)) {
+                        if($confirmacao==1)
+                            echo "<span class='text-danger'>" . $msg . "</span>";
+                        else if($confirmacao==2)
+                            echo "<span class='text-danger'>RA e RG já cadastrados.</span>";
+                    }
+                ?>
                 <div class="text-center mt-4">
                     <button type="submit" class="btn btn-primary rounded-pill text-white"><b>Alterar Dados</b></button>
                 </div>
                 <hr>
             </form>
         </div>
-            <!--div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <button class="nav-link active text-dark" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-inicio" type="button" role="tab" aria-controls="nav-inicio" aria-selected="true" onclick="toggleActiveTab();">
-                    <i class="fas fa-home"></i> Início
-                </button>
-                <button class="nav-link text-dark" id="nav-curso-tab" data-bs-toggle="tab" data-bs-target="#nav-cursos" type="button" role="tab" aria-controls="nav-cursos" aria-selected="false" onclick="toggleActiveTab();">
-                    <i class="fas fa-graduation-cap"></i> Cursos
-                </button>
-                <button class="nav-link text-dark" id="nav-disciplina-tab" data-bs-toggle="tab" data-bs-target="#nav-disciplinas" type="button" role="tab" aria-controls="nav-disciplinas" aria-selected="false" onclick="toggleActiveTab();">
-                    <i class="fas fa-book"></i> Disciplinas
-                </button>
-                <button class="nav-link text-dark" id="nav-turmas-tab" data-bs-toggle="tab" data-bs-target="#nav-turmas" type="button" role="tab" aria-controls="nav-turmas" aria-selected="false" onclick="toggleActiveTab();">
-                    <i class="fas fa-users"></i> Turmas
-                </button>
-                <button class="nav-link text-dark" id="nav-professor-tab" data-bs-toggle="tab" data-bs-target="#nav-professores" type="button" role="tab" aria-controls="nav-professores" aria-selected="false" onclick="toggleActiveTab();">
-                    <i class="fas fa-chalkboard-teacher"></i> Professores
-                </button>
-                <button class="nav-link text-dark" id="nav-aluno-tab" data-bs-toggle="tab" data-bs-target="#nav-alunos" type="button" role="tab" aria-controls="nav-alunos" aria-selected="false" onclick="toggleActiveTab();">
-                    <i class="fas fa-user"></i> Alunos
-                </button>
-            </div>
-        </nav>
-        <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active" id="nav-inicio" role="tabpanel" aria-labelledby="nav-home-tab">
-                Conteúdo Início
-            </div>
-            <div class="tab-pane fade" id="nav-cursos" role="tabpanel" aria-labelledby="nav-curso-tab">
-                Conteúdo Cursos
-            </div>
-            <div class="tab-pane fade" id="nav-disciplinas" role="tabpanel" aria-labelledby="nav-disciplina-tab">
-                Conteúdo Disciplinas
-            </div>
-            <div class="tab-pane fade" id="nav-turmas" role="tabpanel" aria-labelledby="nav-turmas-tab">
-                Conteúdo Turmas
-            </div>
-            <div class="tab-pane fade" id="nav-professores" role="tabpanel" aria-labelledby="nav-professor-tab">
-                Conteúdo Professores
-            </div>
-            <div class="tab-pane fade" id="nav-alunos" role="tabpanel" aria-labelledby="nav-aluno-tab">
-                <nav class="ms-5 mt-2" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="adminAlunos.php">Alunos</a></li>
-                        <?php echo "<li class='breadcrumb-item active' aria-current='page'>". $nome. "</li> "; ?> 
-                    </ol>
-                </nav>
-                <div class="container mt-3">
-                    <form method="post">
-                        <label for="nome" class="form-label">Nome:</label>
-                        <?php echo "<input value='" .$nome. "' class='form-control' type='text' id='nome' name='nome'>"; ?>
-                        <br>
-                        <div class="row">
-                            <div class="col-md-6 col-sm-12">
-                                <label for="ra" class="form-label">RA:</label>
-                                <?php echo "<input value='" .$ra. "' class='form-control' type='text' id='ra' name='ra' maxlength='6'>"; ?>
-                            </div>
-                            <div class="col-md-6 col-sm-12">
-                                <label for="rg" class="form-label">RG (somente números):</label>
-                                <?php echo "<input value='" .$rg. "' class='form-control' type='text' id='rg' name='rg' maxlength='9'>"; ?> 
-                            </div>
-                        </div>
-                        <br>
-                        <label for="email" class="form-label">Email:</label>
-                        <?php echo "<input value='" .$email. "' class='form-control mb-3' type='text' id='email' name='email'>"; ?>
-                    
-
-                        <div class="text-center mt-4">
-                            <button type="submit" class="btn btn-primary rounded-pill text-white"><b>Alterar Dados</b></button>
-                        </div>
-                        <hr>
-                    </form>
-                </div>
-            </div>
-        </div-->
         <script type="text/javascript" src="javascript/admin.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
     </body>
