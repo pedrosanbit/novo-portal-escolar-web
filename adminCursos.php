@@ -111,7 +111,7 @@
         <?php include("consultaCurso.php"); ?>
         <hr>
       <a href="CadastroCurso.php" class="btn btn-primary btn-lg rounded-pill text-white" role="button">
-        <i class="fas fa-user-plus"></i> Cadastrar Cursos
+        <i class="fas fa-plus-square"></i> Cadastrar Cursos
       </a>
     </div>
     <script src="javascript/admin.js"></script>

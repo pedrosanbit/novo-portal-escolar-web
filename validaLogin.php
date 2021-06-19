@@ -1,8 +1,6 @@
 <?php
     $confirmacao=0;
     $tipo = "";
-    /*$usuario = array("admin","prof","estudante");
-    $senha   =  array("admin123","prof123","est123");*/
 
     $usuarioInformado = $_GET["usuario"];
     $senhaInformada   = $_GET["senha"];

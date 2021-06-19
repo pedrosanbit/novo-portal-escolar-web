@@ -48,7 +48,7 @@
           echo "<td>" . $row['codDisciplina'] . "</td>";
           echo "<td>" . $row['nomeDisciplina'] . "</td>";
           echo "<td>" . $row['cargaHoraria'] . "</td>";
-          echo "<td class='text-md-start text-center'>" . "<a href='editDisciplina.php?codDisciplina=" . $row['codDisciplina'] . "'><i class='fas fa-user-edit me-2 ms-md-0 ms-2'></i></a>" . "<i class='fas fa-user-minus text-danger ms-md-2' data-bs-toggle='modal' data-bs-target='#modalExcluirDisciplina". $row['codDisciplina'] ."'></i>" . "</td>";
+          echo "<td class='text-md-start text-center'>" . "<a href='editDisciplina.php?codDisciplina=" . $row['codDisciplina'] . "'><i class='fas fa-edit me-2 ms-md-0 ms-2'></i></a>" . "<i class='fas fa-minus-circle text-danger ms-md-2' data-bs-toggle='modal' data-bs-target='#modalExcluirDisciplina". $row['codDisciplina'] ."'></i>" . "</td>";
           echo "</tr>";
           echo "<div class='modal fade' id='modalExcluirDisciplina". $row['codDisciplina'] ."' tabindex='-1' aria-labelledby='modalExcluirDisciplinaLabel' aria-hidden='true'>
                   <div class='modal-dialog'>
