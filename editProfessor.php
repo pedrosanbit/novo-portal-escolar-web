@@ -1,4 +1,11 @@
 <?php
+    session_start();
+    if(!isset($_SESSION['login']))
+        header('location:index.php');
+    else if($_SESSION['tipo'] != 'admin')
+        header('location:index.php');
+    if(!isset($_GET['rf']))
+        header('location:adminProfessores.php');
     include("conexaoBD.php");
     $stmt = $pdo->prepare("select * from ProfessoresTCC where rfProfessor = :rf");
     $stmt->bindParam(':rf', $_GET["rf"]);
@@ -11,6 +18,10 @@
         $rg=$row['rgProfessor'];
         $rf=$row['rfProfessor'];
     }
+    else {
+        header('location:adminProfessores.php');
+    }
+    
     $pdo=null;
 
     if ($_SERVER["REQUEST_METHOD"] === 'POST') {
@@ -164,7 +175,7 @@
                     }
                 ?>
                 <div class="text-center mt-4">
-                    <button type="submit" class="btn btn-primary rounded-pill text-white"><b>Alterar Dados</b></button>
+                    <button type="submit" class="btn btn-primary rounded-pill text-white"><b><i class='fas fa-user-edit'></i> Alterar Dados</b></button>
                 </div>
                 <hr>
             </form>

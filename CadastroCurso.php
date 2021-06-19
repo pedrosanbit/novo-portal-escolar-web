@@ -100,7 +100,7 @@
                 <div class="row">
                     <div class="col-md-6 col-sm-12">
                         <label for="codCurso" class="form-label">Código do Curso:</label>
-                        <input class="form-control" type="text" id="codCurso" name="codCurso" maxlength="2">
+                        <input class="form-control" type="number" id="codCurso" name="codCurso" maxlength="2" min="1" max="99">
                     </div>
                     <div class="col-md-6 col-sm-12">
                         <label for="nomeCurso" class="form-label">Nome do Curso:</label>

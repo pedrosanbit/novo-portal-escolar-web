@@ -118,7 +118,7 @@
       <?php include("consultaTurma.php"); ?>
       <hr>
       <a href="CadastroTurma.php" class="btn btn-primary btn-lg rounded-pill text-white" role="button">
-        <i class="fas fa-user-plus"></i> Cadastrar Turmas
+        <i class="fas fa-plus-square"></i> Cadastrar Turmas
       </a>
     </div>
 

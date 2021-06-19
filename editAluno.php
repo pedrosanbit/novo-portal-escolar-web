@@ -1,4 +1,11 @@
 <?php
+    session_start();
+    if(!isset($_SESSION['login']))
+        header('location:index.php');
+    else if($_SESSION['tipo'] != 'admin')
+        header('location:index.php');
+    if(!isset($_GET['ra']))
+        header('location:adminAlunos.php');
     include("conexaoBD.php");
     $stmt = $pdo->prepare("select * from AlunosTCC where raAluno = :ra");
     $stmt->bindParam(':ra', $_GET["ra"]);
@@ -11,6 +18,9 @@
         $rg=$row['rgAluno'];
         $ra=$row['raAluno'];
         $email=$row['emailAluno'];
+    }
+    else {
+        header('location:adminAlunos.php');
     }
     $pdo=null;
 
@@ -176,7 +186,7 @@
                     }
                 ?>
                 <div class="text-center mt-4">
-                    <button type="submit" class="btn btn-primary rounded-pill text-white"><b>Alterar Dados</b></button>
+                    <button type="submit" class="btn btn-primary rounded-pill text-white"><b><i class='fas fa-user-edit'></i> Alterar Dados</b></button>
                 </div>
                 <hr>
             </form>

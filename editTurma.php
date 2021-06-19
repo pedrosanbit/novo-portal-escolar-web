@@ -6,6 +6,23 @@
         header('location:index.php');
     if(!isset($_GET['codTurma']))
         header('location:adminTurmas.php');
+
+    if($_SERVER["REQUEST_METHOD"] !== "POST") {
+        if(isset($_GET['msg'])) {
+            $msg = $_GET['msg'];
+            if($msg == 1) {
+                echo "<script type='text/javascript'>
+                    alert('Disciplina removida.');
+                </script>";
+            }
+            else if($msg == 2) {
+                echo "<script type='text/javascript'>
+                    alert('Aluno removido.');
+                </script>";
+            }
+            $msg = 0;
+        }
+    }
     include("conexaoBD.php");
     $stmt = $pdo->prepare("select * from TurmasTCC where codTurma = :codTurma");
     $stmt->bindParam(':codTurma', $_GET["codTurma"]);
@@ -18,6 +35,9 @@
         $codTurma=$row['codTurma'];
         $curso=$row['curso'];
         $periodo=$row['periodo'];
+    }
+    else {
+        header('location:adminTurmas.php');
     }
     $pdo=null;
 
@@ -206,7 +226,7 @@
             <?php
                 include("conexaoBD.php");
                 try {
-                    $stmt = $pdo->prepare("select d.nomeDisciplina, p.nomeProfessor from ProfessoresTCC p inner join LecionaTCC l on p.rfProfessor = l.rfProfessor inner join DisciplinasTCC d on l.codDisciplina = d.codDisciplina inner join TurmasTCC t on t.codTurma = l.codTurma where t.codTurma = :codTurma");
+                    $stmt = $pdo->prepare("select d.codDisciplina, d.nomeDisciplina, p.rfProfessor, p.nomeProfessor from ProfessoresTCC p inner join LecionaTCC l on p.rfProfessor = l.rfProfessor inner join DisciplinasTCC d on l.codDisciplina = d.codDisciplina inner join TurmasTCC t on t.codTurma = l.codTurma where t.codTurma = :codTurma");
                     $stmt->bindParam(':codTurma',$_GET['codTurma']);
                     $stmt->execute();
 
@@ -215,6 +235,7 @@
                                 <thead>
                                     <th>Disciplina</th>
                                     <th>Professor</th>
+                                    <th>Ações</th>
                                 </thead>
                             <tbody>";
 
@@ -222,7 +243,27 @@
                         echo "<tr>";
                         echo "<td>" . $row['nomeDisciplina'] . "</td>";
                         echo "<td>" . $row['nomeProfessor'] . "</td>";
+                        echo "<td class='text-md-start text-center'>" . "<a href='editDisciplinaTurma.php?codTurma=" . $_GET['codTurma'] . "&codDisciplina=" . $row['codDisciplina'] . "'><i class='fas fa-edit' me-2 ms-md-0 ms-2'></i></a>" . "<i class='fas fa-minus-circle text-danger ms-md-2' data-bs-toggle='modal' data-bs-target='#modalExcluirDisciplinaTurma". $row['codDisciplina'] ."'></i>" . "</td>";
                         echo "</tr>";
+                        echo "<div class='modal fade' id='modalExcluirDisciplinaTurma". $row['codDisciplina'] ."' tabindex='-1' aria-labelledby='modalExcluirDisciplinaTurmaLabel' aria-hidden='true'>
+                                <div class='modal-dialog'>
+                                    <div class='modal-content' id='modalContentExcluirDisciplinaTurma'>
+                                        <div class='modal-header'>
+                                            <h5 class='modal-title' id='modalExcluirDisciplinaTurmaLabel'>Remover Disciplina</h5>
+                                            <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                        </div>
+                                        <div class='modal-body'>
+                                            Tem certeza que deseja remover ". $row['nomeDisciplina'] ." da turma?
+                                        </div>
+                                        <div class='modal-footer'>
+                                            <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cancelar</button>
+                                            <form method='post' action='excluirDisciplinaTurma.php'>
+                                                <button name='codTurma' value='". $_GET['codTurma'] . "|" . $row['codDisciplina'] . "|". $row['rfProfessor'] ."' type='submit' class='btn btn-outline-danger'>Remover disciplina</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>";
                     }
                     echo "</tbody></table></div>";
                 }
@@ -234,7 +275,7 @@
                 }
             ?>
             <div class="text-center">
-                <a href="CadastroTurma.php" class="btn btn-primary rounded-pill text-white" role="button">
+                <?php echo "<a href='addDisciplinaTurma.php?codTurma=".$_GET['codTurma']."' class='btn btn-primary rounded-pill text-white' role='button'>";?>
                     <b><i class="fas fa-plus-square"></i> Adicionar Disciplinas</b>
                 </a>
             </div>
@@ -252,6 +293,7 @@
                                 <thead>
                                     <th>RA</th>
                                     <th>Nome</th>
+                                    <th>Ações</th>
                                 </thead>
                             <tbody>";
 
@@ -259,7 +301,27 @@
                         echo "<tr>";
                         echo "<td>" . $row['raAluno'] . "</td>";
                         echo "<td>" . $row['nomeAluno'] . "</td>";
+                        echo "<td class='text-md-start text-center'>" . "<i class='fas fa-minus-circle text-danger ms-md-2' data-bs-toggle='modal' data-bs-target='#modalExcluirAlunoTurma". $row['raAluno'] ."'></i>" . "</td>";
                         echo "</tr>";
+                        echo "<div class='modal fade' id='modalExcluirAlunoTurma". $row['raAluno'] ."' tabindex='-1' aria-labelledby='modalExcluirAlunoTurmaLabel' aria-hidden='true'>
+                                <div class='modal-dialog'>
+                                    <div class='modal-content' id='modalContentExcluirAlunoTurma'>
+                                        <div class='modal-header'>
+                                            <h5 class='modal-title' id='modalExcluirAlunoTurmaLabel'>Remover Aluno</h5>
+                                            <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                        </div>
+                                        <div class='modal-body'>
+                                            Tem certeza que deseja remover ". $row['nomeAluno'] ." da turma?
+                                        </div>
+                                        <div class='modal-footer'>
+                                            <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cancelar</button>
+                                            <form method='post' action='excluirAlunoTurma.php'>
+                                                <button name='codTurma' value='". $_GET['codTurma'] . "|" . $row['raAluno'] ."' type='submit' class='btn btn-outline-danger'>Remover aluno</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>";
                     }
                     echo "</tbody></table></div>";
                 }
@@ -271,7 +333,7 @@
                 }
             ?>
             <div class="text-center mb-4">
-                <a href="CadastroTurma.php" class="btn btn-primary rounded-pill text-white" role="button">
+                <?php echo "<a href='addAlunoTurma.php?codTurma=".$_GET['codTurma']."' class='btn btn-primary rounded-pill text-white' role='button'>";?>
                     <b><i class="fas fa-user-plus"></i> Adicionar Alunos</b>
                 </a>
             </div>

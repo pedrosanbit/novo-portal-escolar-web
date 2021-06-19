@@ -1,4 +1,11 @@
 <?php
+    session_start();
+    if(!isset($_SESSION['login']))
+        header('location:index.php');
+    else if($_SESSION['tipo'] != 'admin')
+        header('location:index.php');
+    if(!isset($_GET['codDisciplina']))
+        header('location:adminDisciplinas.php');
 	include("conexaoBD.php");
     $stmt = $pdo->prepare("select * from DisciplinasTCC where codDisciplina = :cod");
     $stmt->bindParam(':cod', $_GET["codDisciplina"]);
@@ -10,6 +17,10 @@
         $cargaHoraria=$row['cargaHoraria'];
         $cod=$row['codDisciplina'];
     }
+    else {
+        header('location:adminDisciplinas.php');
+    }
+    
     $pdo=null;
 
 
@@ -35,8 +46,8 @@
                 	$stmt->execute();
             }
             if($nomeNovo!=$row['nomeDisciplina']){
-                    $stmt = $pdo->prepare("select * from DisciplinasTCC where codDisciplina = :cod");
-                    $stmt->bindParam(':cod', $codDisciplina);
+                    $stmt = $pdo->prepare("select * from DisciplinasTCC where nomeDisciplina = :nome");
+                    $stmt->bindParam(':nome', $nome);
                     $stmt->execute();
                     $rows = $stmt->rowCount();
                     if ($rows <= 0) {
@@ -73,12 +84,12 @@
                 	else
                     	header("location:editDisciplina.php?codDisciplina=".$codNovo);
             }
-            else if($confirmacao==1){
+            /*else if($confirmacao==1){
                 	echo $msg;
             }
             else if($confirmacao==2){
                 	echo "Código e Nome já cadastrados.";
-            }
+            }*/
             $pdo=null;
             
         }
@@ -118,10 +129,10 @@
                 <a class="nav-link text-dark" href="adminCursos.php"><i class="fas fa-graduation-cap"></i> Cursos</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-dark" href="adminDisciplinas.php"><i class="fas fa-book"></i> Disciplinas</a>
+                <a class="nav-link active text-primary" id="nav-active" href="adminDisciplinas.php"><i class="fas fa-book"></i> Disciplinas</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active text-primary" id="nav-active" href="adminTurmas.php"><b><i class="fas fa-users"></i> Turmas</b></a>
+                <a class="nav-link text-dark" href="adminTurmas.php"><b><i class="fas fa-users"></i> Turmas</b></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-dark" href="adminProfessores.php"><i class="fas fa-chalkboard-teacher"></i> Professores</a>
@@ -141,18 +152,26 @@
                 <label for="nome" class="form-label">Nome:</label>
                 <?php echo "<input value='" .$nome. "' class='form-control' type='text' id='nome' name='nome'>"; ?> 
                 <br>
-                <div class="row">
+                <div class="row mb-1">
                     <div class="col-md-6 col-sm-12">
                         <label for="rf" class="form-label">Código:</label>
                         <?php echo "<input value='" .$cod. "' class='form-control' type='text' id='cod' name='cod' maxlength='6'>"; ?>
                     </div>
                     <div class="col-md-6 col-sm-12">
                         <label for="rg" class="form-label">Carga Horária (qtd de horas aula):</label>
-                        <?php echo "<input value='" .$cargaHoraria. "' class='form-control' type='text' id='CH' name='CH' maxlength='9'>"; ?>  
+                        <?php echo "<input value='" .$cargaHoraria. "' class='form-control' type='number' id='CH' name='CH' min='1' max='10'>"; ?>  
                     </div>
                 </div>
+                <?php
+                    if(isset($confirmacao)) {
+                        if($confirmacao==1)
+                            echo "<span class='text-danger'>" . $msg . "</span>";
+                        else if($confirmacao==2)
+                            echo "<span class='text-danger'>Código e Nome já cadastrados.</span>";
+                    }
+                ?>
                 <div class="text-center mt-4">
-                    <button type="submit" class="btn btn-primary rounded-pill text-white"><b>Alterar Dados</b></button>
+                    <button type="submit" class="btn btn-primary rounded-pill text-white"><b><i class='fas fa-edit'></i> Alterar Dados</b></button>
                 </div>
                 <hr>
             </form>

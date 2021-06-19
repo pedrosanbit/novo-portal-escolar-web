@@ -117,7 +117,7 @@
         <?php include("consultaDisciplina.php"); ?>
         <hr>
       <a href="CadastroDisciplina.php" class="btn btn-primary btn-lg rounded-pill text-white" role="button">
-        <i class="fas fa-user-plus"></i> Cadastrar Disciplinas
+        <i class="fas fa-plus-square"></i> Cadastrar Disciplinas
       </a>
     </div>
     <script src="javascript/admin.js"></script>

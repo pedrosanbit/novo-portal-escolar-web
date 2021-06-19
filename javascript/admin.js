@@ -38,9 +38,12 @@ function toggleDarkMode() {
 		inputs[i].classList.toggle('bg-dark');
 		inputs[i].classList.toggle('text-white');
 	}
-	darkSwitch.classList.toggle('border-white');
-	darkSwitch.classList.toggle('bg-dark');
-	darkSwitch.classList.toggle('text-white');
+	var checkboxes = document.getElementsByClassName('form-check-input');
+	for(var i=0; i < checkboxes.length; i++) {
+		checkboxes[i].classList.toggle('border-white');
+		checkboxes[i].classList.toggle('bg-dark');
+		checkboxes[i].classList.toggle('text-white');
+	}
 	var selects = document.getElementsByTagName('select')
 	for(var i=0; i < selects.length; i++) {
 		selects[i].classList.toggle('border-white');

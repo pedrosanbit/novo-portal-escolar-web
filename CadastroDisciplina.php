@@ -109,7 +109,7 @@
                     </div>
                     <div class="col-md-6 col-sm-12">
                         <label for="cargaHoraria" class="form-label">Carga Horária:</label>
-                        <input class="form-control" type="text" id="cargaHoraria" name="cargaHoraria" maxlength="1">
+                        <input class="form-control" type="number" id="cargaHoraria" name="cargaHoraria" min='1' max='10'>
                     </div>
                 </div>
                 <br>
