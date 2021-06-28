@@ -4,10 +4,10 @@
     }
     else if ($_GET["login"]=="logado") { 
         if($_GET["tipo"]=="admin"){
-            header("location:admin.php");
+            header("location:admin/admin.php");
         }
         else if($_GET["tipo"]=="prof"){
-            header("location:sucesso.html");
+            header("location:professor/professor.php");
         }
         else if($_GET["tipo"]=="estudante"){
             header("location:sucesso.html");
