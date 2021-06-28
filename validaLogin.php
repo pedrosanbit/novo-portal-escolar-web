@@ -12,9 +12,9 @@
         $msg = "Informe seu login e senha!";
     }
 
-    else if ( strlen($usuarioInformado) < 4 ) {
+    /*else if ( strlen($usuarioInformado) < 4 ) {
         $msg = "O login deve possuir no minimo 4 caracteres!";
-    }
+    }*/
 
     else if ( strlen($senhaInformada) < 4 ) {
         $msg = "A senha deve possuir no minimo 4 caracteres!";

@@ -12,6 +12,7 @@ function iniciarDark() {
 }
 
 function setTema() {
+	document.getElementById("darkSwitch2").checked = darkSwitch.checked;
 	if(darkSwitch.checked) {
 		toggleDarkMode();
 		localStorage.setItem("darkTheme", "on");
@@ -22,11 +23,22 @@ function setTema() {
 	}
 }
 
+function toggleDarkSwitch() {
+	darkSwitch.checked = document.getElementById("darkSwitch2").checked;
+	setTema();
+}
+
 function toggleDarkMode() {
 	document.body.classList.toggle("bg-dark");
 	document.body.classList.toggle("text-white");
-	document.getElementById('navbar').classList.toggle("bg-dark");
+	var navbars = document.getElementsByClassName("navbar");
+	for(var i=0; i < navbars.length; i++) {
+		navbars[i].classList.toggle("bg-dark");
+	}
+	document.getElementById('navbar2').classList.toggle("border-bottom");
+	document.getElementById('navbar2').classList.toggle("border-light");
 	document.getElementById('lua').classList.toggle("fas");
+	document.getElementById('lua2').classList.toggle("fas");
 	var tabs = document.getElementsByClassName('nav-link');
 	for(var i=0; i < tabs.length; i++)
 		tabs[i].classList.toggle('text-white');
@@ -56,4 +68,9 @@ function toggleDarkMode() {
 	var modals = document.getElementsByClassName('modal-content');
 	for(var i=0; i < modals.length; i++)
 		modals[i].classList.toggle("bg-dark");
+	var accordions = document.getElementsByClassName('accordion-body');
+	for(var i=0; i < accordions.length; i++) {
+		accordions[i].classList.toggle("bg-dark");
+		accordions[i].classList.toggle("text-white");
+	}
 }
