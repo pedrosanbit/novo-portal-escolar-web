@@ -50,6 +50,12 @@ function toggleDarkMode() {
 		inputs[i].classList.toggle('bg-dark');
 		inputs[i].classList.toggle('text-white');
 	}
+	var textareas = document.getElementsByTagName('textarea');
+	for(var i=0; i < textareas.length; i++) {
+		textareas[i].classList.toggle('border-white');
+		textareas[i].classList.toggle('bg-dark');
+		textareas[i].classList.toggle('text-white');
+	}
 	var checkboxes = document.getElementsByClassName('form-check-input');
 	for(var i=0; i < checkboxes.length; i++) {
 		checkboxes[i].classList.toggle('border-white');

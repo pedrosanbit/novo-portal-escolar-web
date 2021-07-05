@@ -111,7 +111,7 @@
                 <a class="nav-link" href="adminTurmas.php"><i class="fas fa-file-alt"></i> Notas</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="adminProfessores.php"><i class="fas fa-chalkboard"></i> Planejamento</a>
+                <a class="nav-link" href="professorPlanejamento.php"><i class="fas fa-chalkboard"></i> Planejamento</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="../logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
@@ -142,7 +142,7 @@
           <a class="nav-link text-dark" href="adminTurmas.php"><i class="fas fa-file-alt"></i> Notas</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="adminProfessores.php"><i class="fas fa-chalkboard"></i> Planejamento</a>
+          <a class="nav-link text-dark" href="professorPlanejamento.php"><i class="fas fa-chalkboard"></i> Planejamento</a>
         </li>
       </ul>
     </div>
