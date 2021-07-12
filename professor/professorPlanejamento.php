@@ -108,7 +108,7 @@
                 <a class="nav-link" href="adminDisciplinas.php"><i class="fas fa-calendar-alt"></i> Frequência</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="adminTurmas.php"><i class="fas fa-file-alt"></i> Notas</a>
+                <a class="nav-link" href="professorNotas.php"><i class="fas fa-file-alt"></i> Notas</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link active" href="professorPlanejamento.php"><b><i class="fas fa-chalkboard"></i> Planejamento</b></a>
@@ -139,7 +139,7 @@
           <a class="nav-link text-dark" href="adminDisciplinas.php"><i class="fas fa-calendar-alt"></i> Frequência</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="adminTurmas.php"><i class="fas fa-file-alt"></i> Notas</a>
+          <a class="nav-link text-dark" href="professorNotas.php"><i class="fas fa-file-alt"></i> Notas</a>
         </li>
         <li class="nav-item">
           <a class="nav-link active text-primary" id="nav-active" href="professorPlanejamento.php"><b><i class="fas fa-chalkboard"></i> Planejamento</b></a>
