@@ -267,8 +267,97 @@
             echo "<div class='tab-content' id='pills-tabContent'>";
             echo "<div class='tab-pane fade show active' id='pills-avaliacao' role='tabpanel' aria-labelledby='pills-avaliacao-tab'>
                     <h4>Avaliações</h4>
-                      <div class='mt-4 text-center'>
-                        <button type='submit' class='btn btn-primary rounded-pill text-white'><b><i class='fas fa-edit'></i> Editar Avaliações</b></button>
+                      <ul class='nav nav-pills mb-3' id='pills-tab' role='tablist'>
+                        <li class='nav-item' role='presentation'>
+                          <button class='nav-link active' id='pills-sem1-tab' data-bs-toggle='pill' data-bs-target='#pills-sem1' type='button' role='tab' aria-controls='pills-sem1' aria-selected='true'>1º Semestre</button>
+                        </li>
+                        <li class='nav-item' role='presentation'>
+                          <button class='nav-link' id='pills-sem2-tab' data-bs-toggle='pill' data-bs-target='#pills-sem2' type='button' role='tab' aria-controls='pills-sem2' aria-selected='false'>2º Semestre</button>
+                        </li>
+                      </ul>
+                      <div class='tab-content' id='pills-tabContent'>
+                        <div class='tab-pane fade show active' id='pills-sem1' role='tabpanel' aria-labelledby='pills-sem1-tab'>";
+            try {
+              include("../conexaoBD.php");
+              $stmt = $pdo->prepare("select a.descricao, a.data, a.peso from AtividadesTCC a inner join DisciplinaTurmaAtividadeTCC dta on a.codAtividade = dta.codAtividade where dta.codTurma = :codTurma and dta.codDisciplina = :codDisciplina and a.etapa = 1");
+              $stmt->bindParam(":codTurma", $_POST["turma"]);
+              $stmt->bindParam(":codDisciplina", $_POST["disciplina"]);
+              $stmt->execute();
+              if($stmt->rowCount() > 0) {
+                echo "<div class='table-responsive mt-4 mb-4'>
+                        <table id='tableConsulta' class='table table-sm table-striped table-hover'>
+                          <thead>
+                            <th>Avaliação</th>
+                            <th>Data</th>
+                            <th>Peso</th>
+                          </thead>
+                        <tbody>";
+                while($row = $stmt->fetch()) {
+                  echo "<tr>";
+                  echo "<td>" . $row['descricao'] . "</td>";
+                  echo "<td>" . date("d/m/Y", strtotime($row['data'])) . "</td>";
+                  echo "<td>" . (int)$row['peso'] . "</td>";
+                  echo "</tr>";
+                }
+                echo "</tbody></table></div>";
+              }
+              else {
+                echo "Nenhuma atividade adicionada ainda.";
+              }
+            }
+            catch(PDOException $e) {
+              echo 'Error: ' . $e->getMessage();
+            }
+            finally {
+              $pdo = null;
+            }
+            echo "<div class='mt-4 text-center'>
+                    <a href='editAtividades.php?turma=".$_POST["turma"]."&disciplina=".$_POST["disciplina"]."&etapa=1' class='btn btn-primary rounded-pill text-white' role='button'>
+                      <b><i class='fas fa-edit'></i> Editar Avaliações</b>
+                    </a>
+                  </div>";
+                  echo "</div>
+                        <div class='tab-pane fade' id='pills-sem2' role='tabpanel' aria-labelledby='pills-sem2-tab'>";
+            try {
+              include("../conexaoBD.php");
+              $stmt = $pdo->prepare("select a.descricao, a.data, a.peso from AtividadesTCC a inner join DisciplinaTurmaAtividadeTCC dta on a.codAtividade = dta.codAtividade where dta.codTurma = :codTurma and dta.codDisciplina = :codDisciplina and a.etapa = 2");
+              $stmt->bindParam(":codTurma", $_POST["turma"]);
+              $stmt->bindParam(":codDisciplina", $_POST["disciplina"]);
+              $stmt->execute();
+              if($stmt->rowCount() > 0) {
+                echo "<div class='table-responsive mt-4 mb-4'>
+                        <table id='tableConsulta' class='table table-sm table-striped table-hover'>
+                          <thead>
+                            <th>Avaliação</th>
+                            <th>Data</th>
+                            <th>Peso</th>
+                          </thead>
+                        <tbody>";
+                while($row = $stmt->fetch()) {
+                  echo "<tr>";
+                  echo "<td>" . $row['descricao'] . "</td>";
+                  echo "<td>" . date("d/m/Y", strtotime($row['data'])) . "</td>";
+                  echo "<td>" . (int)$row['peso'] . "</td>";
+                  echo "</tr>";
+                }
+                echo "</tbody></table></div>";
+              }
+              else {
+                echo "Nenhuma atividade adicionada ainda.";
+              }
+            }
+            catch(PDOException $e) {
+              echo 'Error: ' . $e->getMessage();
+            }
+            finally {
+              $pdo = null;
+            }
+                  echo "<div class='mt-4 text-center'>
+                          <a href='editAtividades.php?turma=".$_POST["turma"]."&disciplina=".$_POST["disciplina"]."&etapa=2' class='btn btn-primary rounded-pill text-white' role='button'>
+                            <b><i class='fas fa-edit'></i> Editar Avaliações</b>
+                          </a>
+                        </div>
+                        </div>
                       </div>
                     <hr>
                   </div>";
