@@ -99,7 +99,7 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="professor.php"><b><i class="fas fa-home"></i> Início</b></a>
+                <a class="nav-link" href="professor.php"><i class="fas fa-home"></i> Início</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="adminCursos.php"><i class="fas fa-search"></i> Consultas</a>
@@ -108,10 +108,10 @@
                 <a class="nav-link" href="adminDisciplinas.php"><i class="fas fa-calendar-alt"></i> Frequência</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="professorNotas.php"><i class="fas fa-file-alt"></i> Notas</a>
+                <a class="nav-link active" aria-current="page" href="notas.php"><b><i class="fas fa-file-alt"></i> Notas</b></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="professorPlanejamento.php"><i class="fas fa-chalkboard"></i> Planejamento</a>
+                <a class="nav-link" href="adminProfessores.php"><i class="fas fa-chalkboard"></i> Planejamento</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="../logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
@@ -130,7 +130,7 @@
     <div id="navtabs">
       <ul class="nav nav-tabs">
         <li class="nav-item">
-          <a class="nav-link active text-primary" id="nav-active" aria-current="page" href="professor.php"><b><i class="fas fa-home"></i> Início</b></a>
+          <a class="nav-link text-dark" href="professor.php"><i class="fas fa-home"></i> Início</a>
         </li>
         <li class="nav-item">
           <a class="nav-link text-dark" href="adminCursos.php"><i class="fas fa-search"></i> Consultas</a>
@@ -139,10 +139,10 @@
           <a class="nav-link text-dark" href="adminDisciplinas.php"><i class="fas fa-calendar-alt"></i> Frequência</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="professorNotas.php"><i class="fas fa-file-alt"></i> Notas</a>
+          <a class="nav-link active text-primary" id="nav-active" aria-current="page" href="notas.php"><b><i class="fas fa-file-alt"></i> Notas</b></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="professorPlanejamento.php"><i class="fas fa-chalkboard"></i> Planejamento</a>
+          <a class="nav-link text-dark" href="adminProfessores.php"><i class="fas fa-chalkboard"></i> Planejamento</a>
         </li>
       </ul>
     </div>
@@ -179,16 +179,16 @@
                           <div class='accordion-body'>
                             <ul>
                               <li>
-                                <a style='text-decoration: none;' href='#'><i class='fas fa-search'></i> Consultas</a>
+                                <a style='text-decoration: none;' href='#'><i class='fas fa-file-excel'></i> 1° Trimestre</a>
                               </li>
                               <li>
-                                <a style='text-decoration: none;' href='#'><i class='fas fa-calendar-alt'></i> Frequência</a>
+                                <a style='text-decoration: none;' href='#'><i class='fas fa-file-excel'></i> 2° Trimestre</a>
                               </li>
                               <li>
-                                <a style='text-decoration: none;' href='#'><i class='fas fa-file-alt'></i> Notas</a>
+                                <a style='text-decoration: none;' href='#'><i class='fas fa-file-excel'></i> 3° Trimestre</a>
                               </li>
                               <li>
-                                <a style='text-decoration: none;' href='#'><i class='fas fa-chalkboard'></i> Planejamento</a>
+                                <a style='text-decoration: none;' href='#'><i class='fas fa-file-excel'></i> 4° Trimestre</a>
                               </li>
                             </ul>
                           </div>
