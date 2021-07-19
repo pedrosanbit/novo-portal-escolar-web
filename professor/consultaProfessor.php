@@ -102,7 +102,7 @@
                 <a class="nav-link" aria-current="page" href="professor.php"><i class="fas fa-home"></i> Início</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="adminCursos.php"><i class="fas fa-search"></i> Consultas</a>
+                <a class="nav-link active" href="adminCursos.php"><i class="fas fa-search"></i> Consultas</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="adminDisciplinas.php"><i class="fas fa-calendar-alt"></i> Frequência</a>
@@ -111,7 +111,7 @@
                 <a class="nav-link" href="adminTurmas.php"><i class="fas fa-file-alt"></i> Notas</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" href="professorPlanejamento.php"><b><i class="fas fa-chalkboard"></i> Planejamento</b></a>
+                <a class="nav-link" href="professorPlanejamento.php"><b><i class="fas fa-chalkboard"></i> Planejamento</b></a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="../logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
@@ -133,7 +133,7 @@
           <a class="nav-link text-dark" aria-current="page" href="professor.php"><i class="fas fa-home"></i> Início</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active text-primary" href="adminCursos.php"><i class="fas fa-search"></i> Consultas</a>
+          <a class="nav-link active text-primary" id="nav-active" href="consultaProfessor.php"><i class="fas fa-search"></i> Consultas</a>
         </li>
         <li class="nav-item">
           <a class="nav-link text-dark" href="adminDisciplinas.php"><i class="fas fa-calendar-alt"></i> Frequência</a>
@@ -142,7 +142,7 @@
           <a class="nav-link text-dark" href="adminTurmas.php"><i class="fas fa-file-alt"></i> Notas</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link  text-dark" id="nav-active" href="professorPlanejamento.php"><b><i class="fas fa-chalkboard"></i> Planejamento</b></a>
+          <a class="nav-link  text-dark" href="professorPlanejamento.php"><b><i class="fas fa-chalkboard"></i> Planejamento</b></a>
         </li>
       </ul>
     </div>
@@ -226,9 +226,9 @@
               <option value="boletimAva">Boletim de avaliações</option>
               <option value="boletimEsc">Boletim Escolar</option>
               <option value="diarioClasse">Diário de Classe</option>
-              <option value="1">Boletim de avaliações</option>
-              <option value="1">Boletim de avaliações</option>
-              <option value="1">Boletim de avaliações</option>
+              <option value="horarioAula">Horário de aula </option>
+              <option value="matLecionadaData">Matéria lecionada - Por data </option>
+              <option value="matLecionadaDisc">Matéria lecionada - Por disciplina </option>
 
             </select>
           </div>
