@@ -251,7 +251,7 @@
         <div class="mt-4 text-center">
           <button type="submit" class="btn btn-primary rounded-pill text-white w-25"><b>Buscar</b></button>
         </div>
-      </form>
+      <!--/form-->
       <hr>
       <?php
         if($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -361,50 +361,176 @@
                       </div>
                     <hr>
                   </div>";
+
+            //Plano de Ensino
+            $ementa = "";
+            $objetivosGerais = "";
+            $objetivosEspecificos = "";
+            $modeloAvaliacao = "";
+            $conteudoProgramatico = "";
+            $procedimentosDidaticos = "";
+            $bibliografiaBasica = "";
+            $bibliografiaComplementar = "";
+            try {
+              include("../conexaoBD.php");
+              $stmt = $pdo->prepare("select * from LecionaTCC where codTurma = :codTurma and codDisciplina = :codDisciplina");
+              $stmt->bindParam(":codTurma", $_POST["turma"]);
+              $stmt->bindParam(":codDisciplina", $_POST["disciplina"]);
+              $stmt->execute();
+              $row = $stmt->fetch();
+              if($row["planoEnsino"] != NULL) {
+                $arquivo = $row["planoEnsino"];
+                $arquivo = fopen($arquivo, "r");
+                while(!feof($arquivo)) {
+                  $linha = fgets($arquivo);
+                  if($linha == false) break;
+                  if(str_contains($linha,"EMENTA")) {
+                    $linha = fgets($arquivo);
+                    while(!str_contains($linha,"OBJETIVOS GERAIS") && !feof($arquivo)) {
+                      $ementa .= $linha;
+                      $linha = fgets($arquivo);
+                    }
+                  }
+                  if(str_contains($linha,"OBJETIVOS GERAIS")) {
+                    $linha = fgets($arquivo);
+                    while(!str_contains($linha,"OBJETIVOS ESPECÍFICOS") && !feof($arquivo)) {
+                      $objetivosGerais .= $linha;
+                      $linha = fgets($arquivo);
+                    }
+                  }
+                  if(str_contains($linha,"OBJETIVOS ESPECÍFICOS")) {
+                    $linha = fgets($arquivo);
+                    while(!str_contains($linha,"MODELO DE AVALIAÇÃO") && !feof($arquivo)) {
+                      $objetivosEspecificos .= $linha;
+                      $linha = fgets($arquivo);
+                    }
+                  }
+                  if(str_contains($linha,"MODELO DE AVALIAÇÃO")) {
+                    $linha = fgets($arquivo);
+                    while(!str_contains($linha,"CONTEÚDO PROGRAMÁTICO") && !feof($arquivo)) {
+                      $modeloAvaliacao .= $linha;
+                      $linha = fgets($arquivo);
+                    }
+                  }
+                  if(str_contains($linha,"CONTEÚDO PROGRAMÁTICO")) {
+                    $linha = fgets($arquivo);
+                    while(!str_contains($linha,"PROCEDIMENTOS DIDÁTICOS") && !feof($arquivo)) {
+                      $conteudoProgramatico .= $linha;
+                      $linha = fgets($arquivo);
+                    }
+                  }
+                  if(str_contains($linha,"PROCEDIMENTOS DIDÁTICOS")) {
+                    $linha = fgets($arquivo);
+                    while(!str_contains($linha,"BIBLIOGRAFIA BÁSICA") && !feof($arquivo)) {
+                      $procedimentosDidaticos .= $linha;
+                      $linha = fgets($arquivo);
+                    }
+                  }
+                  if(str_contains($linha,"BIBLIOGRAFIA BÁSICA")) {
+                    $linha = fgets($arquivo);
+                    while(!str_contains($linha,"BIBLIOGRAFIA COMPLEMENTAR") && !feof($arquivo)) {
+                      $bibliografiaBasica .= $linha;
+                      $linha = fgets($arquivo);
+                    }
+                  }
+                  if(str_contains($linha,"BIBLIOGRAFIA COMPLEMENTAR")) {
+                    $linha = fgets($arquivo);
+                    while($linha != null && !feof($arquivo)) {
+                      $bibliografiaComplementar .= $linha;
+                      $linha = fgets($arquivo);
+                    }
+                  }
+                }
+                fclose($arquivo);
+              }
+            }
+            catch(PDOException $e) {
+              echo 'Error: ' . $e->getMessage();
+            }
+            finally {
+              $pdo = null;
+            }
             echo "<div class='tab-pane fade' id='pills-plano' role='tabpanel' aria-labelledby='pills-plano-tab'>
                     <h4>Plano de Ensino</h4>
                       <div class='mb-3'>
                         <h6><label for='ementa' class='form-label'>Ementa</label></h6>
-                        <textarea class='form-control' id='ementa' name='ementa' rows='4'></textarea>
+                        <textarea class='form-control' id='ementa' name='ementa' rows='4'>".$ementa."</textarea>
                       </div>
                       <div class='row mb-3'>
                         <div class='col-md-6 col-sm-12 mb-3'>
                            <h6><label for='objetivosGerais' class='form-label'>Objetivos Gerais</label></h6>
-                          <textarea class='form-control' id='objetivosGerais' name='objetivosGerais' rows='8'></textarea>
+                          <textarea class='form-control' id='objetivosGerais' name='objetivosGerais' rows='8'>".$objetivosGerais."</textarea>
                         </div>
                         <div class='col-md-6 col-sm-12 mb-3'>
                           <h6><label for='objetivosEspecificos' class='form-label'>Objetivos Específicos</label></h6>
-                          <textarea class='form-control' id='objetivosEspecificos' name='objetivosEspecificos' rows='8'></textarea>
+                          <textarea class='form-control' id='objetivosEspecificos' name='objetivosEspecificos' rows='8'>".$objetivosEspecificos."</textarea>
                         </div>
                       </div>
                       <div class='mb-3'>
                         <h6><label for='modeloAvaliacao' class='form-label'>Modelo de Avaliação</label></h6>
-                        <textarea class='form-control' id='modeloAvaliacao' name='modeloAvaliacao' rows='2'></textarea>
+                        <textarea class='form-control' id='modeloAvaliacao' name='modeloAvaliacao' rows='2'>".$modeloAvaliacao."</textarea>
                       </div>
                       <div class='mb-3'>
                         <h6><label for='conteudoProgramatico' class='form-label'>Conteúdo Programático</label></h6>
-                        <textarea class='form-control' id='conteudoProgramatico' name='conteudoProgramatico' rows='10'></textarea>
+                        <textarea class='form-control' id='conteudoProgramatico' name='conteudoProgramatico' rows='10'>".$conteudoProgramatico."</textarea>
                       </div>
                       <div class='mb-3'>
                         <h6><label for='procedimentosDidaticos' class='form-label'>Procedimentos Didáticos</label></h6>
-                        <textarea class='form-control' id='procedimentosDidaticos' name='procedimentosDidaticos' rows='6'></textarea>
+                        <textarea class='form-control' id='procedimentosDidaticos' name='procedimentosDidaticos' rows='6'>".$procedimentosDidaticos."</textarea>
                       </div>
                       <div class='row mb-3'>
                         <div class='col-md-6 col-sm-12 mb-3'>
                           <h6><label for='bibliografiaBasica' class='form-label'>Bibliografia Básica</label></h6>
-                          <textarea class='form-control' id='bibliografiaBasica' name='bibliografiaBasica' rows='4'></textarea>
+                          <textarea class='form-control' id='bibliografiaBasica' name='bibliografiaBasica' rows='4'>".$bibliografiaBasica."</textarea>
                         </div>
                         <div class='col-md-6 col-sm-12 mb-3'>
                           <h6><label for='bibliografiaComplementar' class='form-label'>Bibliografia Complementar</label></h6>
-                          <textarea class='form-control' id='bibliografiaComplementar' name='bibliografiaComplementar' rows='4'></textarea>
+                          <textarea class='form-control' id='bibliografiaComplementar' name='bibliografiaComplementar' rows='4'>".$bibliografiaComplementar."</textarea>
                         </div>
                       </div>
                       <div class='mt-4 text-center'>
                         <button type='submit' class='btn btn-primary rounded-pill text-white'><b><i class='fas fa-edit'></i> Salvar alterações</b></button>
                       </div>
+                      </form>
                     <hr>
                   </div>";
             echo "</div>";
+
+            $arquivo = "../planoEnsino/".$_POST["turma"].$_POST["disciplina"].".txt";
+            $arquivo = fopen($arquivo, "w");
+            fwrite($arquivo, "EMENTA\r\n");
+            if(isset($_POST["ementa"])) fwrite($arquivo, $_POST["ementa"]."\r\n");
+            fwrite($arquivo, "OBJETIVOS GERAIS\r\n");
+            if(isset($_POST["objetivosGerais"])) fwrite($arquivo, $_POST["objetivosGerais"]."\r\n");
+            fwrite($arquivo, "OBJETIVOS ESPECÍFICOS\r\n");
+            if(isset($_POST["objetivosEspecificos"])) fwrite($arquivo, $_POST["objetivosEspecificos"]."\r\n");
+            fwrite($arquivo, "MODELO DE AVALIAÇÃO\r\n");
+            if(isset($_POST["modeloAvaliacao"])) fwrite($arquivo, $_POST["modeloAvaliacao"]."\r\n");
+            fwrite($arquivo, "CONTEÚDO PROGRAMÁTICO\r\n");
+            if(isset($_POST["conteudoProgramatico"])) fwrite($arquivo, $_POST["conteudoProgramatico"]."\r\n");
+            fwrite($arquivo, "PROCEDIMENTOS DIDÁTICOS\r\n");
+            if(isset($_POST["procedimentosDidaticos"])) fwrite($arquivo, $_POST["procedimentosDidaticos"]."\r\n");
+            fwrite($arquivo, "BIBLIOGRAFIA BÁSICA\r\n");
+            if(isset($_POST["bibliografiaBasica"])) fwrite($arquivo, $_POST["bibliografiaBasica"]."\r\n");
+            fwrite($arquivo, "BIBLIOGRAFIA COMPLEMENTAR\r\n");
+            if(isset($_POST["bibliografiaComplementar"])) fwrite($arquivo, $_POST["bibliografiaComplementar"]."\r\n");
+            fclose($arquivo);
+            $arquivo = "../planoEnsino/".$_POST["turma"].$_POST["disciplina"].".txt";
+
+            try{
+              include("../conexaoBD.php");
+              $stmt = $pdo->prepare("update LecionaTCC set planoEnsino = :planoEnsino where codTurma = :codTurma and codDisciplina = :codDisciplina");
+              $stmt->bindParam(":planoEnsino", $arquivo);
+              $stmt->bindParam(":codTurma", $_POST["turma"]);
+              $stmt->bindParam(":codDisciplina", $_POST["disciplina"]);
+              $stmt->execute();
+            }
+            catch(PDOException $e) {
+              echo 'Error: ' . $e->getMessage();
+            }
+            finally {
+              $pdo = null;
+            }
           }
         }
       ?>

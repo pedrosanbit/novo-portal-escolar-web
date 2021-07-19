@@ -35,19 +35,6 @@
   finally {
     $pdo = null;
   }
-
-  if($_SERVER["REQUEST_METHOD"] === "POST") {
-  	$msg = 0;
-  	if(count($_POST["nome"]) < 3)
-  		$msg = 1;
-  	else {
-  		$i;
-  		for($i = 0; $i < count($_POST["nome"]); $i++) {
-  			if(trim($_POST["nome"][$i]) == "" || trim($_POST["data"][$i]) == "" || trim($_POST["peso"][$i]) == "")
-  				$msg = 2;
-  		}
-  	}
-  }
 ?>
 
 <!DOCTYPE html>
@@ -175,9 +162,9 @@
     <nav class="ms-5 mt-2" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="professorPlanejamento.php">Planejamento</a></li>
-            <li class="breadcrumb-item active" aria-current='page'>Avaliações</li>
             <?php echo "<li class='breadcrumb-item active' aria-current='page'>". $nomeTurma . "</li> "; ?>
             <?php echo "<li class='breadcrumb-item active' aria-current='page'>". $nomeDisciplina . "</li> "; ?>
+            <li class="breadcrumb-item active" aria-current='page'>Avaliações</li>
             <?php echo "<li class='breadcrumb-item active' aria-current='page'>". $_GET["etapa"] . "º Semestre</li> "; ?>  
         </ol>
     </nav>
@@ -192,48 +179,66 @@
 	    				<th>Excluir</th>
 	    			</thead>
 	    			<tbody>
-	    				<tr>
-	    					<td>
-	    						<input class='form-control' type='text' name='nome[]'>
-	    					</td>
-	    					<td>
-	    						<input class='form-control' type='date' name='data[]'>
-	    					</td>
-	    					<td>
-	    						<input class='form-control' type='number' name='peso[]' min="1" max="8">
-	    					</td>
-	    					<td class='text-md-start text-center'>
-	    						<i class='fas fa-minus-circle text-danger ms-md-4 deleteBtn'></i>
-	    					</td>
-	    				</tr>
-	    				<tr>
-	    					<td>
-	    						<input class='form-control' type='text' name='nome[]'>
-	    					</td>
-	    					<td>
-	    						<input class='form-control' type='date' name='data[]'>
-	    					</td>
-	    					<td>
-	    						<input class='form-control' type='number' name='peso[]' min="1" max="8">
-	    					</td>
-	    					<td class='text-md-start text-center'>
-	    						<i class='fas fa-minus-circle text-danger ms-md-4 deleteBtn'></i>
-	    					</td>
-	    				</tr>
-	    				<tr>
-	    					<td>
-	    						<input class='form-control' type='text' name='nome[]'>
-	    					</td>
-	    					<td>
-	    						<input class='form-control' type='date' name='data[]'>
-	    					</td>
-	    					<td>
-	    						<input class='form-control' type='number' name='peso[]' min="1" max="8">
-	    					</td>
-	    					<td class='text-md-start text-center'>
-	    						<i class='fas fa-minus-circle text-danger ms-md-4 deleteBtn'></i>
-	    					</td>
-	    				</tr>
+	    				<?php
+	    					include("../conexaoBD.php");
+	    					try {
+	    						$stmt = $pdo->prepare("select dta.codAtividade from DisciplinaTurmaAtividadeTCC dta inner join AtividadesTCC a where dta.codTurma = :codTurma and dta.codDisciplina = :codDisciplina and a.etapa = :etapa");
+  								$stmt->bindParam(":codTurma", $_GET["turma"]);
+  								$stmt->bindParam(":codDisciplina", $_GET["disciplina"]);
+  								$stmt->bindParam(":etapa", $_GET["etapa"]);
+  								$stmt->execute();
+  								if($stmt->rowCount() > 0) {
+  									$atividadesArray = array();
+  									$stmt = $pdo->prepare("select a.codAtividade, a.descricao, a.data, a.peso from AtividadesTCC a inner join DisciplinaTurmaAtividadeTCC dta on a.codAtividade = dta.codAtividade where dta.codTurma = :codTurma and dta.codDisciplina = :codDisciplina and a.etapa = :etapa");
+  									$stmt->bindParam(":codTurma", $_GET["turma"]);
+  									$stmt->bindParam(":codDisciplina", $_GET["disciplina"]);
+  									$stmt->bindParam(":etapa", $_GET["etapa"]);
+  									$stmt->execute();
+  									while($row = $stmt->fetch()) {
+  										$atividadesArray[count($atividadesArray)] = $row["codAtividade"];
+  										echo "<tr>
+  												<td>
+  													<input type='hidden' name='nomeAnt[]' value='".$row["codAtividade"]."'>
+  													<input class='form-control' type='text' name='nome[]' value='".$row["descricao"]."'>
+  												</td>
+  												<td>
+  													<input class='form-control' type='date' name='data[]' value='".$row["data"]."'>
+  												</td>
+  												<td>
+  													<input class='form-control' type='number' name='peso[]' value='".(int)$row["peso"]."' min='1' max='8'>
+  												</td>
+  												<td class='text-md-start text-center'>
+		    										<i class='fas fa-minus-circle text-danger ms-md-4 deleteBtn'></i>
+		    									</td>
+  											  </tr>";
+  									}
+  								}
+  								else {
+  									for($i = 0; $i < 3; $i++) {
+	  									echo "<tr>
+		    								  	<td>
+		    										<input class='form-control' type='text' name='nome[]'>
+		    									</td>
+		    									<td>
+		    										<input class='form-control' type='date' name='data[]'>
+		    									</td>
+		    									<td>
+		    										<input class='form-control' type='number' name='peso[]' min='1' max='8'>
+		    									</td>
+		    									<td class='text-md-start text-center'>
+		    										<i class='fas fa-minus-circle text-danger ms-md-4 deleteBtn'></i>
+		    									</td>
+		    								  </tr>";
+		    						}
+  								}
+	    					}
+	    					catch(PDOException $e) {
+    							echo 'Error: ' . $e->getMessage();
+  							}
+  							finally {
+    							$pdo = null;
+  							}
+	    				?>
 	    			</tbody>
 	    		</table>
 	    		<div>
@@ -255,20 +260,63 @@
   							$msg = 2;
   					}
   					$soma = 0;
-  					foreach($_POST["peso"] as $peso)
-  						$soma += (int)$peso;
-  					unset($peso);
-  					if($soma != 10)
-  						$msg = 3;
+  					if($msg != 2) {
+	  					foreach($_POST["peso"] as $peso)
+	  						$soma += (int)$peso;
+	  					unset($peso);
+	  					if($soma != 10)
+	  						$msg = 3;
+  					}
   					if($msg != 2 && $msg != 3) {
   						include("../conexaoBD.php");
   						try {
+  							if(isset($atividadesArray)) {
+	  							foreach($atividadesArray as $atividade) {
+	  								$found = 0;
+	  								for($i = 0; $i < count($_POST["nomeAnt"]); $i++) {
+	  									if($atividade == $_POST["nomeAnt"][$i]) {
+	  										$stmt = $pdo->prepare("select * from AtividadesTCC where codAtividade = :codAtividade");
+		  									$stmt->bindParam(":codAtividade", $atividade);
+		  									$stmt->execute();
+		  									$row = $stmt->rowCount();
+			  								if($row == 1) {
+			  									$row = $stmt->fetch();
+			  									if($_POST["nome"][$i] != $row["descricao"]) {
+			  										$stmt= $pdo->prepare("update AtividadesTCC set descricao = :nome where codAtividade= :codAtividade");
+			                						$stmt->bindParam(':nome', $_POST["nome"][$i]);
+			                						$stmt->bindParam(':codAtividade', $atividade);
+			               							$stmt->execute();
+			  									}
+			  									if($_POST["data"][$i] != $row["data"]) {
+			  										$stmt= $pdo->prepare("update AtividadesTCC set data = :data where codAtividade= :codAtividade");
+			                						$stmt->bindParam(':data', $_POST["data"][$i]);
+			                						$stmt->bindParam(':codAtividade', $atividade);
+			               							$stmt->execute();
+			  									}
+			  									if($_POST["peso"][$i] != $row["peso"]) {
+			  										$stmt= $pdo->prepare("update AtividadesTCC set peso = :peso where codAtividade= :codAtividade");
+			  										$peso = (int)$_POST["peso"][$i];
+			                						$stmt->bindParam(':peso', $peso);
+			                						$stmt->bindParam(':codAtividade', $atividade);
+			               							$stmt->execute();
+			  									}
+			  								}
+			  								$found = 1;
+	  									}
+	  								}
+	  								if($found == 0) {
+	  										$stmt = $pdo->prepare("delete from AtividadesTCC where codAtividade = :codAtividade");
+		  									$stmt->bindParam(":codAtividade", $atividade);
+		  									$stmt->execute();
+	  								}
+	  							}
+	  						}
   							$stmt = $pdo->prepare("select codAtividade from DisciplinaTurmaAtividadeTCC where codTurma = :codTurma and codDisciplina = :codDisciplina");
   							$stmt->bindParam(":codTurma", $_GET["turma"]);
   							$stmt->bindParam(":codDisciplina", $_GET["disciplina"]);
   							$stmt->execute();
   							$j = $stmt->rowCount();
-  							for($i = 0; $i < count($_POST["nome"]); $i++) {
+  							for($i = isset($_POST["nomeAnt"]) ? count($_POST["nomeAnt"]) : 0; $i < count($_POST["nome"]); $i++) {
   								$codAtividade = $_GET["turma"] . $_GET["disciplina"] . $j;
   								$peso = (int)$_POST["peso"][$i];
   								$stmt = $pdo->prepare("insert into AtividadesTCC (codAtividade, descricao, peso, data, etapa) values (:codAtividade, :nome, :peso, :data, :etapa)");
@@ -276,7 +324,7 @@
   								$stmt->bindParam(":nome", $_POST["nome"][$i]);
   								$stmt->bindParam(":peso", $peso);
   								$stmt->bindParam(":data", $_POST["data"][$i]);
-  								$stmt->bindParam(":data", $_GET["etapa"]);
+  								$stmt->bindParam(":etapa", $_GET["etapa"]);
   								$stmt->execute();
 
   								$stmt = $pdo->prepare("insert into DisciplinaTurmaAtividadeTCC (codTurma, codDisciplina, codAtividade) values (:codTurma, :codDisciplina, :codAtividade)");
@@ -296,27 +344,34 @@
   						}
   					}
   				}
-  				switch ($msg) {
-  					case 0:
-  						echo "<span class='text-success'>Alterações salvas com sucesso!</span>";
-  						break;	
-  					case 1:
-  						echo "<span class='text-warning'>Devem haver pelo menos 3 atividades por etapa.</span>";
-  						break;
-  					case 2:
-  						echo "<span class='text-danger'>Preencha todos os campos.</span>";
-  						break;
-  					case 3:
-  						echo "<span class='text-warning'>A soma dos pesos das avaliações deve ser 10.</span>";
-  						break;
-  				}
+  				if(isset($msg)) {
+			  		switch ($msg) {
+			  			case 0:
+			  				echo "<script>alert('Alterações salvas com sucesso!');</script>";
+			  				echo "<script>window.location.replace('editAtividades.php?turma=".$_GET["turma"]."&disciplina=".$_GET["disciplina"]."&etapa=".$_GET["etapa"]."');</script>";
+			  				break;	
+			  			case 1:
+			  				echo "<span class='text-warning'>Devem haver pelo menos 3 atividades por etapa.</span>";
+			  				break;
+			  			case 2:
+			  				echo "<span class='text-danger'>Preencha todos os campos.</span>";
+			  				break;
+			  			case 3:
+			  				echo "<span class='text-warning'>A soma dos pesos das avaliações deve ser 10.</span>";
+			  				break;
+			  		}
+		  		}
   			}
 	   	?>
     </div>
+    <script src="../javascript/admin.js"></script>
     <script type="text/javascript">
     	const tbodyEl = document.querySelector('tbody');
     	var tabela = document.getElementById('tableAv');
     	function addRow() {
+    		if(localStorage.getItem("darkTheme") === "on") {
+    			toggleDarkMode();
+    		}
     		tbodyEl.innerHTML += `
     			<tr>
 	    			<td>
@@ -333,6 +388,9 @@
 	    			</td>
 	    		</tr>
     		`;
+    		if(localStorage.getItem("darkTheme") === "on") {
+    			toggleDarkMode();
+    		}
     	}
 
     	function removeRow(e) {
@@ -345,7 +403,6 @@
 
     	tabela.addEventListener("click", removeRow);
    	</script>
-    <script src="../javascript/admin.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
   </body>
 </html>
