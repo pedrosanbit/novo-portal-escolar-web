@@ -230,6 +230,7 @@
                     $pdo=null;
                   }
                 }
+                //a
                 /*if(isset($_POST["periodo"]) && $_POST["periodo"] != 'null') {
                   $periodo = $_POST["periodo"];
                   include("../conexaoBD.php");
