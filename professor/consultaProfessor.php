@@ -102,7 +102,7 @@
                 <a class="nav-link" aria-current="page" href="professor.php"><i class="fas fa-home"></i> Início</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" href="adminCursos.php"><i class="fas fa-search"></i> Consultas</a>
+                <a class="nav-link active" href="adminCursos.php"><b><i class="fas fa-search"></i> Consultas</b></a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="adminDisciplinas.php"><i class="fas fa-calendar-alt"></i> Frequência</a>
@@ -111,7 +111,7 @@
                 <a class="nav-link" href="adminTurmas.php"><i class="fas fa-file-alt"></i> Notas</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="professorPlanejamento.php"><b><i class="fas fa-chalkboard"></i> Planejamento</b></a>
+                <a class="nav-link" href="professorPlanejamento.php"><i class="fas fa-chalkboard"></i> Planejamento</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="../logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
@@ -133,7 +133,7 @@
           <a class="nav-link text-dark" aria-current="page" href="professor.php"><i class="fas fa-home"></i> Início</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active text-primary" id="nav-active" href="consultaProfessor.php"><i class="fas fa-search"></i> Consultas</a>
+          <a class="nav-link active text-primary" id="nav-active" href="consultaProfessor.php"><b><i class="fas fa-search"></i> Consultas</b></a>
         </li>
         <li class="nav-item">
           <a class="nav-link text-dark" href="adminDisciplinas.php"><i class="fas fa-calendar-alt"></i> Frequência</a>
@@ -142,7 +142,7 @@
           <a class="nav-link text-dark" href="adminTurmas.php"><i class="fas fa-file-alt"></i> Notas</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link  text-dark" href="professorPlanejamento.php"><b><i class="fas fa-chalkboard"></i> Planejamento</b></a>
+          <a class="nav-link text-dark" href="professorPlanejamento.php"><i class="fas fa-chalkboard"></i> Planejamento</a>
         </li>
       </ul>
     </div>
@@ -230,6 +230,7 @@
                     $pdo=null;
                   }
                 }
+                //a
                 /*if(isset($_POST["periodo"]) && $_POST["periodo"] != 'null') {
                   $periodo = $_POST["periodo"];
                   include("../conexaoBD.php");
