@@ -305,7 +305,7 @@
         <div class="mt-4 text-center">
           <button type="submit" class="btn btn-primary rounded-pill text-white w-25"><b>Buscar</b></button>
         </div>
-      <!--/form-->
+      </form>
       <hr>
       <?php
         if($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -425,7 +425,144 @@
             $procedimentosDidaticos = "";
             $bibliografiaBasica = "";
             $bibliografiaComplementar = "";
-            /*try {
+            try {
+              include("../conexaoBD.php");
+              $stmt = $pdo->prepare("select * from LecionaTCC where codTurma = :codTurma and codDisciplina = :codDisciplina");
+              $stmt->bindParam(":codTurma", $_POST["turma"]);
+              $stmt->bindParam(":codDisciplina", $_POST["disciplina"]);
+              $stmt->execute();
+              $row = $stmt->fetch();
+              $planoEnsino = $row["planoEnsino"] != NULL;
+              if($row["planoEnsino"] != NULL) {
+                $arquivo = $row["planoEnsino"];
+                $arquivo = fopen($arquivo, "r");
+                while(!feof($arquivo)) {
+                  $linha = fgets($arquivo);
+                  if($linha == false) break;
+                  if(str_contains($linha,"EMENTA")) {
+                    $linha = fgets($arquivo);
+                    while(!str_contains($linha,"OBJETIVOS GERAIS") && !feof($arquivo)) {
+                      $ementa .= $linha;
+                      $linha = fgets($arquivo);
+                    }
+                  }
+                  if(str_contains($linha,"OBJETIVOS GERAIS")) {
+                    $linha = fgets($arquivo);
+                    while(!str_contains($linha,"OBJETIVOS ESPECÍFICOS") && !feof($arquivo)) {
+                      $objetivosGerais .= $linha;
+                      $linha = fgets($arquivo);
+                    }
+                  }
+                  if(str_contains($linha,"OBJETIVOS ESPECÍFICOS")) {
+                    $linha = fgets($arquivo);
+                    while(!str_contains($linha,"MODELO DE AVALIAÇÃO") && !feof($arquivo)) {
+                      $objetivosEspecificos .= $linha;
+                      $linha = fgets($arquivo);
+                    }
+                  }
+                  if(str_contains($linha,"MODELO DE AVALIAÇÃO")) {
+                    $linha = fgets($arquivo);
+                    while(!str_contains($linha,"CONTEÚDO PROGRAMÁTICO") && !feof($arquivo)) {
+                      $modeloAvaliacao .= $linha;
+                      $linha = fgets($arquivo);
+                    }
+                  }
+                  if(str_contains($linha,"CONTEÚDO PROGRAMÁTICO")) {
+                    $linha = fgets($arquivo);
+                    while(!str_contains($linha,"PROCEDIMENTOS DIDÁTICOS") && !feof($arquivo)) {
+                      $conteudoProgramatico .= $linha . "<br>";
+                      $linha = fgets($arquivo);
+                    }
+                  }
+                  if(str_contains($linha,"PROCEDIMENTOS DIDÁTICOS")) {
+                    $linha = fgets($arquivo);
+                    while(!str_contains($linha,"BIBLIOGRAFIA BÁSICA") && !feof($arquivo)) {
+                      $procedimentosDidaticos .= $linha;
+                      $linha = fgets($arquivo);
+                    }
+                  }
+                  if(str_contains($linha,"BIBLIOGRAFIA BÁSICA")) {
+                    $linha = fgets($arquivo);
+                    while(!str_contains($linha,"BIBLIOGRAFIA COMPLEMENTAR") && !feof($arquivo)) {
+                      $bibliografiaBasica .= $linha . "<br>";
+                      $linha = fgets($arquivo);
+                    }
+                  }
+                  if(str_contains($linha,"BIBLIOGRAFIA COMPLEMENTAR")) {
+                    $linha = fgets($arquivo);
+                    while($linha != null && !feof($arquivo)) {
+                      $bibliografiaComplementar .= $linha . "<br>";
+                      $linha = fgets($arquivo);
+                    }
+                  }
+                }
+                fclose($arquivo);
+              }
+            }
+            catch(PDOException $e) {
+              echo 'Error: ' . $e->getMessage();
+            }
+            finally {
+              $pdo = null;
+            }
+            if($planoEnsino) {
+              echo "<div class='tab-pane fade' id='pills-plano' role='tabpanel' aria-labelledby='pillsplano-tab'>
+                      <div class='mb-4'>
+                        <h6><label for='ementa' class='form-label'>Ementa</label></h6>
+                        $ementa
+                      </div>
+                      <div class='row mb-4'>
+                        <div class='col-md-6 col-sm-12'>
+                          <h6><label for='objetivosGerais' class='form-label'>Objetivos Gerais</label></h6>
+                          $objetivosGerais
+                        </div>
+                        <div class='col-md-6 col-sm-12'>
+                          <h6><label for='objetivosEspecificos' class='form-label'>Objetivos Específicos</label></h6>
+                          $objetivosEspecificos
+                        </div>
+                      </div>
+                      <div class='mb-4'>
+                        <h6><label for='modeloAvaliacao' class='form-label'>Modelo de Avaliação</label></h6>
+                        $modeloAvaliacao
+                      </div>
+                      <div class='mb-4'>
+                        <h6><label for='conteudoProgramatico' class='form-label'>Conteúdo Programático</label></h6>
+                        $conteudoProgramatico
+                      </div>
+                      <div class='mb-4'>
+                        <h6><label for='procedimentosDidaticos' class='form-label'>Procedimentos Didáticos</label></h6>
+                        $procedimentosDidaticos
+                      </div>
+                      <div class='row mb-4'>
+                        <div class='col-md-6 col-sm-12'>
+                          <h6><label for='bibliografiaBasica' class='form-label'>Bibliografia Básica</label></h6>
+                          $bibliografiaBasica
+                        </div>
+                        <div class='col-md-6 col-sm-12'>
+                          <h6><label for='bibliografiaComplementar' class='form-label'>Bibliografia Complementar</label></h6>
+                          $bibliografiaComplementar
+                        </div>
+                      </div>";
+            }
+            else {
+              echo "<div class='tab-pane fade' id='pills-plano' role='tabpanel' aria-labelledby='pillsplano-tab'>Plano de Ensino não adicionado ainda.";
+            }
+            echo   "<div class='mt-4 text-center'>
+                      <a href='editPlanoEnsino.php?turma=".$_POST["turma"]."&disciplina=".$_POST["disciplina"]."' class='btn btn-primary rounded-pill text-white' role='button'>
+                        <b><i class='fas fa-edit'></i> Editar Plano de Ensino</b>
+                      </a>
+                    </div><hr>
+                  </div>";
+            echo "</div>";
+            /*$ementa = "";
+            $objetivosGerais = "";
+            $objetivosEspecificos = "";
+            $modeloAvaliacao = "";
+            $conteudoProgramatico = "";
+            $procedimentosDidaticos = "";
+            $bibliografiaBasica = "";
+            $bibliografiaComplementar = "";
+            try {
               include("../conexaoBD.php");
               $stmt = $pdo->prepare("select * from LecionaTCC where codTurma = :codTurma and codDisciplina = :codDisciplina");
               $stmt->bindParam(":codTurma", $_POST["turma"]);

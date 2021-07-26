@@ -1,8 +1,36 @@
 EMENTA
+Conhecimento das técnicas de documentação, arquitetura/engenharia de software; desenvolver sistemas informatizados baseados em documentação desenvolvida; identificar compatibilidade entre sistema e documentação; efetuar a fase de testes do software desenvolvido; apresentar o software mostrando seu custo/benefício.
+
 OBJETIVOS GERAIS
+O aluno saberá modelar sistemas computacionais com simplicidade e sem ambiguidades. Saberá implementar e testar sistemas compatíveis com documentação.
 OBJETIVOS ESPECÍFICOS
+O aluno saberá aplicar seus conhecimentos de Lógica de Programação, Estrutura de Dados e Desenvolvimento em linguagens de programação e usará Técnicas de Testes de Software para testar os programas desenvolvidos.
 MODELO DE AVALIAÇÃO
+Apresentação e avaliação dos trabalhos solicitados e processo continuo de recuperação. Cálculo da Média = (A1+A2+A3+A4)/4 onde: A1=Apresentação 1; A2=Apresentação 2; A3=Apresentação 3; A4 = Apresentação 4.
 CONTEÚDO PROGRAMÁTICO
+1º SEMESTRE:
+Fevereiro: Termo de Abertura do Projeto
+Março: Analise de Requisitos
+Abril: Prototipação de Interfaces e Apresentação 1
+Maio: Implementação do Software
+Junho: Implementação do Software e Apresentação 2
+Julho: Período de Recuperação
+2º SEMESTRE:
+Agosto: Revisão da documentação e Implementação do Software
+Setembro: Implementação do Software e Apresentação 3
+Outubro: Implementação do Software
+Novembro: Implementação Final do Software e Apresentação 4
+Dezembro: Período de Recuperação
 PROCEDIMENTOS DIDÁTICOS
+Aplicação dos conceitos de Engenharia de Software, Desenvolvimento de Sistemas e Testes Computacionais, usaremos ambientes virtuais como recurso no processo de ensino-aprendizagem de nossos alunos.
 BIBLIOGRAFIA BÁSICA
+Princípios do PMBOK (Cursos em Livro)
+Ricardo Garay
+eBook Kindle
+Modelagem e Projetos Baseados em Objetos
+Rumbaugh, J. e outros
+Editora Campus
 BIBLIOGRAFIA COMPLEMENTAR
+Gerenciamento de Projetos Fora da Caixa
+Fabiana Bigao Silva
+Editora Alta Books
