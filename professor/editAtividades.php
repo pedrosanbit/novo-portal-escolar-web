@@ -311,13 +311,19 @@
 	  								}
 	  							}
 	  						}
-  							$stmt = $pdo->prepare("select codAtividade from DisciplinaTurmaAtividadeTCC where codTurma = :codTurma and codDisciplina = :codDisciplina");
+  							$stmt = $pdo->prepare("select dta.codAtividade from DisciplinaTurmaAtividadeTCC dta inner join AtividadesTCC a on dta.codAtividade = a.codAtividade where dta.codTurma = :codTurma and dta.codDisciplina = :codDisciplina and a.etapa = :etapa order by dta.codAtividade desc limit 1");
   							$stmt->bindParam(":codTurma", $_GET["turma"]);
   							$stmt->bindParam(":codDisciplina", $_GET["disciplina"]);
+  							$stmt->bindParam(":etapa", $_GET["etapa"]);
   							$stmt->execute();
-  							$j = $stmt->rowCount();
+  							$rows = $stmt->rowCount();
+  							if($rows > 0) {
+	  							$row = $stmt->fetch();
+	  							$j = ($row["codAtividade"][strlen($row["codAtividade"])-1]) + 1;
+  							}
+  							else $j = 0;
   							for($i = isset($_POST["nomeAnt"]) ? count($_POST["nomeAnt"]) : 0; $i < count($_POST["nome"]); $i++) {
-  								$codAtividade = $_GET["turma"] . $_GET["disciplina"] . $j;
+  								$codAtividade = $_GET["etapa"] . $_GET["turma"] . $_GET["disciplina"] . $j;
   								$peso = (int)$_POST["peso"][$i];
   								$stmt = $pdo->prepare("insert into AtividadesTCC (codAtividade, descricao, peso, data, etapa) values (:codAtividade, :nome, :peso, :data, :etapa)");
   								$stmt->bindParam(":codAtividade", $codAtividade);
