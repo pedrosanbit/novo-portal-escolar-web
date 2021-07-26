@@ -108,10 +108,10 @@
                 <a class="nav-link" href="adminDisciplinas.php"><i class="fas fa-calendar-alt"></i> Frequência</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="notas.php"><b><i class="fas fa-file-alt"></i> Notas</b></a>
+                <a class="nav-link active" aria-current="page" href="professorNotas.php"><b><i class="fas fa-file-alt"></i> Notas</b></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="adminProfessores.php"><i class="fas fa-chalkboard"></i> Planejamento</a>
+                <a class="nav-link" href="professorPlanejamento.php"><i class="fas fa-chalkboard"></i> Planejamento</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="../logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
@@ -139,32 +139,22 @@
           <a class="nav-link text-dark" href="adminDisciplinas.php"><i class="fas fa-calendar-alt"></i> Frequência</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active text-primary" id="nav-active" aria-current="page" href="notas.php"><b><i class="fas fa-file-alt"></i> Notas</b></a>
+          <a class="nav-link active text-primary" id="nav-active" aria-current="page" href="professorNotas.php"><b><i class="fas fa-file-alt"></i> Notas</b></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="adminProfessores.php"><i class="fas fa-chalkboard"></i> Planejamento</a>
+          <a class="nav-link text-dark" href="professorPlanejamento.php"><i class="fas fa-chalkboard"></i> Planejamento</a>
         </li>
       </ul>
     </div>
 
     <div class="container mt-3">
-      <div class="row mb-3">
-        <div class="col-9">
-          <?php echo "<h4>Bem-vindo(a), " . $nome ."!</h4>" ?>
-        </div>
-        <div class="col-3 text-end" id="btn-logout">
-          <a href="../logout.php" class="btn btn-primary rounded-pill text-white" role="button">
-            <b><i class="fas fa-sign-out-alt"></i> Logout</b>
-          </a>
-        </div>
-      </div>
       <div class="mb-3">
         Período: <?php echo date("Y");?>
       </div>
-      <?php
+      <!--?php
         include("../conexaoBD.php");
         try {
-          $stmt = $pdo->prepare("select distinct t.codTurma, t.nomeTurma from TurmasTCC t inner join LecionaTCC l on t.codTurma = l.codTurma inner join ProfessoresTCC p on l.rfProfessor = p.rfProfessor where p.rfProfessor = " .  $_SESSION["login"] . " and t.periodo = " . date("Y"));
+          /*$stmt = $pdo->prepare("select distinct t.codTurma, t.nomeTurma from TurmasTCC t inner join LecionaTCC l on t.codTurma = l.codTurma inner join ProfessoresTCC p on l.rfProfessor = p.rfProfessor where p.rfProfessor = " .  $_SESSION["login"] . " and t.periodo = " . date("Y"));
           $stmt->execute();
           while($row = $stmt->fetch()) {
             echo "<div class='mb-3'>
@@ -195,8 +185,144 @@
                         </div>
                       </div>
                     </div>
-                  </div>";
-          }
+                  </div>";-->
+
+        <form method="post">
+	        <div class="row">
+	          <div class="col-md-4">
+	            <label for="codTurma" class="form-label">Código da Turma:</label>
+	            <select class="form-select" type="text" id="codTurma" name="codTurma" maxlength="6" onchange="submit(codTurma.value)";>
+	            <?php
+	                include("../conexaoBD.php");
+	                try{
+	                	if(isset($_POST["codTurma"]) && $_POST["codTurma"] != 'null') {
+	                		$codTurma = $_POST["codTurma"];
+			                  $stmt= $pdo->prepare("select distinct codTurma from LecionaTCC where rfProfessor= :rf and codTurma != :codTurma ");
+			                  $stmt->bindParam(":rf", $_SESSION["login"]);
+			                  $stmt->bindParam(":codTurma", $_POST["codTurma"]);
+			                  $stmt->execute();
+			                  echo "<option value='" . $_POST["codTurma"] . "'>" . $_POST["codTurma"] . "</option>";
+	                  	}
+	                  	else{
+	                  		 $stmt= $pdo->prepare("select distinct codTurma from LecionaTCC where rfProfessor= :rf");
+			                   $stmt->bindParam(":rf", $_SESSION["login"]);
+			                   $stmt->execute();
+			                echo "<option value='null'></option>";
+	                  	}
+
+	                  	while($row= $stmt->fetch()){
+			                   echo "<option value='". $row["codTurma"] ."'>".$row["codTurma"]."</option>";
+	                  	}
+
+	                }
+	                catch(PDOException $e){
+	                  echo 'Error: ' . $e->getMessage();
+	                }
+	                finally{
+	                  $pdo=null;
+	                }  
+              	?>
+	            </select>
+	          </div>
+
+	          <div class="col-md-4">
+	            <label for="codDisciplina" class="form-label">Código da Disciplina:</label>
+	            <select class="form-select" type="text" id="codDisciplina" name="codDisciplina" onchange="submit(codTurma.value, codDisciplina.value)";>
+	            	<?php
+	            		if(isset($_POST["codTurma"]) && $_POST["codTurma"] != 'null'){
+	            			include("../conexaoBD.php");
+			                try{
+			                	if(isset($_POST["codDisciplina"]) && $_POST["codDisciplina"] != 'null') {
+				                  $stmt= $pdo->prepare("select codDisciplina from LecionaTCC where rfProfessor= :rf and codTurma= :codTurma and codDisciplina!= :codDisciplina");
+				                  $stmt->bindParam(":rf", $_SESSION["login"]);
+				                  $stmt->bindParam(":codTurma", $_POST["codTurma"]);
+				                  $stmt->bindParam(":codDisciplina", $_POST["codDisciplina"]);
+				                  $stmt->execute();
+				                  echo "<option value='" . $_POST["codDisciplina"] . "'>" . $_POST["codDisciplina"] . "</option>"; 
+				                }
+				                else{
+				                	$stmt= $pdo->prepare("select codDisciplina from LecionaTCC where rfProfessor= :rf and codTurma= :codTurma");
+				                  	$stmt->bindParam(":rf", $_SESSION["login"]);
+				                  	$stmt->bindParam(":codTurma", $_POST["codTurma"]);
+				                  	$stmt->execute();
+				                  	echo "<option value='null'></option>";
+				                }
+				                  while($row= $stmt->fetch()){
+				                    echo "<option value='". $row["codDisciplina"] ."'>".$row["codDisciplina"]."</option>";
+				                  }
+
+			                }
+			                catch(PDOException $e){
+			                  echo 'Error: ' . $e->getMessage();
+			                }
+
+		                	finally{
+		                  		$pdo=null;
+		                	}
+		            	}
+		                
+              	?>
+	            </select>
+	          </div>
+
+	          <div class="col-md-4">
+	            <label for="codAtividade" class="form-label">Nome da Atividade:</label>
+	            <select class='form-select' id='codAtividade' name='codAtividade' aria-label='Default select example' onchange="submit(codTurma.value, codDisciplina.value , codAtividade.value)";>
+	            	<?php
+
+	            		if(isset($_POST["codTurma"]) && $_POST["codTurma"] != 'null' && isset($_POST["codDisciplina"]) && $_POST["codDisciplina"] != 'null'){
+	            			include("../conexaoBD.php");
+			                try{
+			                	if(isset($_POST["codAtividade"]) && $_POST["codAtividade"] != 'null') {
+
+                          $stmt= $pdo->prepare("select a.descricao from AtividadesTCC a inner join DisciplinaTurmaAtividadeTCC s on a.codAtividade=s.codAtividade where a.codAtividade= :codAtividade and s.codTurma= :codTurma and s.codDisciplina= :codDisciplina");
+                          $stmt->bindParam(":codAtividade", $_POST["codAtividade"]);
+                          $stmt->bindParam(":codTurma", $_POST["codTurma"]);
+                          $stmt->bindParam(":codDisciplina", $_POST["codDisciplina"]);
+                          $stmt->execute();
+                          $nomeAtiv=$stmt->fetch();
+                          echo "<option value='" . $_POST["codAtividade"] . "'>" . $nomeAtiv["descricao"] . "</option>"; 
+
+                          $stmt= $pdo->prepare("select distinct a.descricao, a.codAtividade from AtividadesTCC a inner join DisciplinaTurmaAtividadeTCC s on a.codAtividade=s.codAtividade where s.codTurma= :codTurma and s.codDisciplina= :codDisciplina and a.codAtividade != :codAtividade");
+                          $stmt->bindParam(":codAtividade", $_POST["codAtividade"]);
+                          $stmt->bindParam(":codTurma", $_POST["codTurma"]);
+                          $stmt->bindParam(":codDisciplina", $_POST["codDisciplina"]);
+                          $stmt->execute();
+
+                          //echo "<script>window.location.replace('professorNotas.php?codTurma=".$_POST["codTurma"]."&codDisciplina=".$_POST["codDisciplina"]."&codAtividade=".$_POST["codAtividade"]."');</script>";
+				                 
+				                }
+				                else{
+				                	$stmt= $pdo->prepare("select a.descricao, a.codAtividade from AtividadesTCC a inner join DisciplinaTurmaAtividadeTCC s on a.codAtividade=s.codAtividade where s.codTurma= :codTurma and s.codDisciplina= :codDisciplina");
+				                  	$stmt->bindParam(":codTurma", $_POST["codTurma"]);
+				                  	$stmt->bindParam(":codDisciplina", $_POST["codDisciplina"]);
+				                  	$stmt->execute();
+				                  	echo "<option value='null'></option>";                            
+				                }
+				                  while($row= $stmt->fetch()){
+				                    echo "<option value='". $row["codAtividade"] ."'>".$row["descricao"]."</option>";
+				                  } 
+			                }
+			                catch(PDOException $e){
+			                  echo 'Error: ' . $e->getMessage();
+			                }
+
+		                	finally{
+		                  		$pdo=null;
+		                	}
+		            	}	
+	            	?>
+	            </select>
+	          </div>
+	        </div>
+          <!--div class="mt-4 text-center">
+             <button type="submit" class="btn btn-primary rounded-pill text-white w-25"><b>Consultar</b></button>  
+          </div-->
+	    </form>
+
+      <?php include('consultaTurmaAtividade.php')?>
+
+          <!--}
         }
         catch(PDOException $e) {
           echo 'Error: ' . $e->getMessage();
@@ -204,7 +330,7 @@
         finally {
           $pdo = null;
         }
-      ?>
+      ?-->
     </div>
     <script src="../javascript/admin.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
