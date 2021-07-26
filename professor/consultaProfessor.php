@@ -102,7 +102,7 @@
                 <a class="nav-link" aria-current="page" href="professor.php"><i class="fas fa-home"></i> Início</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" href="adminCursos.php"><b><i class="fas fa-search"></i> Consultas</b></a>
+                <a class="nav-link active" href="adminCursos.php"><i class="fas fa-search"></i> Consultas</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="adminDisciplinas.php"><i class="fas fa-calendar-alt"></i> Frequência</a>
@@ -111,7 +111,7 @@
                 <a class="nav-link" href="adminTurmas.php"><i class="fas fa-file-alt"></i> Notas</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="professorPlanejamento.php"><i class="fas fa-chalkboard"></i> Planejamento</a>
+                <a class="nav-link" href="professorPlanejamento.php"><b><i class="fas fa-chalkboard"></i> Planejamento</b></a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="../logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
@@ -133,7 +133,7 @@
           <a class="nav-link text-dark" aria-current="page" href="professor.php"><i class="fas fa-home"></i> Início</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active text-primary" id="nav-active" href="consultaProfessor.php"><b><i class="fas fa-search"></i> Consultas</b></a>
+          <a class="nav-link active text-primary" id="nav-active" href="consultaProfessor.php"><i class="fas fa-search"></i> Consultas</a>
         </li>
         <li class="nav-item">
           <a class="nav-link text-dark" href="adminDisciplinas.php"><i class="fas fa-calendar-alt"></i> Frequência</a>
@@ -142,7 +142,7 @@
           <a class="nav-link text-dark" href="adminTurmas.php"><i class="fas fa-file-alt"></i> Notas</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="professorPlanejamento.php"><i class="fas fa-chalkboard"></i> Planejamento</a>
+          <a class="nav-link  text-dark" href="professorPlanejamento.php"><b><i class="fas fa-chalkboard"></i> Planejamento</b></a>
         </li>
       </ul>
     </div>
@@ -189,52 +189,6 @@
                   include("../conexaoBD.php");
                   try {
                     if(isset($_POST["turma"]) && $_POST["turma"] != 'null') {
-                      $stmt = $pdo->prepare("select * from TurmasTCC where codTurma = :codTurma and periodo = :periodo");
-                      $stmt->bindParam(":codTurma", $_POST["turma"]);
-                      $stmt->bindParam(":periodo", $_POST["periodo"]);
-                      $stmt->execute();
-                      $rows = $stmt->rowCount();
-                      if($rows > 0) {
-                        $stmt = $pdo->prepare("select nomeTurma from TurmasTCC where codTurma = :codTurma");
-                        $stmt->bindParam(":codTurma",$_POST["turma"]);
-                        $stmt->execute();
-                        if ($row = $stmt->fetch()) {
-                          echo "<option value='".$_POST["turma"]."'>".$row["nomeTurma"]."</option>";
-                        }
-                        $stmt = $pdo->prepare("select distinct t.codTurma, t.nomeTurma from TurmasTCC t inner join LecionaTCC l on t.codTurma = l.codTurma inner join ProfessoresTCC p on l.rfProfessor = p.rfProfessor where p.rfProfessor = :login and t.periodo = :periodo and t.codTurma != :turma");
-                        $stmt->bindParam(":login",$_SESSION["login"]);
-                        $stmt->bindParam(":periodo",$periodo);
-                        $stmt->bindParam(":turma",$_POST["turma"]);
-                        $stmt->execute();
-                      }
-                      else {
-                        unset($_POST["turma"]);
-                        $stmt = $pdo->prepare("select distinct t.codTurma, t.nomeTurma from TurmasTCC t inner join LecionaTCC l on t.codTurma = l.codTurma inner join ProfessoresTCC p on l.rfProfessor = p.rfProfessor where p.rfProfessor = " .  $_SESSION["login"] . " and t.periodo = " . $periodo);
-                        $stmt->execute();
-                        echo "<option value='null'></option>";
-                      }
-                    }
-                    else {
-                      $stmt = $pdo->prepare("select distinct t.codTurma, t.nomeTurma from TurmasTCC t inner join LecionaTCC l on t.codTurma = l.codTurma inner join ProfessoresTCC p on l.rfProfessor = p.rfProfessor where p.rfProfessor = " .  $_SESSION["login"] . " and t.periodo = " . $periodo);
-                      $stmt->execute();
-                      echo "<option value='null'></option>";
-                    }
-                    while($row = $stmt->fetch()) {
-                      echo "<option value='" . $row['codTurma'] . "'>" . $row['nomeTurma'] . "</option>";
-                    }
-                  }
-                  catch(PDOException $e) {
-                    echo 'Error: ' . $e->getMessage();
-                  }
-                  finally{
-                    $pdo=null;
-                  }
-                }
-                /*if(isset($_POST["periodo"]) && $_POST["periodo"] != 'null') {
-                  $periodo = $_POST["periodo"];
-                  include("../conexaoBD.php");
-                  try {
-                    if(isset($_POST["turma"]) && $_POST["turma"] != 'null') {
                       $stmt = $pdo->prepare("select nomeTurma from TurmasTCC where codTurma = :codTurma");
                       $stmt->bindParam(":codTurma",$_POST["turma"]);
                       $stmt->execute();
@@ -262,7 +216,7 @@
                   finally{
                     $pdo=null;
                   }
-                }*/
+                }
               ?>
             </select>
           </div>
