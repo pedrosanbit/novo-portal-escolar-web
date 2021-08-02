@@ -6,7 +6,7 @@
    		if(isset($_POST["codTurma"]) && $_POST["codTurma"]!= ""){
    			if(isset($_POST["codDisciplina"]) && $_POST["codDisciplina"]!= ""){
    				if(isset($_POST["codAtividade"]) && $_POST["codAtividade"]!= ""){
-
+            echo "<script>alert('Turma: ".$_POST["codTurma"]." Disciplina: ".$_POST["codDisciplina"]." Atividade: ".$_POST["codAtividade"]."')</script>";
             $verificacao=$pdo->prepare("select * from AlunoTurmaDisciplinaAtividadeTCC atda where atda.codTurma= :codTurma and atda.codDisciplina= :codDisciplina and atda.codAtividade= :codAtividade;");
             $verificacao->bindParam(":codTurma",$_POST["codTurma"]);
             $verificacao->bindParam(":codDisciplina",$_POST["codDisciplina"]);
