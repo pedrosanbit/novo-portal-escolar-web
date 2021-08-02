@@ -151,39 +151,67 @@
       <div class="mb-3">
         Período: <?php echo date("Y");?>
       </div>
+      <!--?php
+        include("../conexaoBD.php");
+        try {
+          /*$stmt = $pdo->prepare("select distinct t.codTurma, t.nomeTurma from TurmasTCC t inner join LecionaTCC l on t.codTurma = l.codTurma inner join ProfessoresTCC p on l.rfProfessor = p.rfProfessor where p.rfProfessor = " .  $_SESSION["login"] . " and t.periodo = " . date("Y"));
+          $stmt->execute();
+          while($row = $stmt->fetch()) {
+            echo "<div class='mb-3'>
+                    <div class='accordion' id='accordionExample".$row['codTurma']."'>
+                      <div class='accordion-item'>
+                        <h2 class='accordion-header' id='headingTwo'>
+                          <button class='accordion-button collapsed' type='button' data-bs-toggle='collapse' data-bs-target='#collapseTwo".$row['codTurma']."' aria-expanded='false' aria-controls='collapseTwo'><b>Turma ".
+                            $row['nomeTurma'].
+                          "</b></button>
+                        </h2>
+                        <div id='collapseTwo".$row['codTurma']."' class='accordion-collapse collapse' aria-labelledby='headingTwo' data-bs-parent='#accordionExample".$row['codTurma']."'>
+                          <div class='accordion-body'>
+                            <ul>
+                              <li>
+                                <a style='text-decoration: none;' href='#'><i class='fas fa-file-excel'></i> 1° Trimestre</a>
+                              </li>
+                              <li>
+                                <a style='text-decoration: none;' href='#'><i class='fas fa-file-excel'></i> 2° Trimestre</a>
+                              </li>
+                              <li>
+                                <a style='text-decoration: none;' href='#'><i class='fas fa-file-excel'></i> 3° Trimestre</a>
+                              </li>
+                              <li>
+                                <a style='text-decoration: none;' href='#'><i class='fas fa-file-excel'></i> 4° Trimestre</a>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>";-->
+
         <form method="post">
 	        <div class="row">
 	          <div class="col-md-4">
-	            <label for="codTurma" class="form-label">Turma:</label>
-	            <select class="form-select" type="text" id="codTurma" name="codTurma" maxlength="6" onchange="submit(codTurma.value);">
+	            <label for="codTurma" class="form-label">Código da Turma:</label>
+	            <select class="form-select" type="text" id="codTurma" name="codTurma" maxlength="6" onchange="submit(codTurma.value)";>
 	            <?php
 	                include("../conexaoBD.php");
 	                try{
 	                	if(isset($_POST["codTurma"]) && $_POST["codTurma"] != 'null') {
 	                		$codTurma = $_POST["codTurma"];
-                        $stmt= $pdo->prepare("select t.codTurma, t.nomeTurma from TurmasTCC t inner join LecionaTCC l on t.codTurma = l.codTurma where l.rfProfessor= :rf and t.codTurma = :codTurma and t.periodo = :periodo");
-                        $stmt->bindParam(":rf", $_SESSION["login"]);
-                        $stmt->bindParam(":codTurma", $_POST["codTurma"]);
-                        $stmt->bindParam(":periodo", date("Y"));
-                        $stmt->execute();
-                        $row = $stmt->fetch();
-			                  $stmt= $pdo->prepare("select distinct t.codTurma, t.nomeTurma from TurmasTCC t inner join LecionaTCC l on t.codTurma = l.codTurma where l.rfProfessor= :rf and t.codTurma != :codTurma and t.periodo = :periodo");
+			                  $stmt= $pdo->prepare("select distinct codTurma from LecionaTCC where rfProfessor= :rf and codTurma != :codTurma ");
 			                  $stmt->bindParam(":rf", $_SESSION["login"]);
 			                  $stmt->bindParam(":codTurma", $_POST["codTurma"]);
-                        $stmt->bindParam(":periodo", date("Y"));
 			                  $stmt->execute();
-			                  echo "<option value='" . $_POST["codTurma"] . "'>" . $row["nomeTurma"] . "</option>";
+			                  echo "<option value='" . $_POST["codTurma"] . "'>" . $_POST["codTurma"] . "</option>";
 	                  	}
 	                  	else{
-	                  		 $stmt= $pdo->prepare("select distinct t.codTurma, t.nomeTurma from TurmasTCC t inner join LecionaTCC l on t.codTurma = l.codTurma where l.rfProfessor= :rf and t.periodo = :periodo");
+	                  		 $stmt= $pdo->prepare("select distinct codTurma from LecionaTCC where rfProfessor= :rf");
 			                   $stmt->bindParam(":rf", $_SESSION["login"]);
-                         $stmt->bindParam(":periodo", date("Y"));
 			                   $stmt->execute();
 			                echo "<option value='null'></option>";
 	                  	}
 
 	                  	while($row= $stmt->fetch()){
-			                   echo "<option value='". $row["codTurma"] ."'>".$row["nomeTurma"]."</option>";
+			                   echo "<option value='". $row["codTurma"] ."'>".$row["codTurma"]."</option>";
 	                  	}
 
 	                }
@@ -198,48 +226,29 @@
 	          </div>
 
 	          <div class="col-md-4">
-	            <label for="codDisciplina" class="form-label">Disciplina:</label>
+	            <label for="codDisciplina" class="form-label">Código da Disciplina:</label>
 	            <select class="form-select" type="text" id="codDisciplina" name="codDisciplina" onchange="submit(codTurma.value, codDisciplina.value)";>
 	            	<?php
 	            		if(isset($_POST["codTurma"]) && $_POST["codTurma"] != 'null'){
 	            			include("../conexaoBD.php");
 			                try{
 			                	if(isset($_POST["codDisciplina"]) && $_POST["codDisciplina"] != 'null') {
-                          $stmt = $pdo->prepare("select * from DisciplinasTCC d inner join LecionaTCC l on d.codDisciplina = l.codDisciplina where d.codDisciplina = :codDisciplina and l.codTurma = :codTurma");
-                          $stmt->bindParam(":codDisciplina", $_POST["codDisciplina"]);
-                          $stmt->bindParam(":codTurma", $_POST["codTurma"]);
-                          $stmt->execute();
-                          $rows = $stmt->rowCount();
-                          if($rows > 0) {
-                            $stmt = $pdo->prepare("select * from DisciplinasTCC where codDisciplina = :codDisciplina");
-                            $stmt->bindParam(":codDisciplina", $_POST["codDisciplina"]);
-                            $stmt->execute();
-                            $row = $stmt->fetch();
-                            $stmt= $pdo->prepare("select d.codDisciplina, d.nomeDisciplina from DisciplinasTCC d inner join LecionaTCC l on d.codDisciplina = l.codDisciplina where l.rfProfessor= :rf and l.codTurma= :codTurma and d.codDisciplina != :codDisciplina");
-                            $stmt->bindParam(":rf", $_SESSION["login"]);
-                            $stmt->bindParam(":codTurma", $_POST["codTurma"]);
-                            $stmt->bindParam(":codDisciplina", $_POST["codDisciplina"]);
-                            $stmt->execute();
-                            echo "<option value='" . $_POST["codDisciplina"] . "'>" . $row["nomeDisciplina"] . "</option>";
-                          }
-                          else {
-                            unset($_POST["codDisciplina"]);
-                            $stmt= $pdo->prepare("select d.codDisciplina, d.nomeDisciplina from DisciplinasTCC d inner join LecionaTCC l on d.codDisciplina = l.codDisciplina where l.rfProfessor= :rf and l.codTurma= :codTurma");
-                            $stmt->bindParam(":rf", $_SESSION["login"]);
-                            $stmt->bindParam(":codTurma", $_POST["codTurma"]);
-                            $stmt->execute();
-                            echo "<option value='null'></option>";
-                          }
+				                  $stmt= $pdo->prepare("select codDisciplina from LecionaTCC where rfProfessor= :rf and codTurma= :codTurma and codDisciplina!= :codDisciplina");
+				                  $stmt->bindParam(":rf", $_SESSION["login"]);
+				                  $stmt->bindParam(":codTurma", $_POST["codTurma"]);
+				                  $stmt->bindParam(":codDisciplina", $_POST["codDisciplina"]);
+				                  $stmt->execute();
+				                  echo "<option value='" . $_POST["codDisciplina"] . "'>" . $_POST["codDisciplina"] . "</option>"; 
 				                }
 				                else{
-				                	$stmt= $pdo->prepare("select d.codDisciplina, d.nomeDisciplina from DisciplinasTCC d inner join LecionaTCC l on d.codDisciplina = l.codDisciplina where l.rfProfessor= :rf and l.codTurma= :codTurma");
+				                	$stmt= $pdo->prepare("select codDisciplina from LecionaTCC where rfProfessor= :rf and codTurma= :codTurma");
 				                  	$stmt->bindParam(":rf", $_SESSION["login"]);
 				                  	$stmt->bindParam(":codTurma", $_POST["codTurma"]);
 				                  	$stmt->execute();
 				                  	echo "<option value='null'></option>";
 				                }
 				                  while($row= $stmt->fetch()){
-				                    echo "<option value='". $row["codDisciplina"] ."'>".$row["nomeDisciplina"]."</option>";
+				                    echo "<option value='". $row["codDisciplina"] ."'>".$row["codDisciplina"]."</option>";
 				                  }
 
 			                }
@@ -257,58 +266,38 @@
 	          </div>
 
 	          <div class="col-md-4">
-	            <label for="codAtividade" class="form-label">Nome da Avaliação:</label>
-	            <select class='form-select' id='codAtividade' name='codAtividade' aria-label='Default select example'>
+	            <label for="codAtividade" class="form-label">Nome da Atividade:</label>
+	            <select class='form-select' id='codAtividade' name='codAtividade' aria-label='Default select example' onchange="submit(codTurma.value, codDisciplina.value , codAtividade.value)";>
 	            	<?php
 
 	            		if(isset($_POST["codTurma"]) && $_POST["codTurma"] != 'null' && isset($_POST["codDisciplina"]) && $_POST["codDisciplina"] != 'null'){
 	            			include("../conexaoBD.php");
 			                try{
 			                	if(isset($_POST["codAtividade"]) && $_POST["codAtividade"] != 'null') {
-                          $stmt = $pdo->prepare("select a.codAtividade from AtividadesTCC a inner join DisciplinaTurmaAtividadeTCC dta on a.codAtividade = dta.codAtividade where dta.codTurma = :codTurma and a.codAtividade = :codAtividade");
+
+                          $stmt= $pdo->prepare("select a.descricao from AtividadesTCC a inner join DisciplinaTurmaAtividadeTCC s on a.codAtividade=s.codAtividade where a.codAtividade= :codAtividade and s.codTurma= :codTurma and s.codDisciplina= :codDisciplina");
                           $stmt->bindParam(":codAtividade", $_POST["codAtividade"]);
                           $stmt->bindParam(":codTurma", $_POST["codTurma"]);
+                          $stmt->bindParam(":codDisciplina", $_POST["codDisciplina"]);
                           $stmt->execute();
-                          $rows = $stmt->rowCount();
-                          if($rows > 0) {
-                            $stmt = $pdo->prepare("select a.codAtividade from AtividadesTCC a inner join DisciplinaTurmaAtividadeTCC dta on a.codAtividade = dta.codAtividade where dta.codDisciplina = :codDisciplina and a.codAtividade = :codAtividade");
-                            $stmt->bindParam(":codAtividade", $_POST["codAtividade"]);
-                            $stmt->bindParam(":codTurma", $_POST["codTurma"]);
-                            $stmt->execute();
-                            $rows = $stmt->rowCount();
-                            if($rows > 0) {
-                              $stmt= $pdo->prepare("select a.descricao from AtividadesTCC a inner join DisciplinaTurmaAtividadeTCC s on a.codAtividade=s.codAtividade where a.codAtividade= :codAtividade and s.codTurma= :codTurma and s.codDisciplina= :codDisciplina");
-                              $stmt->bindParam(":codAtividade", $_POST["codAtividade"]);
-                              $stmt->bindParam(":codTurma", $_POST["codTurma"]);
-                              $stmt->bindParam(":codDisciplina", $_POST["codDisciplina"]);
-                              $stmt->execute();
-                              $nomeAtiv=$stmt->fetch();
-                              echo "<option value='" . $_POST["codAtividade"] . "'>" . $nomeAtiv["descricao"] . "</option>"; 
+                          $nomeAtiv=$stmt->fetch();
+                          echo "<option value='" . $_POST["codAtividade"] . "'>" . $nomeAtiv["descricao"] . "</option>"; 
 
-                              $stmt= $pdo->prepare("select distinct a.descricao, a.codAtividade from AtividadesTCC a inner join DisciplinaTurmaAtividadeTCC s on a.codAtividade=s.codAtividade where s.codTurma= :codTurma and s.codDisciplina= :codDisciplina and a.codAtividade != :codAtividade");
-                              $stmt->bindParam(":codAtividade", $_POST["codAtividade"]);
-                              $stmt->bindParam(":codTurma", $_POST["codTurma"]);
-                              $stmt->bindParam(":codDisciplina", $_POST["codDisciplina"]);
-                              $stmt->execute();
-                            }
-                            else {
-                              unset($_POST["codAtividade"]);
-                              $stmt= $pdo->prepare("select a.descricao, a.codAtividade from AtividadesTCC a inner join DisciplinaTurmaAtividadeTCC s on a.codAtividade=s.codAtividade where s.codTurma= :codTurma and s.codDisciplina= :codDisciplina");
-                              $stmt->bindParam(":codTurma", $_POST["codTurma"]);
-                              $stmt->bindParam(":codDisciplina", $_POST["codDisciplina"]);
-                              $stmt->execute(); 
-                            }
-                          }
-                          else {
-                            unset($_POST["codAtividade"]);
-                          }
+                          $stmt= $pdo->prepare("select distinct a.descricao, a.codAtividade from AtividadesTCC a inner join DisciplinaTurmaAtividadeTCC s on a.codAtividade=s.codAtividade where s.codTurma= :codTurma and s.codDisciplina= :codDisciplina and a.codAtividade != :codAtividade");
+                          $stmt->bindParam(":codAtividade", $_POST["codAtividade"]);
+                          $stmt->bindParam(":codTurma", $_POST["codTurma"]);
+                          $stmt->bindParam(":codDisciplina", $_POST["codDisciplina"]);
+                          $stmt->execute();
+
+                          //echo "<script>window.location.replace('professorNotas.php?codTurma=".$_POST["codTurma"]."&codDisciplina=".$_POST["codDisciplina"]."&codAtividade=".$_POST["codAtividade"]."');</script>";
+				                 
 				                }
 				                else{
 				                	$stmt= $pdo->prepare("select a.descricao, a.codAtividade from AtividadesTCC a inner join DisciplinaTurmaAtividadeTCC s on a.codAtividade=s.codAtividade where s.codTurma= :codTurma and s.codDisciplina= :codDisciplina");
 				                  	$stmt->bindParam(":codTurma", $_POST["codTurma"]);
 				                  	$stmt->bindParam(":codDisciplina", $_POST["codDisciplina"]);
 				                  	$stmt->execute();
-				                  	//echo "<option value='null'></option>";                            
+				                  	echo "<option value='null'></option>";                            
 				                }
 				                  while($row= $stmt->fetch()){
 				                    echo "<option value='". $row["codAtividade"] ."'>".$row["descricao"]."</option>";
@@ -326,18 +315,12 @@
 	            </select>
 	          </div>
 	        </div>
-          <div class="mt-4 text-center">
+          <!--div class="mt-4 text-center">
              <button type="submit" class="btn btn-primary rounded-pill text-white w-25"><b>Consultar</b></button>  
-          </div>
+          </div-->
 	    </form>
-      <?php
-        if($_SERVER["REQUEST_METHOD"] === "POST") {
-          if(isset($_POST["codTurma"]) && isset($_POST["codDisciplina"]) && isset($_POST["codAtividade"])) {
-            echo "<script>window.location.replace('editNotas.php?turma=".$_POST["codTurma"]."&disc=".$_POST["codDisciplina"]."&ativ=".$_POST["codAtividade"]."')</script>";
-          }
-        }
-        //include('consultaTurmaAtividade.php')
-      ?>
+
+      <?php include('consultaTurmaAtividade.php')?>
 
           <!--}
         }
