@@ -9,8 +9,8 @@
         else if($_GET["tipo"]=="prof"){
             header("location:professor/professor.php");
         }
-        else if($_GET["tipo"]=="estudante"){
-            header("location:sucesso.html");
+        else if($_GET["tipo"]=="aluno"){
+            header("location:aluno/aluno.php");
         }
         $msg = "";
     }
