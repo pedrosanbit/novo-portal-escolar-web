@@ -2,19 +2,19 @@
   session_start();
   if(!isset($_SESSION['login']))
     header('location:../index.php');
-  else if($_SESSION['tipo'] != 'prof')
+  else if($_SESSION['tipo'] != 'aluno')
     header('location:../index.php');
 
   include("../conexaoBD.php");
   try {
-    $stmt = $pdo->prepare("select p.rfProfessor, p.nomeProfessor from ProfessoresTCC p where p.rfProfessor = " . $_SESSION['login']);
+    $stmt = $pdo->prepare("select raAluno, nomeAluno from AlunosTCC p where raAluno = " . $_SESSION['login']);
     $stmt->execute();
     $row = $stmt->fetch();
-    if(strpos($row['nomeProfessor']," ")) {
-      $nome = substr($row['nomeProfessor'], 0, strpos($row['nomeProfessor']," "));
+    if(strpos($row['nomeAluno']," ")) {
+      $nome = substr($row['nomeAluno'], 0, strpos($row['nomeAluno']," "));
     }
     else
-      $nome = $row['nomeProfessor'];
+      $nome = $row['nomeAluno'];
   }
   catch(PDOException $e) {
     echo 'Error: ' . $e->getMessage();
@@ -101,21 +101,9 @@
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="professor.php"><b><i class="fas fa-home"></i> Início</b></a>
               </li>
-              <li class="nav-item">
+              <!--li class="nav-item">
                 <a class="nav-link" href="adminCursos.php"><i class="fas fa-search"></i> Consultas</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="adminDisciplinas.php"><i class="fas fa-calendar-alt"></i> Frequência</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="professorNotas.php"><i class="fas fa-file-alt"></i> Notas</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="professorPlanejamento.php"><i class="fas fa-chalkboard"></i> Planejamento</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="../logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
-              </li>
+              </li-->
             </ul>
             <form class="d-flex text-white">
               <div class="form-check form-switch">
@@ -132,18 +120,9 @@
         <li class="nav-item">
           <a class="nav-link active text-primary" id="nav-active" aria-current="page" href="professor.php"><b><i class="fas fa-home"></i> Início</b></a>
         </li>
-        <li class="nav-item">
+        <!--li class="nav-item">
           <a class="nav-link text-dark" href="adminCursos.php"><i class="fas fa-search"></i> Consultas</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-dark" href="adminDisciplinas.php"><i class="fas fa-calendar-alt"></i> Frequência</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-dark" href="professorNotas.php"><i class="fas fa-file-alt"></i> Notas</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-dark" href="professorPlanejamento.php"><i class="fas fa-chalkboard"></i> Planejamento</a>
-        </li>
+        </li-->
       </ul>
     </div>
 
@@ -164,7 +143,7 @@
       <?php
         include("../conexaoBD.php");
         try {
-          $stmt = $pdo->prepare("select distinct t.codTurma, t.nomeTurma from TurmasTCC t inner join LecionaTCC l on t.codTurma = l.codTurma inner join ProfessoresTCC p on l.rfProfessor = p.rfProfessor where p.rfProfessor = " .  $_SESSION["login"] . " and t.periodo = " . date("Y"));
+          $stmt = $pdo->prepare("select distinct t.codTurma, t.nomeTurma from TurmasTCC t inner join AlunoTurmaTCC alt on t.codTurma = alt.codTurma inner join AlunosTCC a on alt.raAluno = a.raAluno where a.raAluno = " .  $_SESSION["login"] . " and t.periodo = " . date("Y"));
           $stmt->execute();
           while($row = $stmt->fetch()) {
             echo "<div class='mb-3'>
@@ -177,20 +156,12 @@
                         </h2>
                         <div id='collapseTwo".$row['codTurma']."' class='accordion-collapse collapse' aria-labelledby='headingTwo' data-bs-parent='#accordionExample".$row['codTurma']."'>
                           <div class='accordion-body'>
-                            <ul>
-                              <li>
-                                <a style='text-decoration: none;' href='#'><i class='fas fa-search'></i> Consultas</a>
-                              </li>
-                              <li>
-                                <a style='text-decoration: none;' href='#'><i class='fas fa-calendar-alt'></i> Frequência</a>
-                              </li>
-                              <li>
-                                <a style='text-decoration: none;' href='#'><i class='fas fa-file-alt'></i> Notas</a>
-                              </li>
-                              <li>
-                                <a style='text-decoration: none;' href='professorPlanejamento.php?turma=".$row['codTurma']."'><i class='fas fa-chalkboard'></i> Planejamento</a>
-                              </li>
-                            </ul>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
                           </div>
                         </div>
                       </div>

@@ -148,13 +148,27 @@
     </div>
 
     <div class="container mt-3">
-      <form method="post">
+      <form method="post" id="campos">
         <div class="row">
           <div class="col-md-4 col-sm-12">
             <label for="periodo" class="form-label">Período:</label>
             <select class="form-select" id="periodo" name="periodo" aria-label="Default select example" onchange="submit(periodo.value);">
               <?php
                 include("../conexaoBD.php");
+                if($_SERVER["REQUEST_METHOD"] != "POST") {
+                  if(isset($_GET["turma"])) {
+                    try {
+                      $stmt = $pdo->prepare("select periodo from TurmasTCC where codTurma = :codTurma");
+                      $stmt->bindParam(":codTurma", $_GET["turma"]);
+                      $stmt->execute();
+                      $row = $stmt->fetch();
+                      echo "<option value='" . $row["periodo"] . "'>" . $row["periodo"] . "</option>";
+                    }
+                    catch(PDOException $e) {
+                      echo 'Error: ' . $e->getMessage();
+                    }
+                  }
+                }
                 try {
                   if(isset($_POST["periodo"]) && $_POST["periodo"] != 'null') {
                     $stmt = $pdo->prepare("select distinct t.periodo from TurmasTCC t inner join LecionaTCC l on t.codTurma = l.codTurma inner join ProfessoresTCC p on l.rfProfessor = p.rfProfessor where p.rfProfessor = " . $_SESSION['login'] . " and t.periodo != " . $_POST["periodo"]);
@@ -184,6 +198,25 @@
             <label for="turma" class="form-label">Turma:</label>
             <select class="form-select" id="turma" name="turma" aria-label="Default select example" onchange="submit(periodo.value, turma.value);">
               <?php
+                if($_SERVER["REQUEST_METHOD"] != "POST") {
+                  if(isset($_GET["turma"])) {
+                    include("../conexaoBD.php");
+                    try {
+                      $stmt = $pdo->prepare("select * from TurmasTCC where codTurma = :codTurma");
+                      $stmt->bindParam(":codTurma", $_GET["turma"]);
+                      $stmt->execute();
+                      $row = $stmt->fetch();
+                      echo "<option value='" . $row["codTurma"] . "'>" . $row["nomeTurma"] . "</option>";
+                      echo "<script>document.getElementById('campos').submit(periodo.value, turma.value);</script>";
+                    }
+                    catch(PDOException $e) {
+                      echo 'Error: ' . $e->getMessage();
+                    }
+                    finally{
+                      $pdo = null;
+                    }
+                  }
+                }
                 if(isset($_POST["periodo"]) && $_POST["periodo"] != 'null') {
                   $periodo = $_POST["periodo"];
                   include("../conexaoBD.php");
