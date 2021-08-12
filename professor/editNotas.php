@@ -185,43 +185,51 @@
             </thead>
             <tbody>
               <?php
-                include("../conexaoBD.php");
-                $stmt = $pdo->prepare("select a.raAluno, a.nomeAluno from AlunosTCC a inner join AlunoTurmaTCC alt on a.raAluno = alt.raAluno where alt.codTurma = :codTurma");
-                $stmt->bindParam(":codTurma", $_GET["turma"]);
-                $stmt->execute();
-                while($row = $stmt->fetch()) {
-                  $stmt2 = $pdo->prepare("select a.raAluno, a.nomeAluno, atda.nota from AlunosTCC a inner join AlunoTurmaTCC alt on a.raAluno = alt.raAluno inner join AlunoTurmaDisciplinaAtividadeTCC atda on alt.raAluno = atda.raAluno where a.raAluno = :ra and atda.codAtividade = :ativ");
-                  $stmt2->bindParam(":ra", $row["raAluno"]);
-                  $stmt2->bindParam(":ativ", $_GET["ativ"]);
-                  $stmt2->execute();
-                  $rows = $stmt2->rowCount();
-                  if($rows > 0) {
-                    $row2 = $stmt2->fetch();
-                    echo "<tr>
-                            <td>
-                              ".$row2['raAluno']."
-                            </td>
-                            <td>
-                              ".$row2['nomeAluno']."
-                            </td>
-                            <td>
-                              <input class='form-control' type='number' min='0' max='10' step='0.1' name='".$row2["raAluno"]."' value='".$row2["nota"]."'>
-                            </td>
-                          </tr>";
+                try {
+                  include("../conexaoBD.php");
+                  $stmt = $pdo->prepare("select a.raAluno, a.nomeAluno from AlunosTCC a inner join AlunoTurmaTCC alt on a.raAluno = alt.raAluno where alt.codTurma = :codTurma");
+                  $stmt->bindParam(":codTurma", $_GET["turma"]);
+                  $stmt->execute();
+                  while($row = $stmt->fetch()) {
+                    $stmt2 = $pdo->prepare("select a.raAluno, a.nomeAluno, atda.nota from AlunosTCC a inner join AlunoTurmaTCC alt on a.raAluno = alt.raAluno inner join AlunoTurmaDisciplinaAtividadeTCC atda on alt.raAluno = atda.raAluno where a.raAluno = :ra and atda.codAtividade = :ativ");
+                    $stmt2->bindParam(":ra", $row["raAluno"]);
+                    $stmt2->bindParam(":ativ", $_GET["ativ"]);
+                    $stmt2->execute();
+                    $rows = $stmt2->rowCount();
+                    if($rows > 0) {
+                      $row2 = $stmt2->fetch();
+                      echo "<tr>
+                              <td>
+                                ".$row2['raAluno']."
+                              </td>
+                              <td>
+                                ".$row2['nomeAluno']."
+                              </td>
+                              <td>
+                                <input class='form-control' type='number' min='0' max='10' step='0.1' name='".$row2["raAluno"]."' value='".$row2["nota"]."'>
+                              </td>
+                            </tr>";
+                    }
+                    else {
+                      echo "<tr>
+                              <td>
+                                ".$row['raAluno']."
+                              </td>
+                              <td>
+                                ".$row['nomeAluno']."
+                              </td>
+                              <td>
+                                <input class='form-control' type='number' min='0' max='10' step='0.1' name='".$row["raAluno"]."'>
+                              </td>
+                            </tr>";
+                    }
                   }
-                  else {
-                    echo "<tr>
-                            <td>
-                              ".$row['raAluno']."
-                            </td>
-                            <td>
-                              ".$row['nomeAluno']."
-                            </td>
-                            <td>
-                              <input class='form-control' type='number' min='0' max='10' step='0.1' name='".$row["raAluno"]."'>
-                            </td>
-                          </tr>";
-                  }
+                }
+                catch(PDOException $e) {
+                  echo 'Error: ' . $e->getMessage();
+                }
+                finally {
+                  $pdo = null;
                 }
               ?>
             </tbody>
@@ -230,6 +238,69 @@
         <div class='mt-4 text-center'>
           <button type='submit' class='btn btn-primary rounded-pill text-white'><b><i class='fas fa-save'></i> Salvar Notas</b></button>
         </div>
+        <?php
+          if($_SERVER["REQUEST_METHOD"] === "POST") {
+            $msg = 1;
+            try {
+              include("../conexaoBD.php");
+              $stmt = $pdo->prepare("select a.raAluno, a.nomeAluno from AlunosTCC a inner join AlunoTurmaTCC alt on a.raAluno = alt.raAluno where alt.codTurma = :codTurma");
+              $stmt->bindParam(":codTurma", $_GET["turma"]);
+              $stmt->execute();
+              while($row = $stmt->fetch()) {
+                $stmt2 = $pdo->prepare("select a.raAluno, a.nomeAluno, atda.nota from AlunosTCC a inner join AlunoTurmaTCC alt on a.raAluno = alt.raAluno inner join AlunoTurmaDisciplinaAtividadeTCC atda on alt.raAluno = atda.raAluno where a.raAluno = :ra and atda.codAtividade = :ativ");
+                $stmt2->bindParam(":ra", $row["raAluno"]);
+                $stmt2->bindParam(":ativ", $_GET["ativ"]);
+                $stmt2->execute();
+                $rows = $stmt2->rowCount();
+                if($rows > 0) {
+                  if($_POST[$row["raAluno"]] == "") {
+                    $stmt3 = $pdo->prepare("update AlunoTurmaDisciplinaAtividadeTCC set nota = null where raAluno = :raAluno and codAtividade = :codAtividade");
+                  }
+                  else {
+                    $stmt3 = $pdo->prepare("update AlunoTurmaDisciplinaAtividadeTCC set nota = :nota where raAluno = :raAluno and codAtividade = :codAtividade");
+                    $stmt3->bindParam(":nota", $_POST[$row["raAluno"]]);
+                  }
+                  $stmt3->bindParam(":raAluno", $row["raAluno"]);
+                  $stmt3->bindParam(":codAtividade", $_GET["ativ"]);
+                  $stmt3->execute();
+                  $msg = 0;
+                }
+                else {
+                  if($_POST[$row["raAluno"]] == "") {
+                    $stmt3 = $pdo->prepare("insert into AlunoTurmaDisciplinaAtividadeTCC (raAluno, codTurma, codDisciplina, codAtividade, nota) values (:raAluno, :codTurma, :codDisciplina, :codAtividade, null)");
+                  }
+                  else {
+                    $stmt3 = $pdo->prepare("insert into AlunoTurmaDisciplinaAtividadeTCC (raAluno, codTurma, codDisciplina, codAtividade, nota) values (:raAluno, :codTurma, :codDisciplina, :codAtividade, :nota)");
+                    $stmt3->bindParam(":nota", $_POST[$row["raAluno"]]);
+                  }
+                  $stmt3->bindParam(":raAluno", $row["raAluno"]);
+                  $stmt3->bindParam(":codTurma", $_GET["turma"]);
+                  $stmt3->bindParam(":codDisciplina", $_GET["disc"]);
+                  $stmt3->bindParam(":codAtividade", $_GET["ativ"]);
+                  $stmt3->execute();
+                  $msg = 0;
+                }
+              }
+            }
+            catch(PDOException $e) {
+              echo 'Error: ' . $e->getMessage();
+            }
+            finally {
+              $pdo = null;
+            }
+            if(isset($msg)) {
+              switch ($msg) {
+                case 0:
+                  echo "<script>alert('Alterações salvas com sucesso!');</script>";
+                  echo "<script>window.location.replace('editNotas.php?turma=".$_GET["turma"]."&disc=".$_GET["disc"]."&ativ=".$_GET["ativ"]."');</script>";
+                  break;  
+                case 1:
+                  echo "<span class='text-warning'>Não foi possível fazer as alterações.</span>";
+                  break;
+              }
+            }
+          }
+        ?>
       </form>
     </div>
     <script src="../javascript/admin.js"></script>
