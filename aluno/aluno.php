@@ -99,7 +99,13 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="professor.php"><b><i class="fas fa-home"></i> Início</b></a>
+                <a class="nav-link active" aria-current="page" href="aluno.php"><b><i class="fas fa-home"></i> Início</b></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="alunoPlanoEnsino.php"><i class="fas fa-chalkboard"></i> Plano de Ensino</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="../logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
               </li>
               <!--li class="nav-item">
                 <a class="nav-link" href="adminCursos.php"><i class="fas fa-search"></i> Consultas</a>
@@ -118,7 +124,10 @@
     <div id="navtabs">
       <ul class="nav nav-tabs">
         <li class="nav-item">
-          <a class="nav-link active text-primary" id="nav-active" aria-current="page" href="professor.php"><b><i class="fas fa-home"></i> Início</b></a>
+          <a class="nav-link active text-primary" id="nav-active" aria-current="page" href="aluno.php"><b><i class="fas fa-home"></i> Início</b></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-dark" href="alunoPlanoEnsino.php"><i class="fas fa-chalkboard"></i> Plano de Ensino</a>
         </li>
         <!--li class="nav-item">
           <a class="nav-link text-dark" href="adminCursos.php"><i class="fas fa-search"></i> Consultas</a>
@@ -156,12 +165,9 @@
                         </h2>
                         <div id='collapseTwo".$row['codTurma']."' class='accordion-collapse collapse' aria-labelledby='headingTwo' data-bs-parent='#accordionExample".$row['codTurma']."'>
                           <div class='accordion-body'>
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                            <ul>
+                              <li><a style='text-decoration: none;' href='planoEnsino.php?turma=".$row["codTurma"]."'><i class='fas fa-chalkboard'></i> Plano de Ensino</li></a>
+                            </ul>
                           </div>
                         </div>
                       </div>
