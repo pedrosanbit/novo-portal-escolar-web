@@ -105,6 +105,9 @@
                 <a class="nav-link" href="alunoPlanoEnsino.php"><i class="fas fa-chalkboard"></i> Plano de Ensino</a>
               </li>
               <li class="nav-item">
+                <a class="nav-link" href="alunoBoletimAvaliacoes.php"><i class="far fa-file-alt"></i> Boletim de Avaliações</a>
+              </li>
+              <li class="nav-item">
                 <a class="nav-link" href="../logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
               </li>
               <!--li class="nav-item">
@@ -128,6 +131,9 @@
         </li>
         <li class="nav-item">
           <a class="nav-link text-dark" href="alunoPlanoEnsino.php"><i class="fas fa-chalkboard"></i> Plano de Ensino</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-dark" href="alunoBoletimAvaliacoes.php"><i class="far fa-file-alt"></i> Boletim de Avaliações</a>
         </li>
         <!--li class="nav-item">
           <a class="nav-link text-dark" href="adminCursos.php"><i class="fas fa-search"></i> Consultas</a>

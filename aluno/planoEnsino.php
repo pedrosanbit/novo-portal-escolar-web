@@ -195,6 +195,7 @@
                 }
               ?>
             </select>
+            <?php echo $_SERVER["REQUEST_METHOD"];?>
           </form>
         </div>
       </div>
