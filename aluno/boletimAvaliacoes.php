@@ -118,6 +118,9 @@
                 <a class="nav-link active" href="alunoBoletimAvaliacoes.php"><b><i class="far fa-file-alt"></i> Boletim de Avaliações</b></a>
               </li>
               <li class="nav-item">
+                <a class="nav-link" href="alunoBoletimEscolar.php"><i class="fas fa-file-invoice"></i> Boletim Escolar</a>
+              </li>
+              <li class="nav-item">
                 <a class="nav-link" href="../logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
               </li>
               <!--li class="nav-item">
@@ -144,6 +147,9 @@
         </li>
         <li class="nav-item">
           <a class="nav-link active text-primary" id="nav-active" href="alunoBoletimAvaliacoes.php"><b><i class="far fa-file-alt"></i> Boletim de Avaliações</b></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-dark" href="alunoBoletimEscolar.php"><i class="fas fa-file-invoice"></i> Boletim Escolar</a>
         </li>
         <!--li class="nav-item">
           <a class="nav-link text-dark" href="adminCursos.php"><i class="fas fa-search"></i> Consultas</a>

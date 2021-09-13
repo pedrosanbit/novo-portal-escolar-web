@@ -113,6 +113,12 @@
                 <a class="nav-link active" href="alunoPlanoEnsino.php"><b><i class="fas fa-chalkboard"></i> Plano de Ensino</b></a>
               </li>
               <li class="nav-item">
+                <a class="nav-link" href="alunoBoletimAvaliacoes.php"><i class="far fa-file-alt"></i> Boletim de Avaliações</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="alunoBoletimEscolar.php"><i class="fas fa-file-invoice"></i> Boletim Escolar</a>
+              </li>
+              <li class="nav-item">
                 <a class="nav-link" href="../logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
               </li>
               <!--li class="nav-item">
@@ -136,6 +142,12 @@
         </li>
         <li class="nav-item">
           <a class="nav-link active text-primary" id="nav-active" href="alunoPlanoEnsino.php"><b><i class="fas fa-chalkboard"></i> Plano de Ensino</b></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-dark" href="alunoBoletimAvaliacoes.php"><i class="far fa-file-alt"></i> Boletim de Avaliações</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-dark" href="alunoBoletimEscolar.php"><i class="fas fa-file-invoice"></i> Boletim Escolar</a>
         </li>
         <!--li class="nav-item">
           <a class="nav-link text-dark" href="adminCursos.php"><i class="fas fa-search"></i> Consultas</a>
@@ -195,7 +207,6 @@
                 }
               ?>
             </select>
-            <?php echo $_SERVER["REQUEST_METHOD"];?>
           </form>
         </div>
       </div>
