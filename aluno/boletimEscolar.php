@@ -4,9 +4,11 @@
     header('location:../index.php');
   else if($_SESSION['tipo'] != 'aluno')
     header('location:../index.php');
+  if(!isset($_GET['turma']))
+    header('location:alunoPlanoEnsino.php');
 
-  include("../conexaoBD.php");
   try {
+    include("../conexaoBD.php");
     $stmt = $pdo->prepare("select raAluno, nomeAluno from AlunosTCC p where raAluno = " . $_SESSION['login']);
     $stmt->execute();
     $row = $stmt->fetch();
@@ -15,6 +17,13 @@
     }
     else
       $nome = $row['nomeAluno'];
+    $nomeCompleto = $row['nomeAluno'];
+
+    $stmt = $pdo->prepare("select codTurma, nomeTurma from TurmasTCC where codTurma = :codTurma");
+    $stmt->bindParam(":codTurma", $_GET["turma"]);
+    $stmt->execute();
+    $row = $stmt->fetch();
+    $nomeTurma = $row['nomeTurma'];
   }
   catch(PDOException $e) {
     echo 'Error: ' . $e->getMessage();
@@ -99,7 +108,7 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="aluno.php"><b><i class="fas fa-home"></i> Início</b></a>
+                <a class="nav-link" aria-current="page" href="aluno.php"><i class="fas fa-home"></i> Início</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="alunoPlanoEnsino.php"><i class="fas fa-chalkboard"></i> Plano de Ensino</a>
@@ -108,14 +117,11 @@
                 <a class="nav-link" href="alunoBoletimAvaliacoes.php"><i class="far fa-file-alt"></i> Boletim de Avaliações</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="alunoBoletimEscolar.php"><i class="fas fa-file-invoice"></i> Boletim Escolar</a>
+                <a class="nav-link active" href="alunoBoletimEscolar.php"><b><i class="fas fa-file-invoice"></i> Boletim Escolar</b></a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="../logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
               </li>
-              <!--li class="nav-item">
-                <a class="nav-link" href="adminCursos.php"><i class="fas fa-search"></i> Consultas</a>
-              </li-->
             </ul>
             <form class="d-flex text-white">
               <div class="form-check form-switch">
@@ -130,7 +136,7 @@
     <div id="navtabs">
       <ul class="nav nav-tabs">
         <li class="nav-item">
-          <a class="nav-link active text-primary" id="nav-active" aria-current="page" href="aluno.php"><b><i class="fas fa-home"></i> Início</b></a>
+          <a class="nav-link text-dark" aria-current="page" href="aluno.php"><i class="fas fa-home"></i> Início</a>
         </li>
         <li class="nav-item">
           <a class="nav-link text-dark" href="alunoPlanoEnsino.php"><i class="fas fa-chalkboard"></i> Plano de Ensino</a>
@@ -139,55 +145,25 @@
           <a class="nav-link text-dark" href="alunoBoletimAvaliacoes.php"><i class="far fa-file-alt"></i> Boletim de Avaliações</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="alunoBoletimEscolar.php"><i class="fas fa-file-invoice"></i> Boletim Escolar</a>
+          <a class="nav-link active text-primary" id="nav-active" href="alunoBoletimEscolar.php"><b><i class="fas fa-file-invoice"></i> Boletim Escolar</b></a>
         </li>
-        <!--li class="nav-item">
-          <a class="nav-link text-dark" href="adminCursos.php"><i class="fas fa-search"></i> Consultas</a>
-        </li-->
       </ul>
     </div>
-
+    <nav class="ms-5 mt-2" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="alunoBoletimEscolar.php">Boletim Escolar</a></li>
+        <?php echo "<li class='breadcrumb-item active' aria-current='page'>". $nomeTurma . "</li> "; ?>
+      </ol>
+    </nav>
     <div class="container mt-3">
-      <div class="row mb-3">
-        <div class="col-9">
-          <?php echo "<h4>Bem-vindo(a), " . $nome ."!</h4>" ?>
-        </div>
-        <div class="col-3 text-end" id="btn-logout">
-          <a href="../logout.php" class="btn btn-primary rounded-pill text-white" role="button">
-            <b><i class="fas fa-sign-out-alt"></i> Logout</b>
-          </a>
-        </div>
-      </div>
-      <div class="mb-3">
-        Período: <?php echo date("Y");?>
-      </div>
       <?php
         include("../conexaoBD.php");
         try {
-          $stmt = $pdo->prepare("select distinct t.codTurma, t.nomeTurma from TurmasTCC t inner join AlunoTurmaTCC alt on t.codTurma = alt.codTurma inner join AlunosTCC a on alt.raAluno = a.raAluno where a.raAluno = " .  $_SESSION["login"] . " and t.periodo = " . date("Y"));
+          $stmt = $pdo->prepare("select periodo from TurmasTCC where codTurma = :codTurma");
+          $stmt->bindParam(":codTurma", $_GET["turma"]);
           $stmt->execute();
-          while($row = $stmt->fetch()) {
-            echo "<div class='mb-3'>
-                    <div class='accordion' id='accordionExample".$row['codTurma']."'>
-                      <div class='accordion-item'>
-                        <h2 class='accordion-header' id='headingTwo'>
-                          <button class='accordion-button collapsed' type='button' data-bs-toggle='collapse' data-bs-target='#collapseTwo".$row['codTurma']."' aria-expanded='false' aria-controls='collapseTwo'><b>Turma ".
-                            $row['nomeTurma'].
-                          "</b></button>
-                        </h2>
-                        <div id='collapseTwo".$row['codTurma']."' class='accordion-collapse collapse' aria-labelledby='headingTwo' data-bs-parent='#accordionExample".$row['codTurma']."'>
-                          <div class='accordion-body'>
-                            <ul>
-                              <li><a style='text-decoration: none;' href='planoEnsino.php?turma=".$row["codTurma"]."'><i class='fas fa-chalkboard'></i> Plano de Ensino</a></li>
-                              <li><a style='text-decoration: none;' href='alunoBoletimAvaliacoes.php?turma=".$row["codTurma"]."'><i class='fas fa-file-alt'></i> Boletim de Avaliações</a></li>
-                              <li><a style='text-decoration: none;' href='boletimEscolar.php?turma=".$row["codTurma"]."'><i class='fas fa-file-invoice'></i> Boletim Escolar</a></li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>";
-          }
+          if($row = $stmt->fetch())
+            echo "<h4>Boletim Escolar " . $row["periodo"] ."</h4>";
         }
         catch(PDOException $e) {
           echo 'Error: ' . $e->getMessage();
@@ -196,6 +172,51 @@
           $pdo = null;
         }
       ?>
+      <div class="table-responsive mt-4">
+        <table id='tableConsulta' class='table table-sm table-striped table-hover'>
+          <tbody>
+            <tr>
+              <th colspan="2">
+                <?php 
+                  include("../conexaoBD.php");
+                  try {
+                    $stmt = $pdo->prepare("select c.nomeCurso from CursosTCC c inner join TurmasTCC t on c.codCurso = t.curso where t.codTurma = :codTurma");
+                    $stmt->bindParam(":codTurma", $_GET["turma"]);
+                    $stmt->execute();
+                    if($row = $stmt->fetch())
+                      echo $row["nomeCurso"];
+                  }
+                  catch(PDOException $e) {
+                    echo 'Error: ' . $e->getMessage();
+                  }
+                  finally {
+                    $pdo = null;
+                  }
+                ?>     
+              </th>
+            </tr>
+            <tr>
+              <td><b>RA:</b> <?php echo $_SESSION["login"]; ?></td>
+              <td><b>Nome:</b> <?php echo $nomeCompleto; ?></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <?php
+        include("geraBoletimEscolar.php");
+      ?>
+      <b>Obs.:</b> Os dados estão sujeitos à confirmação, até o término do ano letivo.
+      <div class="mt-3 mb-4">
+        <b>Legenda:</b><br>
+        <div class="border">
+          <div class="d-flex flex-row flex-wrap">
+            <div class="p-2">MS - Média Semestral<br>MT - Média da Turma</div>
+            <div class="p-2">AD - Aulas Dadas<br>F - Faltas no Semestre</div>
+            <div class="p-2">%F - Porcentagem de Faltas Semestrais<br>MA - Média Anual</div>
+            <div class="p-2">Rec. - Recuperação Final<br>MF - Média Anual Final após Recuperação</div>
+          </div>
+        </div>
+      </div>
     </div>
     <script src="../javascript/admin.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>

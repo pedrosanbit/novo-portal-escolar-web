@@ -15,7 +15,7 @@
     }
     else if(isset($_POST["cursoProfessor"]) && $_POST["cursoProfessor"]!="null"){
       $codProfessor=$_POST["cursoProfessor"];
-      $comando= "select c.codCurso, c.nomeCurso from CursosTCC c inner join TurmasTCC t on c.codCurso = t.curso inner join LecionaTCC l on t.codTurma = l.codTurma inner join ProfessoresTCC p on p.rfProfessor = l.rfProfessor where p.rfProfessor = :codProfessor";
+      $comando= "select distinct c.codCurso, c.nomeCurso from CursosTCC c inner join TurmasTCC t on c.codCurso = t.curso inner join LecionaTCC l on t.codTurma = l.codTurma inner join ProfessoresTCC p on p.rfProfessor = l.rfProfessor where p.rfProfessor = :codProfessor";
     }
     $stmt = $pdo->prepare($comando . " order by nomeCurso");
     if(isset($codCurso)) $stmt->bindParam(':codCurso', $codCurso);

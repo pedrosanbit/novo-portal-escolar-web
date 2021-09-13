@@ -102,13 +102,13 @@
                 <a class="nav-link" aria-current="page" href="aluno.php"><i class="fas fa-home"></i> Início</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" href="alunoPlanoEnsino.php"><b><i class="fas fa-chalkboard"></i> Plano de Ensino</b></a>
+                <a class="nav-link" href="alunoPlanoEnsino.php"><i class="fas fa-chalkboard"></i> Plano de Ensino</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="alunoBoletimAvaliacoes.php"><i class="far fa-file-alt"></i> Boletim de Avaliações</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="alunoBoletimEscolar.php"><i class="fas fa-file-invoice"></i> Boletim Escolar</a>
+                <a class="nav-link active" href="alunoBoletimEscolar.php"><b><i class="fas fa-file-invoice"></i> Boletim Escolar</b></a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="../logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
@@ -133,13 +133,13 @@
           <a class="nav-link text-dark" aria-current="page" href="aluno.php"><i class="fas fa-home"></i> Início</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active text-primary" id="nav-active" href="alunoPlanoEnsino.php"><b><i class="fas fa-chalkboard"></i> Plano de Ensino</b></a>
+          <a class="nav-link text-dark" href="alunoPlanoEnsino.php"><i class="fas fa-chalkboard"></i> Plano de Ensino</a>
         </li>
         <li class="nav-item">
           <a class="nav-link text-dark" href="alunoBoletimAvaliacoes.php"><i class="far fa-file-alt"></i> Boletim de Avaliações</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="alunoBoletimEscolar.php"><i class="fas fa-file-invoice"></i> Boletim Escolar</a>
+          <a class="nav-link active text-primary" id="nav-active" href="alunoBoletimEscolar.php"><b><i class="fas fa-file-invoice"></i> Boletim Escolar</b></a>
         </li>
         <!--li class="nav-item">
           <a class="nav-link text-dark" href="adminCursos.php"><i class="fas fa-search"></i> Consultas</a>
@@ -239,7 +239,7 @@
         <?php
           if($_SERVER["REQUEST_METHOD"] == "POST") {
             if(isset($_POST["periodo"]) && $_POST["periodo"] != 'null' && isset($_POST["turma"])) {
-              echo "<script>window.location.replace('planoEnsino.php?turma=".$_POST["turma"]."');</script>";
+              echo "<script>window.location.replace('boletimEscolar.php?turma=".$_POST["turma"]."');</script>";
             }
           }
         ?>
