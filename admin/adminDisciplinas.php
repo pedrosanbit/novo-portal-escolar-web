@@ -150,7 +150,7 @@
           <div class="col-md-2">
             <label for="turmaDisciplina" class="form-label">Turma:</label>
             <select class='form-select' id='turmaDisciplina' name='turmaDisciplina' aria-label='Default select example'>
-              <?php include("selectTurmas.php"); ?>
+              <?php include("../selectTurmas.php"); ?>
             </select>
           </div>
           <div class="col-md-2">
