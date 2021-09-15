@@ -148,10 +148,14 @@
       else
         echo "<td></td>";
       echo "<td>0%</td>";
-      if($rec != null)
-        echo "<td>" . number_format(bcdiv(((($ms1+$ms2)/2) + $rec)/2, 1, 1), 1, ",") . "</td>";      
+      if($ms1 != null && $ms2 != null) {
+        if($rec != null)
+          echo "<td>" . number_format(bcdiv(((($ms1+$ms2)/2) + $rec)/2, 1, 1), 1, ",") . "</td>";      
+        else
+          echo "<td>" . number_format(bcdiv(($ms1+$ms2)/2, 1, 1), 1, ",") . "</td>";
+      }
       else
-        echo "<td>" . number_format(bcdiv(($ms1+$ms2)/2, 1, 1), 1, ",") . "</td>";
+        echo "<td></td>";
       if($rec != null) {
         if(((($ms1+$ms2)/2) + $rec)/2)
           echo "<td>Reprovado</td>";
