@@ -102,10 +102,10 @@
                 <a class="nav-link active" aria-current="page" href="professor.php"><b><i class="fas fa-home"></i> Início</b></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="adminCursos.php"><i class="fas fa-search"></i> Consultas</a>
+                <a class="nav-link" href="#"><i class="fas fa-search"></i> Consultas</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="adminDisciplinas.php"><i class="fas fa-calendar-alt"></i> Frequência</a>
+                <a class="nav-link" href="#"><i class="fas fa-calendar-alt"></i> Frequência</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="professorNotas.php"><i class="fas fa-file-alt"></i> Notas</a>
@@ -133,10 +133,10 @@
           <a class="nav-link active text-primary" id="nav-active" aria-current="page" href="professor.php"><b><i class="fas fa-home"></i> Início</b></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="adminCursos.php"><i class="fas fa-search"></i> Consultas</a>
+          <a class="nav-link text-dark" href="#"><i class="fas fa-search"></i> Consultas</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="adminDisciplinas.php"><i class="fas fa-calendar-alt"></i> Frequência</a>
+          <a class="nav-link text-dark" href="#"><i class="fas fa-calendar-alt"></i> Frequência</a>
         </li>
         <li class="nav-item">
           <a class="nav-link text-dark" href="professorNotas.php"><i class="fas fa-file-alt"></i> Notas</a>
@@ -185,7 +185,7 @@
                                 <a style='text-decoration: none;' href='#'><i class='fas fa-calendar-alt'></i> Frequência</a>
                               </li>
                               <li>
-                                <a style='text-decoration: none;' href='#'><i class='fas fa-file-alt'></i> Notas</a>
+                                <a style='text-decoration: none;' href='professorNotas.php?turma=".$row['codTurma']."'><i class='fas fa-file-alt'></i> Notas</a>
                               </li>
                               <li>
                                 <a style='text-decoration: none;' href='professorPlanejamento.php?turma=".$row['codTurma']."'><i class='fas fa-chalkboard'></i> Planejamento</a>

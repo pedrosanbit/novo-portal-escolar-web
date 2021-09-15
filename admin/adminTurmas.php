@@ -151,7 +151,7 @@
           <div class="col-md-2">
             <label for="curso" class="form-label">Curso:</label>
             <select class='form-select' id='curso' name='curso' aria-label='Default select example'>
-              <?php include("selectCursos.php"); ?>
+              <?php include("../selectCursos.php"); ?>
             </select>
           </div>
           <div class="col-md-2">

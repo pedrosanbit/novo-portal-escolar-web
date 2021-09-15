@@ -224,34 +224,39 @@
                     <tbody>";
           include("../conexaoBD.php");
           try {
-            $stmt = $pdo->prepare("select distinct a.codAtividade, a.descricao, a.data, a.peso, adta.nota from AlunoTurmaDisciplinaAtividadeTCC adta inner join DisciplinaTurmaAtividadeTCC dta inner join AtividadesTCC a where adta.raAluno = :raAluno and adta.codTurma = :codTurma and adta.codDisciplina = :codDisciplina and a.etapa = :etapa");
+            $stmt = $pdo->prepare("select distinct a.codAtividade, a.descricao, a.data, a.peso, a.rec, adta.nota from AlunoTurmaDisciplinaAtividadeTCC adta inner join AlunosTCC al on adta.raAluno = al.raAluno inner join TurmasTCC t on adta.codTurma = t.codTurma inner join DisciplinasTCC d on adta.codDisciplina = d.codDisciplina inner join AtividadesTCC a on adta.codAtividade = a.codAtividade where adta.raAluno = :raAluno and adta.codTurma = :codTurma and adta.codDisciplina = :codDisciplina and a.etapa = :etapa");
             $stmt->bindParam(":raAluno", $_SESSION["login"]);
             $stmt->bindParam(":codTurma", $_GET["turma"]);
             $stmt->bindParam(":codDisciplina", $_POST["disciplina"]);
             $stmt->bindParam(":etapa", $_GET["etapa"]);
             $stmt->execute();
             while($row = $stmt->fetch()) {
-              echo "<tr>";
-              echo "<td>" . $row["descricao"] . "</td>";
-              echo "<td>" . date("m/d/Y", strtotime($row["data"])) . "</td>";
-              echo "<td>" . (int) $row["peso"] . "</td>";
-              if($row["nota"] != null)
-                echo "<td>" . number_format(bcdiv($row["nota"], 1, 1), 1, ",") . "</td>";
-              else
-                echo "<td></td>";
-              $stmt2 = $pdo->prepare("select a.codAtividade, avg(atda.nota) from AlunoTurmaDisciplinaAtividadeTCC atda inner join AtividadesTCC a on atda.codAtividade = a.codAtividade where a.codAtividade = :codAtividade and a.etapa = :etapa group by a.codAtividade;");
-              $stmt2->bindParam(":codAtividade", $row["codAtividade"]);
-              $stmt2->bindParam(":etapa", $_GET["etapa"]);
-              $stmt2->execute();
-              if($stmt2->rowCount() > 0) {
-                $row2 = $stmt2->fetch();
-                if($row2["avg(atda.nota)"] != null)
-                  echo "<td>" . number_format(bcdiv($row2["avg(atda.nota)"], 1, 1), 1, ",") . "</td>";
+              if(!($_GET["etapa"] == 2 && $row["rec"] == 1)) {
+                echo "<tr>";
+                echo "<td>" . $row["descricao"] . "</td>";
+                if($row["data"] != null)
+                  echo "<td>" . date("m/d/Y", strtotime($row["data"])) . "</td>";
+                else
+                  echo "<td></td>";
+                echo "<td>" . (int) $row["peso"] . "</td>";
+                if($row["nota"] != null)
+                  echo "<td>" . number_format(bcdiv($row["nota"], 1, 1), 1, ",") . "</td>";
+                else
+                  echo "<td></td>";
+                $stmt2 = $pdo->prepare("select a.codAtividade, avg(atda.nota) from AlunoTurmaDisciplinaAtividadeTCC atda inner join AtividadesTCC a on atda.codAtividade = a.codAtividade where a.codAtividade = :codAtividade and a.etapa = :etapa group by a.codAtividade;");
+                $stmt2->bindParam(":codAtividade", $row["codAtividade"]);
+                $stmt2->bindParam(":etapa", $_GET["etapa"]);
+                $stmt2->execute();
+                if($stmt2->rowCount() > 0) {
+                  $row2 = $stmt2->fetch();
+                  if($row2["avg(atda.nota)"] != null)
+                    echo "<td>" . number_format(bcdiv($row2["avg(atda.nota)"], 1, 1), 1, ",") . "</td>";
+                  else
+                    echo "<td></td>";
+                }
                 else
                   echo "<td></td>";
               }
-              else
-                echo "<td></td>";
               echo "</tr>";
             }
             echo "<tr><td colspan='5'><div class='mb-2'></div></td></tr>";
@@ -264,7 +269,7 @@
             echo "<td>0</td>";
             echo "<td colspan='2'>0(0.0%)</td>";
 
-            $stmt = $pdo->prepare("select distinct a.codAtividade, a.descricao, a.data, a.peso, adta.nota from AlunoTurmaDisciplinaAtividadeTCC adta inner join DisciplinaTurmaAtividadeTCC dta inner join AtividadesTCC a where adta.raAluno = :raAluno and adta.codTurma = :codTurma and adta.codDisciplina = :codDisciplina and a.etapa = :etapa");
+            $stmt = $pdo->prepare("select distinct a.codAtividade, a.descricao, a.data, a.peso, adta.nota from AlunoTurmaDisciplinaAtividadeTCC adta inner join AlunosTCC al on adta.raAluno = al.raAluno inner join TurmasTCC t on adta.codTurma = t.codTurma inner join DisciplinasTCC d on adta.codDisciplina = d.codDisciplina inner join AtividadesTCC a on adta.codAtividade = a.codAtividade where adta.raAluno = :raAluno and adta.codTurma = :codTurma and adta.codDisciplina = :codDisciplina and a.etapa = :etapa");
             $stmt->bindParam(":raAluno", $_SESSION["login"]);
             $stmt->bindParam(":codTurma", $_GET["turma"]);
             $stmt->bindParam(":codDisciplina", $_POST["disciplina"]);
@@ -292,6 +297,17 @@
               }
             }
             if($pesos != 0) $nota = $nota/$pesos;
+            if($_GET["etapa"] == 1) {
+              $stmt = $pdo->prepare("select distinct adta.nota from AlunoTurmaDisciplinaAtividadeTCC adta inner join AlunosTCC al on adta.raAluno = al.raAluno inner join TurmasTCC t on adta.codTurma = t.codTurma inner join DisciplinasTCC d on adta.codDisciplina = d.codDisciplina inner join AtividadesTCC a on adta.codAtividade = a.codAtividade where adta.raAluno = :raAluno and adta.codTurma = :codTurma and adta.codDisciplina = :codDisciplina and a.etapa = 1 and a.rec = 1");
+              $stmt->bindParam(":raAluno", $_SESSION["login"]);
+              $stmt->bindParam(":codTurma", $_GET["turma"]);
+              $stmt->bindParam(":codDisciplina", $_POST["disciplina"]);
+              $stmt->execute();
+              if($stmt->rowCount() > 0) {
+                $row = $stmt->fetch();
+                if($row["nota"] != null) $nota = ($nota + $row["nota"])/2;
+              }
+            }
             if($pesos2 != 0) $nota2 = $nota2/$pesos2;
             if($nota != null)
               echo "<td>" . number_format(bcdiv($nota, 1, 1), 1, ",") . "</td>";
