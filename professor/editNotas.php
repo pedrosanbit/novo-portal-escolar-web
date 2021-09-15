@@ -122,13 +122,13 @@
                 <a class="nav-link" aria-current="page" href="professor.php"><i class="fas fa-home"></i> Início</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="adminCursos.php"><i class="fas fa-search"></i> Consultas</a>
+                <a class="nav-link" href="#"><i class="fas fa-search"></i> Consultas</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="adminDisciplinas.php"><i class="fas fa-calendar-alt"></i> Frequência</a>
+                <a class="nav-link" href="#"><i class="fas fa-calendar-alt"></i> Frequência</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" href="adminTurmas.php"><b><i class="fas fa-file-alt"></i> Notas</b></a>
+                <a class="nav-link active" href="professorNotas.php"><b><i class="fas fa-file-alt"></i> Notas</b></a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="professorPlanejamento.php"><i class="fas fa-chalkboard"></i> Planejamento</a>
@@ -153,13 +153,13 @@
           <a class="nav-link text-dark" aria-current="page" href="professor.php"><i class="fas fa-home"></i> Início</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="adminCursos.php"><i class="fas fa-search"></i> Consultas</a>
+          <a class="nav-link text-dark" href="#"><i class="fas fa-search"></i> Consultas</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="adminDisciplinas.php"><i class="fas fa-calendar-alt"></i> Frequência</a>
+          <a class="nav-link text-dark" href="#"><i class="fas fa-calendar-alt"></i> Frequência</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active text-primary" id="nav-active" href="adminTurmas.php"><b><i class="fas fa-file-alt"></i> Notas</b></a>
+          <a class="nav-link active text-primary" id="nav-active" href="professorNotas.php"><b><i class="fas fa-file-alt"></i> Notas</b></a>
         </li>
         <li class="nav-item">
           <a class="nav-link text-dark" href="professorPlanejamento.php"><i class="fas fa-chalkboard"></i> Planejamento</a>
@@ -187,7 +187,133 @@
               <?php
                 try {
                   include("../conexaoBD.php");
-                  $stmt = $pdo->prepare("select a.raAluno, a.nomeAluno from AlunosTCC a inner join AlunoTurmaTCC alt on a.raAluno = alt.raAluno where alt.codTurma = :codTurma");
+                  $stmt = $pdo->prepare("select etapa, rec from AtividadesTCC where codAtividade = :codAtividade");
+                  $stmt->bindParam(":codAtividade", $_GET["ativ"]);
+                  $stmt->execute();
+                  $row = $stmt->fetch();
+                  if($row["rec"] == 1) {
+                    $stmt2 = $pdo->prepare("select a.raAluno, a.nomeAluno from AlunosTCC a inner join AlunoTurmaTCC alt on a.raAluno = alt.raAluno where alt.codTurma = :codTurma");
+                    $stmt2->bindParam(":codTurma", $_GET["turma"]);
+                    $stmt2->execute();
+                    while($row2 = $stmt2->fetch()) {
+                      $stmt3 = $pdo->prepare("select distinct a.codAtividade, a.descricao, a.data, a.peso, adta.nota from AlunoTurmaDisciplinaAtividadeTCC adta inner join AlunosTCC al on adta.raAluno = al.raAluno inner join TurmasTCC t on adta.codTurma = t.codTurma inner join DisciplinasTCC d on adta.codDisciplina = d.codDisciplina inner join AtividadesTCC a on adta.codAtividade = a.codAtividade where adta.raAluno = :raAluno and adta.codTurma = :codTurma and adta.codDisciplina = :codDisciplina and a.etapa = 1 and a.rec = 0");
+                      $stmt3->bindParam(":raAluno", $row2["raAluno"]);
+                      $stmt3->bindParam(":codTurma", $_GET["turma"]);
+                      $stmt3->bindParam(":codDisciplina", $_GET["disc"]);
+                      $stmt3->execute();
+                      $nota = null;
+                      $pesos = 0;
+                      while($row3 = $stmt3->fetch()) {
+                        if($row3["nota"] != null) {
+                          $nota += $row3["nota"] * $row3["peso"];
+                          $pesos += $row3["peso"];
+                        }
+                      }
+                      if($pesos != 0) $nota = $nota/$pesos;
+                      if($row["etapa"] == 2) {
+                        $stmt4 = $pdo->prepare("select distinct a.codAtividade, a.descricao, a.data, a.peso, adta.nota from AlunoTurmaDisciplinaAtividadeTCC adta inner join AlunosTCC al on adta.raAluno = al.raAluno inner join TurmasTCC t on adta.codTurma = t.codTurma inner join DisciplinasTCC d on adta.codDisciplina = d.codDisciplina inner join AtividadesTCC a on adta.codAtividade = a.codAtividade where adta.raAluno = :raAluno and adta.codTurma = :codTurma and adta.codDisciplina = :codDisciplina and a.etapa = 1 and a.rec = 1");
+                        $stmt4->bindParam(":raAluno", $row2["raAluno"]);
+                        $stmt4->bindParam(":codTurma", $_GET["turma"]);
+                        $stmt4->bindParam(":codDisciplina", $_GET["disc"]);
+                        $stmt4->execute();
+                        $rows = $stmt4->rowCount();
+                        if($rows > 0) {
+                          $row4 = $stmt4->fetch();
+                          if($row4["nota"] != null) $nota = ($nota + $row4["nota"])/2;
+                        }
+                        $stmt4 = $pdo->prepare("select distinct a.codAtividade, a.descricao, a.data, a.peso, adta.nota from AlunoTurmaDisciplinaAtividadeTCC adta inner join AlunosTCC al on adta.raAluno = al.raAluno inner join TurmasTCC t on adta.codTurma = t.codTurma inner join DisciplinasTCC d on adta.codDisciplina = d.codDisciplina inner join AtividadesTCC a on adta.codAtividade = a.codAtividade where adta.raAluno = :raAluno and adta.codTurma = :codTurma and adta.codDisciplina = :codDisciplina and a.etapa = 2 and a.rec = 0");
+                        $stmt4->bindParam(":raAluno", $row2["raAluno"]);
+                        $stmt4->bindParam(":codTurma", $_GET["turma"]);
+                        $stmt4->bindParam(":codDisciplina", $_GET["disc"]);
+                        $stmt4->execute();
+                        $nota2 = null;
+                        $pesos2 = 0;
+                        while($row4 = $stmt4->fetch()) {
+                          if($row4["nota"] != null) {
+                            $nota2 += $row4["nota"] * $row4["peso"];
+                            $pesos2 += $row4["peso"];
+                          }
+                        }
+                        if($pesos2 != 0) $nota2 = $nota2/$pesos2;
+                        if($nota2 != null) $nota = ($nota + $nota2)/2;
+                      }
+                      //echo "<script>alert('".$nota."')</script>";
+                      if($nota != null && $nota < 6) {
+                        $stmt4 = $pdo->prepare("select a.raAluno, a.nomeAluno, atda.nota from AlunosTCC a inner join AlunoTurmaTCC alt on a.raAluno = alt.raAluno inner join AlunoTurmaDisciplinaAtividadeTCC atda on alt.raAluno = atda.raAluno where a.raAluno = :ra and atda.codAtividade = :ativ");
+                        $stmt4->bindParam(":ra", $row2["raAluno"]);
+                        $stmt4->bindParam(":ativ", $_GET["ativ"]);
+                        $stmt4->execute();
+                        $rows = $stmt4->rowCount();
+                        if($rows > 0) {
+                          $row4 = $stmt4->fetch();
+                          echo "<tr>
+                              <td>
+                                ".$row2['raAluno']."
+                              </td>
+                              <td>
+                                ".$row2['nomeAluno']."
+                              </td>
+                              <td>
+                                <input class='form-control' type='number' min='0' max='10' step='0.1' name='".$row2["raAluno"]."' value='".$row4["nota"]."'>
+                              </td>
+                            </tr>";
+                        }
+                        else {
+                          echo "<tr>
+                              <td>
+                                ".$row2['raAluno']."
+                              </td>
+                              <td>
+                                ".$row2['nomeAluno']."
+                              </td>
+                              <td>
+                                <input class='form-control' type='number' min='0' max='10' step='0.1' name='".$row2["raAluno"]."'>
+                              </td>
+                            </tr>";
+                        }
+                      }
+                    }
+                  }
+                  else {
+                    $stmt = $pdo->prepare("select a.raAluno, a.nomeAluno from AlunosTCC a inner join AlunoTurmaTCC alt on a.raAluno = alt.raAluno where alt.codTurma = :codTurma");
+                    $stmt->bindParam(":codTurma", $_GET["turma"]);
+                    $stmt->execute();
+                    while($row = $stmt->fetch()) {
+                      $stmt2 = $pdo->prepare("select a.raAluno, a.nomeAluno, atda.nota from AlunosTCC a inner join AlunoTurmaTCC alt on a.raAluno = alt.raAluno inner join AlunoTurmaDisciplinaAtividadeTCC atda on alt.raAluno = atda.raAluno where a.raAluno = :ra and atda.codAtividade = :ativ");
+                      $stmt2->bindParam(":ra", $row["raAluno"]);
+                      $stmt2->bindParam(":ativ", $_GET["ativ"]);
+                      $stmt2->execute();
+                      $rows = $stmt2->rowCount();
+                      if($rows > 0) {
+                        $row2 = $stmt2->fetch();
+                        echo "<tr>
+                                <td>
+                                  ".$row2['raAluno']."
+                                </td>
+                                <td>
+                                  ".$row2['nomeAluno']."
+                                </td>
+                                <td>
+                                  <input class='form-control' type='number' min='0' max='10' step='0.1' name='".$row2["raAluno"]."' value='".$row2["nota"]."'>
+                                </td>
+                              </tr>";
+                      }
+                      else {
+                        echo "<tr>
+                                <td>
+                                  ".$row['raAluno']."
+                                </td>
+                                <td>
+                                  ".$row['nomeAluno']."
+                                </td>
+                                <td>
+                                  <input class='form-control' type='number' min='0' max='10' step='0.1' name='".$row["raAluno"]."'>
+                                </td>
+                              </tr>";
+                      }
+                    }
+                  }
+                  /*$stmt = $pdo->prepare("select a.raAluno, a.nomeAluno from AlunosTCC a inner join AlunoTurmaTCC alt on a.raAluno = alt.raAluno where alt.codTurma = :codTurma");
                   $stmt->bindParam(":codTurma", $_GET["turma"]);
                   $stmt->execute();
                   while($row = $stmt->fetch()) {
@@ -223,7 +349,7 @@
                               </td>
                             </tr>";
                     }
-                  }
+                  }*/
                 }
                 catch(PDOException $e) {
                   echo 'Error: ' . $e->getMessage();
@@ -253,31 +379,35 @@
                 $stmt2->execute();
                 $rows = $stmt2->rowCount();
                 if($rows > 0) {
-                  if($_POST[$row["raAluno"]] == "") {
-                    $stmt3 = $pdo->prepare("update AlunoTurmaDisciplinaAtividadeTCC set nota = null where raAluno = :raAluno and codAtividade = :codAtividade");
+                  if(isset($_POST[$row["raAluno"]])) {
+                    if($_POST[$row["raAluno"]] == "") {
+                      $stmt3 = $pdo->prepare("update AlunoTurmaDisciplinaAtividadeTCC set nota = null where raAluno = :raAluno and codAtividade = :codAtividade");
+                    }
+                    else {
+                      $stmt3 = $pdo->prepare("update AlunoTurmaDisciplinaAtividadeTCC set nota = :nota where raAluno = :raAluno and codAtividade = :codAtividade");
+                      $stmt3->bindParam(":nota", $_POST[$row["raAluno"]]);
+                    }
+                    $stmt3->bindParam(":raAluno", $row["raAluno"]);
+                    $stmt3->bindParam(":codAtividade", $_GET["ativ"]);
+                    $stmt3->execute();
                   }
-                  else {
-                    $stmt3 = $pdo->prepare("update AlunoTurmaDisciplinaAtividadeTCC set nota = :nota where raAluno = :raAluno and codAtividade = :codAtividade");
-                    $stmt3->bindParam(":nota", $_POST[$row["raAluno"]]);
-                  }
-                  $stmt3->bindParam(":raAluno", $row["raAluno"]);
-                  $stmt3->bindParam(":codAtividade", $_GET["ativ"]);
-                  $stmt3->execute();
                   $msg = 0;
                 }
                 else {
-                  if($_POST[$row["raAluno"]] == "") {
-                    $stmt3 = $pdo->prepare("insert into AlunoTurmaDisciplinaAtividadeTCC (raAluno, codTurma, codDisciplina, codAtividade, nota) values (:raAluno, :codTurma, :codDisciplina, :codAtividade, null)");
+                  if(isset($_POST[$row["raAluno"]])) {
+                    if($_POST[$row["raAluno"]] == "") {
+                      $stmt3 = $pdo->prepare("insert into AlunoTurmaDisciplinaAtividadeTCC (raAluno, codTurma, codDisciplina, codAtividade, nota) values (:raAluno, :codTurma, :codDisciplina, :codAtividade, null)");
+                    }
+                    else {
+                      $stmt3 = $pdo->prepare("insert into AlunoTurmaDisciplinaAtividadeTCC (raAluno, codTurma, codDisciplina, codAtividade, nota) values (:raAluno, :codTurma, :codDisciplina, :codAtividade, :nota)");
+                      $stmt3->bindParam(":nota", $_POST[$row["raAluno"]]);
+                    }    
+                    $stmt3->bindParam(":raAluno", $row["raAluno"]);
+                    $stmt3->bindParam(":codTurma", $_GET["turma"]);
+                    $stmt3->bindParam(":codDisciplina", $_GET["disc"]);
+                    $stmt3->bindParam(":codAtividade", $_GET["ativ"]);
+                    $stmt3->execute();
                   }
-                  else {
-                    $stmt3 = $pdo->prepare("insert into AlunoTurmaDisciplinaAtividadeTCC (raAluno, codTurma, codDisciplina, codAtividade, nota) values (:raAluno, :codTurma, :codDisciplina, :codAtividade, :nota)");
-                    $stmt3->bindParam(":nota", $_POST[$row["raAluno"]]);
-                  }
-                  $stmt3->bindParam(":raAluno", $row["raAluno"]);
-                  $stmt3->bindParam(":codTurma", $_GET["turma"]);
-                  $stmt3->bindParam(":codDisciplina", $_GET["disc"]);
-                  $stmt3->bindParam(":codAtividade", $_GET["ativ"]);
-                  $stmt3->execute();
                   $msg = 0;
                 }
               }

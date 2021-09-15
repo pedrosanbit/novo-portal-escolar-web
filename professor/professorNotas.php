@@ -102,10 +102,10 @@
                 <a class="nav-link" href="professor.php"><i class="fas fa-home"></i> Início</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="adminCursos.php"><i class="fas fa-search"></i> Consultas</a>
+                <a class="nav-link" href="#"><i class="fas fa-search"></i> Consultas</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="adminDisciplinas.php"><i class="fas fa-calendar-alt"></i> Frequência</a>
+                <a class="nav-link" href="#"><i class="fas fa-calendar-alt"></i> Frequência</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="professorNotas.php"><b><i class="fas fa-file-alt"></i> Notas</b></a>
@@ -133,10 +133,10 @@
           <a class="nav-link text-dark" href="professor.php"><i class="fas fa-home"></i> Início</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="adminCursos.php"><i class="fas fa-search"></i> Consultas</a>
+          <a class="nav-link text-dark" href="#"><i class="fas fa-search"></i> Consultas</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="adminDisciplinas.php"><i class="fas fa-calendar-alt"></i> Frequência</a>
+          <a class="nav-link text-dark" href="#"><i class="fas fa-calendar-alt"></i> Frequência</a>
         </li>
         <li class="nav-item">
           <a class="nav-link active text-primary" id="nav-active" aria-current="page" href="professorNotas.php"><b><i class="fas fa-file-alt"></i> Notas</b></a>
@@ -151,14 +151,33 @@
       <div class="mb-3">
         Período: <?php echo date("Y");?>
       </div>
-        <form method="post">
+        <form method="post" id="campos">
 	        <div class="row">
 	          <div class="col-md-4">
 	            <label for="codTurma" class="form-label">Turma:</label>
 	            <select class="form-select" type="text" id="codTurma" name="codTurma" maxlength="6" onchange="submit(codTurma.value);">
 	            <?php
-	                include("../conexaoBD.php");
+                  if($_SERVER["REQUEST_METHOD"] != "POST") {
+                    if(isset($_GET["turma"])) {
+                      include("../conexaoBD.php");
+                      try {
+                        $stmt = $pdo->prepare("select * from TurmasTCC where codTurma = :codTurma");
+                        $stmt->bindParam(":codTurma", $_GET["turma"]);
+                        $stmt->execute();
+                        $row = $stmt->fetch();
+                        echo "<option value='" . $row["codTurma"] . "'>" . $row["nomeTurma"] . "</option>";
+                        echo "<script>document.getElementById('campos').submit(codTurma.value);</script>";
+                      }
+                      catch(PDOException $e) {
+                        echo 'Error: ' . $e->getMessage();
+                      }
+                      finally{
+                        $pdo = null;
+                      }
+                    }
+                  }
 	                try{
+                    include("../conexaoBD.php");
 	                	if(isset($_POST["codTurma"]) && $_POST["codTurma"] != 'null') {
 	                		$codTurma = $_POST["codTurma"];
                         $stmt= $pdo->prepare("select t.codTurma, t.nomeTurma from TurmasTCC t inner join LecionaTCC l on t.codTurma = l.codTurma where l.rfProfessor= :rf and t.codTurma = :codTurma and t.periodo = :periodo");

@@ -115,13 +115,13 @@
                 <a class="nav-link" aria-current="page" href="professor.php"><i class="fas fa-home"></i> Início</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="adminCursos.php"><i class="fas fa-search"></i> Consultas</a>
+                <a class="nav-link" href="#.php"><i class="fas fa-search"></i> Consultas</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="adminDisciplinas.php"><i class="fas fa-calendar-alt"></i> Frequência</a>
+                <a class="nav-link" href="#"><i class="fas fa-calendar-alt"></i> Frequência</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="adminTurmas.php"><i class="fas fa-file-alt"></i> Notas</a>
+                <a class="nav-link" href="professorNotas.php"><i class="fas fa-file-alt"></i> Notas</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link active" href="professorPlanejamento.php"><b><i class="fas fa-chalkboard"></i> Planejamento</b></a>
@@ -146,13 +146,13 @@
           <a class="nav-link text-dark" aria-current="page" href="professor.php"><i class="fas fa-home"></i> Início</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="adminCursos.php"><i class="fas fa-search"></i> Consultas</a>
+          <a class="nav-link text-dark" href="#"><i class="fas fa-search"></i> Consultas</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="adminDisciplinas.php"><i class="fas fa-calendar-alt"></i> Frequência</a>
+          <a class="nav-link text-dark" href="#"><i class="fas fa-calendar-alt"></i> Frequência</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="adminTurmas.php"><i class="fas fa-file-alt"></i> Notas</a>
+          <a class="nav-link text-dark" href="professorNotas.php"><i class="fas fa-file-alt"></i> Notas</a>
         </li>
         <li class="nav-item">
           <a class="nav-link active text-primary" id="nav-active" href="professorPlanejamento.php"><b><i class="fas fa-chalkboard"></i> Planejamento</b></a>
@@ -182,14 +182,14 @@
 	    				<?php
 	    					include("../conexaoBD.php");
 	    					try {
-	    						$stmt = $pdo->prepare("select dta.codAtividade from DisciplinaTurmaAtividadeTCC dta inner join AtividadesTCC a where dta.codTurma = :codTurma and dta.codDisciplina = :codDisciplina and a.etapa = :etapa");
+	    						$stmt = $pdo->prepare("select a.codAtividade from AtividadesTCC a inner join DisciplinaTurmaAtividadeTCC dta on a.codAtividade = dta.codAtividade where dta.codTurma = :codTurma and dta.codDisciplina = :codDisciplina and a.etapa = :etapa and a.rec=0");
   								$stmt->bindParam(":codTurma", $_GET["turma"]);
   								$stmt->bindParam(":codDisciplina", $_GET["disciplina"]);
   								$stmt->bindParam(":etapa", $_GET["etapa"]);
   								$stmt->execute();
   								if($stmt->rowCount() > 0) {
   									$atividadesArray = array();
-  									$stmt = $pdo->prepare("select a.codAtividade, a.descricao, a.data, a.peso from AtividadesTCC a inner join DisciplinaTurmaAtividadeTCC dta on a.codAtividade = dta.codAtividade where dta.codTurma = :codTurma and dta.codDisciplina = :codDisciplina and a.etapa = :etapa");
+  									$stmt = $pdo->prepare("select a.codAtividade, a.descricao, a.data, a.peso from AtividadesTCC a inner join DisciplinaTurmaAtividadeTCC dta on a.codAtividade = dta.codAtividade where dta.codTurma = :codTurma and dta.codDisciplina = :codDisciplina and a.etapa = :etapa and a.rec=0");
   									$stmt->bindParam(":codTurma", $_GET["turma"]);
   									$stmt->bindParam(":codDisciplina", $_GET["disciplina"]);
   									$stmt->bindParam(":etapa", $_GET["etapa"]);
@@ -259,15 +259,23 @@
   						if(trim($_POST["nome"][$i]) == "" || trim($_POST["data"][$i]) == "" || trim($_POST["peso"][$i]) == "")
   							$msg = 2;
   					}
+            if($msg != 2) {
+              foreach($_POST["data"] as $data) {
+                $anoAtual = date("Y");
+                $ano = date("Y", strtotime($data));
+                if(((int)$anoAtual) != ((int)$ano))
+                  $msg = 4;
+              }
+            }
   					$soma = 0;
-  					if($msg != 2) {
+  					if($msg != 2 && $msg != 4) {
 	  					foreach($_POST["peso"] as $peso)
 	  						$soma += (int)$peso;
 	  					unset($peso);
 	  					if($soma != 10)
 	  						$msg = 3;
   					}
-  					if($msg != 2 && $msg != 3) {
+  					if($msg != 2 && $msg != 3 && $msg != 4) {
   						include("../conexaoBD.php");
   						try {
   							if(isset($atividadesArray)) {
@@ -319,7 +327,7 @@
   							$rows = $stmt->rowCount();
   							if($rows > 0) {
 	  							$row = $stmt->fetch();
-	  							$j = ($row["codAtividade"][strlen($row["codAtividade"])-1]) + 1;
+	  							$j = ((int)($row["codAtividade"][strlen($row["codAtividade"])-1])) + 1;
   							}
   							else $j = 0;
   							for($i = isset($_POST["nomeAnt"]) ? count($_POST["nomeAnt"]) : 0; $i < count($_POST["nome"]); $i++) {
@@ -338,6 +346,18 @@
   								$stmt->bindParam(":codDisciplina", $_GET["disciplina"]);
   								$stmt->bindParam(":codAtividade", $codAtividade);
   								$stmt->execute();
+
+                  $stmt = $pdo->prepare("select * from AlunosTCC a inner join AlunoTurmaTCC alt on a.raAluno = alt.raAluno where alt.codTurma = :codTurma");
+                  $stmt->bindParam(":codTurma", $_GET["turma"]);
+                  $stmt->execute();
+                  while($row = $stmt->fetch()) {
+                    $stmt2 = $pdo->prepare("insert into AlunoTurmaDisciplinaAtividadeTCC (raAluno, codTurma, codDisciplina, codAtividade, nota) values (:raAluno, :codTurma, :codDisciplina, :codAtividade, null)");
+                    $stmt2->bindParam(":raAluno", $row["raAluno"]);
+                    $stmt2->bindParam(":codTurma", $_GET["turma"]);
+                    $stmt2->bindParam(":codDisciplina", $_GET["disciplina"]);
+                    $stmt2->bindParam(":codAtividade", $codAtividade);
+                    $stmt2->execute();
+                  }
 
   								$j++;
   							}
@@ -365,6 +385,9 @@
 			  			case 3:
 			  				echo "<span class='text-warning'>A soma dos pesos das avaliações deve ser 10.</span>";
 			  				break;
+              case 4:
+                echo "<span class='text-warning'>Data inválida.</span>";
+                break;
 			  		}
 		  		}
   			}

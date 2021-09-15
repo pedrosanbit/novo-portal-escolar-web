@@ -52,6 +52,27 @@
                     $stmt->bindParam(":codTurma",$codTurma);
                     $stmt->bindParam(":codDisciplina",$codDisciplina);
                     $stmt->execute();
+
+                    $codAtividade = "1" .  $codTurma . $codDisciplina . "Rec";
+                    $stmt = $pdo->prepare("insert into AtividadesTCC (codAtividade, descricao, peso, etapa, rec) values (:codAtividade, 'Recuperação', 0, 1, 1)");
+                    $stmt->bindParam(":codAtividade", $codAtividade);
+                    $stmt->execute();
+                    $stmt = $pdo->prepare("insert into DisciplinaTurmaAtividadeTCC (codTurma, codDisciplina, codAtividade) values (:codTurma, :codDisciplina, :codAtividade)");
+                    $stmt->bindParam(":codTurma", $codTurma);
+                    $stmt->bindParam(":codDisciplina", $codDisciplina);
+                    $stmt->bindParam(":codAtividade", $codAtividade);
+                    $stmt->execute();
+
+                    $codAtividade = "2" .  $codTurma . $codDisciplina . "Rec";
+                    $stmt = $pdo->prepare("insert into AtividadesTCC (codAtividade, descricao, peso, etapa, rec) values (:codAtividade, 'Recuperação Final', 0, 2, 1)");
+                    $stmt->bindParam(":codAtividade", $codAtividade);
+                    $stmt->execute();
+                    $stmt = $pdo->prepare("insert into DisciplinaTurmaAtividadeTCC (codTurma, codDisciplina, codAtividade) values (:codTurma, :codDisciplina, :codAtividade)");
+                    $stmt->bindParam(":codTurma", $codTurma);
+                    $stmt->bindParam(":codDisciplina", $codDisciplina);
+                    $stmt->bindParam(":codAtividade", $codAtividade);
+                    $stmt->execute();
+
                     $confirmacao = 1;
                 }
                 else {
