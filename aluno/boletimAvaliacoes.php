@@ -305,7 +305,10 @@
               $stmt->execute();
               if($stmt->rowCount() > 0) {
                 $row = $stmt->fetch();
-                if($row["nota"] != null) $nota = ($nota + $row["nota"])/2;
+                if($row["nota"] != null) {
+                  if($row["nota"] > $nota)
+                    $nota = ($nota + $row["nota"])/2;
+                }
               }
             }
             if($pesos2 != 0) $nota2 = $nota2/$pesos2;

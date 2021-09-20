@@ -191,7 +191,7 @@
                   $stmt->bindParam(":codAtividade", $_GET["ativ"]);
                   $stmt->execute();
                   $row = $stmt->fetch();
-                  if($row["rec"] == 1) {
+                  if($row["rec"] == 1) { //é rec
                     $stmt2 = $pdo->prepare("select a.raAluno, a.nomeAluno from AlunosTCC a inner join AlunoTurmaTCC alt on a.raAluno = alt.raAluno where alt.codTurma = :codTurma");
                     $stmt2->bindParam(":codTurma", $_GET["turma"]);
                     $stmt2->execute();
@@ -210,7 +210,7 @@
                         }
                       }
                       if($pesos != 0) $nota = $nota/$pesos;
-                      if($row["etapa"] == 2) {
+                      if($row["etapa"] == 2) { //é segundo semestre
                         $stmt4 = $pdo->prepare("select distinct a.codAtividade, a.descricao, a.data, a.peso, adta.nota from AlunoTurmaDisciplinaAtividadeTCC adta inner join AlunosTCC al on adta.raAluno = al.raAluno inner join TurmasTCC t on adta.codTurma = t.codTurma inner join DisciplinasTCC d on adta.codDisciplina = d.codDisciplina inner join AtividadesTCC a on adta.codAtividade = a.codAtividade where adta.raAluno = :raAluno and adta.codTurma = :codTurma and adta.codDisciplina = :codDisciplina and a.etapa = 1 and a.rec = 1");
                         $stmt4->bindParam(":raAluno", $row2["raAluno"]);
                         $stmt4->bindParam(":codTurma", $_GET["turma"]);
@@ -219,7 +219,10 @@
                         $rows = $stmt4->rowCount();
                         if($rows > 0) {
                           $row4 = $stmt4->fetch();
-                          if($row4["nota"] != null) $nota = ($nota + $row4["nota"])/2;
+                          if($row4["nota"] != null) { 
+                            if($row4["nota"] > $nota)
+                              $nota = ($nota + $row4["nota"])/2;
+                          }
                         }
                         $stmt4 = $pdo->prepare("select distinct a.codAtividade, a.descricao, a.data, a.peso, adta.nota from AlunoTurmaDisciplinaAtividadeTCC adta inner join AlunosTCC al on adta.raAluno = al.raAluno inner join TurmasTCC t on adta.codTurma = t.codTurma inner join DisciplinasTCC d on adta.codDisciplina = d.codDisciplina inner join AtividadesTCC a on adta.codAtividade = a.codAtividade where adta.raAluno = :raAluno and adta.codTurma = :codTurma and adta.codDisciplina = :codDisciplina and a.etapa = 2 and a.rec = 0");
                         $stmt4->bindParam(":raAluno", $row2["raAluno"]);

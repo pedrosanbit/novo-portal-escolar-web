@@ -69,7 +69,10 @@
       $stmt2->execute();
       if($stmt2->rowCount() > 0) {
         $row2 = $stmt2->fetch();
-        if($row2["nota"] != null) $ms1 = ($ms1 + $row2["nota"])/2;
+        if($row2["nota"] != null) {
+          if($row2["nota"] > $ms1)
+            $ms1 = ($ms1 + $row2["nota"])/2;
+        }
       }
       if($pesot1 != 0) $mt1 = $mt1/$pesot1;
       if($ms1 != null)
@@ -149,8 +152,12 @@
         echo "<td></td>";
       echo "<td>0%</td>";
       if($ms1 != null && $ms2 != null) {
-        if($rec != null)
-          echo "<td>" . number_format(bcdiv(((($ms1+$ms2)/2) + $rec)/2, 1, 1), 1, ",") . "</td>";      
+        if($rec != null) {
+          if($rec > ($ms1+$ms2)/2)
+            echo "<td>" . number_format(bcdiv(((($ms1+$ms2)/2) + $rec)/2, 1, 1), 1, ",") . "</td>";
+          else
+            echo "<td>" . number_format(bcdiv(($ms1+$ms2)/2, 1, 1), 1, ",") . "</td>";
+        }
         else
           echo "<td>" . number_format(bcdiv(($ms1+$ms2)/2, 1, 1), 1, ",") . "</td>";
       }
