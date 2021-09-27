@@ -105,7 +105,7 @@
                 <a class="nav-link active" href="adminCursos.php"><b><i class="fas fa-search"></i> Consultas</b></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="adminDisciplinas.php"><i class="fas fa-calendar-alt"></i> Frequência</a>
+                <a class="nav-link" href="professorFrequencia.php"><i class="fas fa-calendar-alt"></i> Frequência</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="adminTurmas.php"><i class="fas fa-file-alt"></i> Notas</a>
@@ -136,7 +136,7 @@
           <a class="nav-link active text-primary" id="nav-active" href="consultaProfessor.php"><b><i class="fas fa-search"></i> Consultas</b></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="adminDisciplinas.php"><i class="fas fa-calendar-alt"></i> Frequência</a>
+          <a class="nav-link text-dark" href="professorFrequencia.php"><i class="fas fa-calendar-alt"></i> Frequência</a>
         </li>
         <li class="nav-item">
           <a class="nav-link text-dark" href="adminTurmas.php"><i class="fas fa-file-alt"></i> Notas</a>

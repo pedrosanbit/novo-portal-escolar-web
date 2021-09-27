@@ -99,13 +99,13 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="professor.php"><b><i class="fas fa-home"></i> Início</b></a>
+                <a class="nav-link" aria-current="page" href="professor.php"><i class="fas fa-home"></i> Início</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#"><i class="fas fa-search"></i> Consultas</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="professorFrequencia.php"><i class="fas fa-calendar-alt"></i> Frequência</a>
+                <a class="nav-link active" href="professorFrequencia.php"><b><i class="fas fa-calendar-alt"></i> Frequência</b></a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="professorNotas.php"><i class="fas fa-file-alt"></i> Notas</a>
@@ -130,13 +130,13 @@
     <div id="navtabs">
       <ul class="nav nav-tabs">
         <li class="nav-item">
-          <a class="nav-link active text-primary" id="nav-active" aria-current="page" href="professor.php"><b><i class="fas fa-home"></i> Início</b></a>
+          <a class="nav-link text-dark" aria-current="page" href="professor.php"><i class="fas fa-home"></i> Início</a>
         </li>
         <li class="nav-item">
           <a class="nav-link text-dark" href="#"><i class="fas fa-search"></i> Consultas</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="professorFrequencia.php"><i class="fas fa-calendar-alt"></i> Frequência</a>
+          <a class="nav-link active text-primary" id="nav-active" href="professorFrequencia.php"><b><i class="fas fa-calendar-alt"></i> Frequência</b></a>
         </li>
         <li class="nav-item">
           <a class="nav-link text-dark" href="professorNotas.php"><i class="fas fa-file-alt"></i> Notas</a>
@@ -148,63 +148,7 @@
     </div>
 
     <div class="container mt-3">
-      <div class="row mb-3">
-        <div class="col-9">
-          <?php echo "<h4>Bem-vindo(a), " . $nome ."!</h4>" ?>
-        </div>
-        <div class="col-3 text-end" id="btn-logout">
-          <a href="../logout.php" class="btn btn-primary rounded-pill text-white" role="button">
-            <b><i class="fas fa-sign-out-alt"></i> Logout</b>
-          </a>
-        </div>
-      </div>
-      <div class="mb-3">
-        Período: <?php echo date("Y");?>
-      </div>
-      <?php
-        include("../conexaoBD.php");
-        try {
-          $stmt = $pdo->prepare("select distinct t.codTurma, t.nomeTurma from TurmasTCC t inner join LecionaTCC l on t.codTurma = l.codTurma inner join ProfessoresTCC p on l.rfProfessor = p.rfProfessor where p.rfProfessor = " .  $_SESSION["login"] . " and t.periodo = " . date("Y"));
-          $stmt->execute();
-          while($row = $stmt->fetch()) {
-            echo "<div class='mb-3'>
-                    <div class='accordion' id='accordionExample".$row['codTurma']."'>
-                      <div class='accordion-item'>
-                        <h2 class='accordion-header' id='headingTwo'>
-                          <button class='accordion-button collapsed' type='button' data-bs-toggle='collapse' data-bs-target='#collapseTwo".$row['codTurma']."' aria-expanded='false' aria-controls='collapseTwo'><b>Turma ".
-                            $row['nomeTurma'].
-                          "</b></button>
-                        </h2>
-                        <div id='collapseTwo".$row['codTurma']."' class='accordion-collapse collapse' aria-labelledby='headingTwo' data-bs-parent='#accordionExample".$row['codTurma']."'>
-                          <div class='accordion-body'>
-                            <ul>
-                              <li>
-                                <a style='text-decoration: none;' href='#'><i class='fas fa-search'></i> Consultas</a>
-                              </li>
-                              <li>
-                                <a style='text-decoration: none;' href='#'><i class='fas fa-calendar-alt'></i> Frequência</a>
-                              </li>
-                              <li>
-                                <a style='text-decoration: none;' href='professorNotas.php?turma=".$row['codTurma']."'><i class='fas fa-file-alt'></i> Notas</a>
-                              </li>
-                              <li>
-                                <a style='text-decoration: none;' href='professorPlanejamento.php?turma=".$row['codTurma']."'><i class='fas fa-chalkboard'></i> Planejamento</a>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>";
-          }
-        }
-        catch(PDOException $e) {
-          echo 'Error: ' . $e->getMessage();
-        }
-        finally {
-          $pdo = null;
-        }
-      ?>
+
     </div>
     <script src="../javascript/admin.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
