@@ -148,7 +148,87 @@
     </div>
 
     <div class="container mt-3">
+                    <form method="post">
+                        <div class="row">
+                            <div class="col-md-6 col-sm-12">
+                                <label for="periodo" class="form-label">Período:</label>
+            					<select class="form-select" id="periodo" name="periodo" aria-label="Default select example">
 
+            					</select>
+                            </div>
+                            <div class="col-md-6 col-sm-12">
+                                <label for="unidade" class="form-label">Unidade:</label>
+            					<select class="form-select" id="unidade" name="unidade" aria-label="Default select example">
+
+            					</select>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-12">
+                                <label for="turma" class="form-label">Turma:</label>
+            					<select class="form-select" id="turma" name="turma" aria-label="Default select example">
+
+            					</select>
+                            </div>
+                            <div class="col-md-6 col-sm-12">
+                                <label for="disciplina" class="form-label">Disciplina</label>
+            					<select class="form-select" id="disciplina" name="disciplina" aria-label="Default select example">
+
+            					</select>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-4 col-sm-12">
+                                <label for="dataIni" class="form-label">Data inicial:</label>
+            					<input class="form-control" type="date" name="dataIni[]">
+                            </div>
+                            <div class="col-md-4 col-sm-12">
+                                <label for="dataFin" class="form-label">Data final:</label>
+            					<input class="form-control" type="date" name="dataFin[]">
+                            </div>
+                            <div class="col-md-4 col-sm-12">
+                            	<label for="btn" class="form-label"></label>
+                                <button type="submit" class="btn btn-primary rounded-pill text-white w-100"><b>Buscar</b></button>
+                            </div>
+                        </div>
+                        <br>
+                        <hr>
+                    </form>
+                    <br>
+        <div class="table-responsive mt-4">
+        <table id='tableFrequencia' class='table table-sm table-striped table-hover'>
+          <thead>
+          	<tr>
+          		<th style="text-align: center; vertical-align: middle;" rowspan="3">Código</th>
+          		<th style="text-align: center; vertical-align: middle;" rowspan="3">Nome</th>
+          		<th style="text-align: center; vertical-align: middle;" rowspan="3">Número</th>
+          		<th style="text-align: center; vertical-align: middle;"><input class="form-control" type="date" name="data[]"></tr></th>
+          	</tr>
+          	<tr>
+          		<th style="text-align: center; vertical-align: middle;"><input type="checkbox"> Processar</th>
+          	</tr>
+          	<tr>
+          		<th style="text-align: center; vertical-align: middle;">F1</th>
+          	</tr>
+          </thead>
+          <tbody>
+          	<tr>
+          		<td style="text-align: center; vertical-align: middle;">19116</td>
+          		<td style="text-align: center; vertical-align: middle;">Ana Lys Rodrigues Barbosa Dias</td>
+          		<td style="text-align: center; vertical-align: middle;">1</td>
+          		<td style="text-align: center; vertical-align: middle;"><input type="checkbox"></td>
+          	</tr>
+          	<tr>
+          		<td style="text-align: center; vertical-align: middle;">19137</td>
+          		<td style="text-align: center; vertical-align: middle;">Mateus Henrique Beltran</td>
+          		<td style="text-align: center; vertical-align: middle;">89</td>
+          		<td style="text-align: center; vertical-align: middle;"><input type="checkbox"></td>
+          	</tr>
+          </tbody>
+        </table>
+      	</div>
     </div>
     <script src="../javascript/admin.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
