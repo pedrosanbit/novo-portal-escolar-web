@@ -33,6 +33,18 @@
                     $stmt->execute();
                    
                     $confirmacao = 1;
+
+                    $senha = "" . rand(1,9) . rand(1,9) . rand(1,9) . rand(1,9) . rand(1,9) . rand(1,9);
+                    include("phpMailer.php");
+                    enviarEmail($email, $nome, $ra, $senha);
+
+                    $senha = password_hash($senha, PASSWORD_DEFAULT);
+                    $tipo = "aluno";
+                    $stmt = $pdo->prepare("insert into UsuariosTCC (usuario, senha, tipo) values(:ra, :senha, :tipo)");
+                    $stmt->bindParam(':ra', $ra);
+                    $stmt->bindParam(':senha', $senha);
+                    $stmt->bindParam(':tipo', $tipo);
+                    $stmt->execute();
                 } else {
                     $confirmacao = 0;
                 }
