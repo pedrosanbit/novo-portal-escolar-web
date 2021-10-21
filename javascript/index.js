@@ -33,4 +33,14 @@ function toggleDarkMode() {
 	document.getElementById('rodape').classList.toggle("bg-dark");
 	document.getElementById('rodape').classList.toggle("border-top");
 	document.getElementById('rodape').classList.toggle("border-light");
+	var modals = document.getElementsByClassName('modal-content');
+	for(var i=0; i < modals.length; i++) {
+		modals[i].classList.toggle("bg-dark");
+		modals[i].classList.toggle("text-white");
+	}
+	document.getElementById('botaoModal').classList.toggle('text-white');
+	document.getElementById('email').classList.toggle('border-white');
+	document.getElementById('email').classList.toggle('bg-dark');
+	document.getElementById('email').classList.toggle('text-white');
+
 }

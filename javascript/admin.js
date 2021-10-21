@@ -79,4 +79,8 @@ function toggleDarkMode() {
 		accordions[i].classList.toggle("bg-dark");
 		accordions[i].classList.toggle("text-white");
 	}
+	var sbebs = document.getElementsByClassName('sbeb');
+	for(var i=0; i < sbebs.length; i++) {
+		sbebs[i].classList.toggle("border-dark");
+	}
 }
