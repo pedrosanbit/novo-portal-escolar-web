@@ -36,6 +36,7 @@
 			}
 		</style>
 		<script src="https://kit.fontawesome.com/ebb5206ba7.js" crossorigin="anonymous"></script>
+		<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 	</head>
 	<body>
 		<nav class="navbar navbar-dark bg-primary" id="navbar">
@@ -70,7 +71,7 @@
   								<div class="mb-3">
     								<label for="inputSenha" class="form-label">Senha</label>
     								<input type="password" class="form-control" id="inputSenha" name="senha">
-    								<div id="esqueceuSenha" class="form-text"><a href="#">Esqueceu sua senha?</a></div>
+    								<div id="esqueceuSenha" class="form-text"><a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">Esqueceu sua senha?</a></div>
  								</div>
   								<div class="mb-3 form-check">
     								<input name="ManterUser" type="checkbox" class="form-check-input" id="checkLembrar">
@@ -131,6 +132,27 @@
 					</div>
 				</div>
 			</div>
+		</div>
+		<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  			<div class="modal-dialog">
+    			<div class="modal-content">
+      				<div class="modal-header">
+        				<h5 class="modal-title" id="exampleModalLabel">Redefinição de Senha</h5>
+        				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      				</div>
+      				<form method="post" action="esqueciMinhaSenha.php">
+      				<div class="modal-body">
+        				<label for="email" class="form-label">Email:</label>
+                        <input class="form-control mb-3" type="email" id="email" name="email">
+                        <div class="g-recaptcha" data-sitekey="6LczkOUcAAAAADNSILk63GGB3EzxdG9A1UpS_a72"></div>
+      				</div>
+      				<div class="modal-footer">
+        				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        				<button type="submit" class="btn btn-primary" id="botaoModal">Enviar</button>
+        			</form>
+      				</div>
+    			</div>
+  			</div>
 		</div>
 		<script type="text/javascript" src="javascript/index.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>

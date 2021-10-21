@@ -12,8 +12,10 @@
             $confirmacao;            
             $ra = $_POST["ra"];
             $nome = $_POST["nome"];
+            $nome = strip_tags($nome);
             $rg = $_POST["rg"];
             $email= $_POST["email"];
+            $email = strip_tags($email);
 
             if ((trim($ra) == "") || (trim($nome) == "")  || (trim($rg) == "")) {
                 $confirmacao = 2;
