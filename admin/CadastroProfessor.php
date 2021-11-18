@@ -33,6 +33,9 @@
                     $stmt->execute();
 
                     $senha = "" . rand(1,9) . rand(1,9) . rand(1,9) . rand(1,9) . rand(1,9) . rand(1,9);
+		    include("phpMailer.php");
+                    enviarEmail($email, $nome, $rf, $senha);
+			
                     $senha = password_hash($senha, PASSWORD_DEFAULT);
                     $tipo = "prof";
                     $stmt = $pdo->prepare("insert into UsuariosTCC (usuario, senha, tipo) values(:rf, :senha, :tipo)");
