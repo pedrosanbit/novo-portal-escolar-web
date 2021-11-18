@@ -31,7 +31,7 @@
         $stmt->bindParam(":usuario", $row["raAluno"]);
         $stmt->execute();
         echo "<script>alert('Sua senha redefinida foi enviada ao seu e-mail.')</script>";
-        echo "<script>window.location.replace('http://localhost/php/tcc6/index.php')</script>";
+        echo "<script>window.location.replace('index.php')</script>";
       }
       else {
         $stmt = $pdo->prepare("select * from ProfessoresTCC where email = :email");
@@ -49,11 +49,11 @@
           $stmt->bindParam(":usuario", $row["rfProfessor"]);
           $stmt->execute();
           echo "<script>alert('Sua senha redefinida foi enviada ao seu e-mail.')</script>";
-          echo "<script>window.location.replace('http://localhost/php/tcc6/index.php')</script>";
+          echo "<script>window.location.replace('index.php')</script>";
         }
         else {
           echo "<script>alert('E-mail não cadastrado.')</script>";
-          echo "<script>window.location.replace('http://localhost/php/tcc6/index.php')</script>";
+          echo "<script>window.location.replace('index.php')</script>";
         }
       }
     }
