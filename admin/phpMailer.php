@@ -44,7 +44,7 @@ function enviarEmail($email, $nome, $usuario, $senha) {
         $mail->send();
         //echo 'Foi';
     } catch (Exception $e) {
-        echo "Deu ruim Error: {$mail->ErrorInfo}";
+        echo "Error: {$mail->ErrorInfo}";
     }
 }
 

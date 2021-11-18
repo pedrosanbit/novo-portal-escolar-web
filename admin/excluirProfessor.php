@@ -13,6 +13,11 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
 		$stmt=$pdo->prepare("DELETE from ProfessoresTCC WHERE rfProfessor= :rf");
 		$stmt->bindParam(":rf",$_POST["rf"]);
 		$stmt->execute();
+
+		$stmt=$pdo->prepare("DELETE from UsuariosTCC where usuario = :rf and tipo = 'prof'");
+		$stmt->bindParam(":rf",$_POST["rf"]);
+		$stmt->execute();
+		
 		$msg = 1;
 	}
 	catch(PDOException $e){

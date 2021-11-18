@@ -119,6 +119,12 @@
                 <a class="nav-link" href="alunoBoletimEscolar.php"><i class="fas fa-file-invoice"></i> Boletim Escolar</a>
               </li>
               <li class="nav-item">
+                <a class="nav-link" href="alunoMateriaLecionada.php"><i class="fas fa-list"></i> Matéria Lecionada</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="alunoFrequencia.php"><i class="fas fa-calendar-check"></i> Frequência</a>
+              </li>
+              <li class="nav-item">
                 <a class="nav-link" href="../logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
               </li>
               <!--li class="nav-item">
@@ -148,6 +154,12 @@
         </li>
         <li class="nav-item">
           <a class="nav-link text-dark" href="alunoBoletimEscolar.php"><i class="fas fa-file-invoice"></i> Boletim Escolar</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-dark" href="alunoMateriaLecionada.php"><i class="fas fa-list"></i> Matéria Lecionada</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-dark" href="alunoFrequencia.php"><i class="fas fa-calendar-check"></i> Frequência</a>
         </li>
         <!--li class="nav-item">
           <a class="nav-link text-dark" href="adminCursos.php"><i class="fas fa-search"></i> Consultas</a>

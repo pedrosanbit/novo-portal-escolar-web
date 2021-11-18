@@ -102,9 +102,6 @@
                 <a class="nav-link" href="professor.php"><i class="fas fa-home"></i> Início</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#"><i class="fas fa-search"></i> Consultas</a>
-              </li>
-              <li class="nav-item">
                 <a class="nav-link" href="professorFrequencia.php"><i class="fas fa-calendar-alt"></i> Frequência</a>
               </li>
               <li class="nav-item">
@@ -131,9 +128,6 @@
       <ul class="nav nav-tabs">
         <li class="nav-item">
           <a class="nav-link text-dark" href="professor.php"><i class="fas fa-home"></i> Início</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-dark" href="#"><i class="fas fa-search"></i> Consultas</a>
         </li>
         <li class="nav-item">
           <a class="nav-link text-dark" href="professorFrequencia.php"><i class="fas fa-calendar-alt"></i> Frequência</a>

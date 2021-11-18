@@ -17,13 +17,13 @@
     }
     else
       $nome = $row['nomeAluno'];
-    $nomeCompleto = $row['nomeAluno'];
 
-    $stmt = $pdo->prepare("select codTurma, nomeTurma from TurmasTCC where codTurma = :codTurma");
+    $stmt = $pdo->prepare("select codTurma, nomeTurma, periodo from TurmasTCC where codTurma = :codTurma");
     $stmt->bindParam(":codTurma", $_GET["turma"]);
     $stmt->execute();
     $row = $stmt->fetch();
     $nomeTurma = $row['nomeTurma'];
+    $periodo = $row['periodo'];
   }
   catch(PDOException $e) {
     echo 'Error: ' . $e->getMessage();
@@ -117,17 +117,20 @@
                 <a class="nav-link" href="alunoBoletimAvaliacoes.php"><i class="far fa-file-alt"></i> Boletim de Avaliações</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" href="alunoBoletimEscolar.php"><b><i class="fas fa-file-invoice"></i> Boletim Escolar</b></a>
+                <a class="nav-link" href="alunoBoletimEscolar.php"><i class="fas fa-file-invoice"></i> Boletim Escolar</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="alunoMateriaLecionada.php"><i class="fas fa-list"></i> Matéria Lecionada</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="alunoFrequencia.php"><i class="fas fa-calendar-check"></i> Frequência</a>
+                <a class="nav-link active" href="aluno"><b><i class="fas fa-calendar-check"></i> Frequência</b></a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="../logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
               </li>
+              <!--li class="nav-item">
+                <a class="nav-link" href="adminCursos.php"><i class="fas fa-search"></i> Consultas</a>
+              </li-->
             </ul>
             <form class="d-flex text-white">
               <div class="form-check form-switch">
@@ -151,84 +154,138 @@
           <a class="nav-link text-dark" href="alunoBoletimAvaliacoes.php"><i class="far fa-file-alt"></i> Boletim de Avaliações</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active text-primary" id="nav-active" href="alunoBoletimEscolar.php"><b><i class="fas fa-file-invoice"></i> Boletim Escolar</b></a>
+          <a class="nav-link text-dark" href="alunoBoletimEscolar.php"><i class="fas fa-file-invoice"></i> Boletim Escolar</a>
         </li>
         <li class="nav-item">
           <a class="nav-link text-dark" href="alunoMateriaLecionada.php"><i class="fas fa-list"></i> Matéria Lecionada</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="alunoFrequencia.php"><i class="fas fa-calendar-check"></i> Frequência</a>
+          <a class="nav-link active text-primary" id="nav-active" href="alunoFrequencia.php"><b><i class="fas fa-calendar-check"></i> Frequência</b></a>
         </li>
+        <!--li class="nav-item">
+          <a class="nav-link text-dark" href="adminCursos.php"><i class="fas fa-search"></i> Consultas</a>
+        </li-->
       </ul>
     </div>
     <nav class="ms-5 mt-2" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="alunoBoletimEscolar.php">Boletim Escolar</a></li>
+        <li class="breadcrumb-item"><a href="alunoFrequencia.php">Frequência</a></li>
         <?php echo "<li class='breadcrumb-item active' aria-current='page'>". $nomeTurma . "</li> "; ?>
       </ol>
     </nav>
     <div class="container mt-3">
-      <?php
-        include("../conexaoBD.php");
-        try {
-          $stmt = $pdo->prepare("select periodo from TurmasTCC where codTurma = :codTurma");
-          $stmt->bindParam(":codTurma", $_GET["turma"]);
-          $stmt->execute();
-          if($row = $stmt->fetch())
-            echo "<h4>Boletim Escolar " . $row["periodo"] ."</h4>";
-        }
-        catch(PDOException $e) {
-          echo 'Error: ' . $e->getMessage();
-        }
-        finally {
-          $pdo = null;
-        }
-      ?>
-      <div class="table-responsive mt-4">
-        <table id='tableConsulta' class='table table-sm table-striped table-hover'>
-          <tbody>
-            <tr>
-              <th colspan="2">
-                <?php 
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <form method="post" id="disc">
+            <label for="disciplina" class="form-label">Disciplina: </label>
+            <select class="form-select" id="disciplina" name="disciplina" aria-label="Turma" onchange="submit(disciplina.value);">
+              <?php
+                try {
                   include("../conexaoBD.php");
-                  try {
-                    $stmt = $pdo->prepare("select c.nomeCurso from CursosTCC c inner join TurmasTCC t on c.codCurso = t.curso where t.codTurma = :codTurma");
+                  if(isset($_POST["disciplina"])) {
+                    $stmt = $pdo->prepare("select codDisciplina, nomeDisciplina from DisciplinasTCC where codDisciplina = :codDisciplina");
+                    $stmt->bindParam(":codDisciplina", $_POST["disciplina"]);
+                    $stmt->execute();
+                    while($row = $stmt->fetch()) {
+                      echo "<option value='".$row["codDisciplina"]."'>".$row["nomeDisciplina"]."</option>";
+                    }
+                    $stmt = $pdo->prepare("select d.codDisciplina, d.nomeDisciplina from DisciplinasTCC d inner join LecionaTCC l on d.codDisciplina = l.codDisciplina where l.codTurma = :codTurma and l.codDisciplina != :codDisciplina");
+                    $stmt->bindParam(":codTurma", $_GET["turma"]);
+                    $stmt->bindParam(":codDisciplina", $_POST["disciplina"]);
+                    $stmt->execute();
+                    while($row = $stmt->fetch()) {
+                      echo "<option value='".$row["codDisciplina"]."'>".$row["nomeDisciplina"]."</option>";
+                    }
+                  }
+                  else {
+                    $stmt = $pdo->prepare("select d.codDisciplina, d.nomeDisciplina from DisciplinasTCC d inner join LecionaTCC l on d.codDisciplina = l.codDisciplina where l.codTurma = :codTurma");
                     $stmt->bindParam(":codTurma", $_GET["turma"]);
                     $stmt->execute();
-                    if($row = $stmt->fetch())
-                      echo $row["nomeCurso"];
+                    while($row = $stmt->fetch()) {
+                       echo "<option value='".$row["codDisciplina"]."'>".$row["nomeDisciplina"]."</option>";
+                    }
                   }
-                  catch(PDOException $e) {
-                    echo 'Error: ' . $e->getMessage();
+                  if($_SERVER["REQUEST_METHOD"] != "POST") {
+                    echo "<script>submit(disciplina.value);</script>";
                   }
-                  finally {
-                    $pdo = null;
+                  else {
+
                   }
-                ?>     
-              </th>
-            </tr>
-            <tr>
-              <td><b>RA:</b> <?php echo $_SESSION["login"]; ?></td>
-              <td><b>Nome:</b> <?php echo $nomeCompleto; ?></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <?php
-        include("geraBoletimEscolar.php");
-      ?>
-      <b>Obs.:</b> Os dados estão sujeitos à confirmação, até o término do ano letivo.
-      <div class="mt-3 mb-4">
-        <b>Legenda:</b><br>
-        <div class="border">
-          <div class="d-flex flex-row flex-wrap">
-            <div class="p-2">MS - Média Semestral<br>MT - Média da Turma</div>
-            <div class="p-2">AD - Aulas Dadas<br>F - Faltas no Semestre</div>
-            <div class="p-2">%F - Porcentagem de Faltas Semestrais<br>MA - Média Anual</div>
-            <div class="p-2">Rec. - Recuperação Final<br>MF - Média Anual Final após Recuperação</div>
-          </div>
+                }
+                catch(PDOException $e) {
+                  echo 'Error: ' . $e->getMessage();
+                }
+                finally {
+                  $pdo = null;
+                }
+              ?>
+            </select>
+          </form>
         </div>
       </div>
+      <?php
+        if($_SERVER["REQUEST_METHOD"] != "POST") {
+          echo "<script>document.getElementById('disc').submit(disciplina.value);</script>";
+        }
+        else {
+          try {
+            include("../conexaoBD.php");
+            $meiodoano = $periodo . "-07-15";
+
+            $stmt = $pdo->prepare("select data, presenca from PresencasTCC where raAluno = :raAluno and codTurma = :codTurma and codDisciplina = :codDisc and data < :data");
+            $stmt->bindParam(":raAluno", $_SESSION["login"]);
+            $stmt->bindParam(":codTurma", $_GET["turma"]);
+            $stmt->bindParam(":codDisc", $_POST["disciplina"]);
+            $stmt->bindParam(":data", $meiodoano);
+            $stmt->execute();
+            echo "<div class='table-responsive mt-4 mb-4'>
+                    <b>Primeiro Semestre</b>
+                    <table id='tableConsulta' class='table table-sm table-striped table-hover'>
+                      <thead>
+                        <th>Data</th>
+                        <th>Presença</th>
+                      </thead>
+                    <tbody>";
+            while($row = $stmt->fetch()) {
+              echo "<tr>";
+              echo "<td>" . date("d/m/Y", strtotime($row["data"])) . "</td>";
+              $presenca = $row["presenca"] ? "•" : "F";
+              echo "<td>" . $presenca . "</td>";
+              echo "<tr>";
+            }
+            echo "</tbody></table></div>";
+
+            $stmt = $pdo->prepare("select data, presenca from PresencasTCC where raAluno = :raAluno and codTurma = :codTurma and codDisciplina = :codDisc and data > :data");
+            $stmt->bindParam(":raAluno", $_SESSION["login"]);
+            $stmt->bindParam(":codTurma", $_GET["turma"]);
+            $stmt->bindParam(":codDisc", $_POST["disciplina"]);
+            $stmt->bindParam(":data", $meiodoano);
+            $stmt->execute();
+            echo "<div class='table-responsive mt-4 mb-4'>
+                    <b>Segundo Semestre</b>
+                    <table id='tableConsulta' class='table table-sm table-striped table-hover'>
+                      <thead>
+                        <th>Data</th>
+                        <th>Presença</th>
+                      </thead>
+                    <tbody>";
+            while($row = $stmt->fetch()) {
+              echo "<tr>";
+              echo "<td>" . date("d/m/Y", strtotime($row["data"])) . "</td>";
+              $presenca = $row["presenca"] ? "•" : "F";
+              echo "<td>" . $presenca . "</td>";
+              echo "<tr>";
+            }
+            echo "</tbody></table></div>";
+          }
+          catch(PDOException $e) {
+            echo 'Error: ' . $e->getMessage();
+          }
+          finally {
+            $pdo = null;
+          }
+        }
+      ?>
     </div>
     <script src="../javascript/admin.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>

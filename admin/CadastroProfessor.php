@@ -13,6 +13,7 @@
             $rf = $_POST["rf"];
             $nome = $_POST["nome"];
             $rg = $_POST["rg"];
+            $email = $_POST["email"];
 
             if ((trim($rf) == "") || (trim($nome) == "")  || (trim($rg) == "")) {
                 $confirmacao = 2;
@@ -24,10 +25,20 @@
                 $rows = $stmt->rowCount();
 
                 if ($rows <= 0) {
-                    $stmt = $pdo->prepare("insert into ProfessoresTCC (rfProfessor, nomeProfessor, rgProfessor) values(:rf, :nome, :rg)");
+                    $stmt = $pdo->prepare("insert into ProfessoresTCC (rfProfessor, nomeProfessor, rgProfessor, email) values(:rf, :nome, :rg, :email)");
                     $stmt->bindParam(':rf', $rf);
                     $stmt->bindParam(':nome', $nome);
                     $stmt->bindParam(':rg', $rg);
+                    $stmt->bindParam(':email', $email);
+                    $stmt->execute();
+
+                    $senha = "" . rand(1,9) . rand(1,9) . rand(1,9) . rand(1,9) . rand(1,9) . rand(1,9);
+                    $senha = password_hash($senha, PASSWORD_DEFAULT);
+                    $tipo = "prof";
+                    $stmt = $pdo->prepare("insert into UsuariosTCC (usuario, senha, tipo) values(:rf, :senha, :tipo)");
+                    $stmt->bindParam(':rf', $rf);
+                    $stmt->bindParam(':senha', $senha);
+                    $stmt->bindParam(':tipo', $tipo);
                     $stmt->execute();
                    
                     $confirmacao = 1;
@@ -172,13 +183,21 @@
         </nav>
         <div class="container mt-3">
             <form method="post">
-                <label for="nome" class="form-label">Nome:</label>
-                <input class="form-control" type="text" id="nome" name="nome">
-                <br>
                 <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                        <label for="nome" class="form-label">Nome:</label>
+                        <input class="form-control" type="text" id="nome" name="nome">
+                    </div>
                     <div class="col-md-6 col-sm-12">
                         <label for="ra" class="form-label">RF:</label>
                         <input class="form-control" type="text" id="rf" name="rf" maxlength="6">
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                        <label for="email" class="form-label">E-mail:</label>
+                        <input class="form-control" type="text" id="email" name="email">
                     </div>
                     <div class="col-md-6 col-sm-12">
                         <label for="rg" class="form-label">RG (somente números):</label>

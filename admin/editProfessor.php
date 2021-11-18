@@ -17,6 +17,7 @@
         $nome=$row['nomeProfessor'];
         $rg=$row['rgProfessor'];
         $rf=$row['rfProfessor'];
+        $email=$row['email'];
     }
     else {
         header('location:adminProfessores.php');
@@ -32,6 +33,7 @@
         $rgNovo=$_POST['rg'];
         $nomeNovo=$_POST['nome'];
         $rfNovo=$_POST['rf'];
+        $emailNovo=$_POST['email'];
 
         $stmt = $pdo->prepare("select * from ProfessoresTCC where rfProfessor = :rf");
         $stmt->bindParam(':rf', $_GET["rf"]);
@@ -62,6 +64,12 @@
                         $confirmacao+=1;
                     }
             }
+            if($emailNovo!=$row['email']) {
+               $stmt= $pdo->prepare("update ProfessoresTCC set email = :emailNovo where rfProfessor= :rf");
+               $stmt->bindParam(':rf', $_GET["rf"]);
+               $stmt->bindParam(':emailNovo', $emailNovo);
+               $stmt->execute(); 
+            }
             if($rfNovo!=$row['rfProfessor']){
                     $stmt = $pdo->prepare("select * from ProfessoresTCC where rfProfessor= :rf");
                     $stmt->bindParam(':rf', $rfNovo);
@@ -72,6 +80,12 @@
                         $stmt->bindParam(':rf',$_GET['rf']);
                         $stmt->bindParam(':rfNovo',$rfNovo);
                         $stmt->execute();
+
+                        $stmt = $pdo->prepare("update UsuariosTCC set usuario = :rfNovo where usuario = :rf and tipo = 'prof'");
+                        $stmt->bindParam(':rf',$_GET['rf']);
+                        $stmt->bindParam(':rfNovo',$rfNovo);
+                        $stmt->execute();
+
                         $rfAlterado=1;
                     }
                     else{
@@ -222,13 +236,21 @@
         </nav>
         <div class="container mt-3">
             <form method="post">
-                <label for="nome" class="form-label">Nome:</label>
-                <?php echo "<input value='" .$nome. "' class='form-control' type='text' id='nome' name='nome'>"; ?> 
-                <br>
                 <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                        <label for="nome" class="form-label">Nome:</label>
+                        <?php echo "<input value='" .$nome. "' class='form-control' type='text' id='nome' name='nome'>"; ?>
+                    </div>
                     <div class="col-md-6 col-sm-12">
                         <label for="rf" class="form-label">RF:</label>
                         <?php echo "<input value='" .$rf. "' class='form-control' type='text' id='rf' name='rf' maxlength='6'>"; ?>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                        <label for="rf" class="form-label">E-mail:</label>
+                        <?php echo "<input value='" .$email. "' class='form-control' type='text' id='email' name='email'>"; ?>
                     </div>
                     <div class="col-md-6 col-sm-12">
                         <label for="rg" class="form-label">RG (somente números):</label>
