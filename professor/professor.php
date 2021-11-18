@@ -102,9 +102,6 @@
                 <a class="nav-link active" aria-current="page" href="professor.php"><b><i class="fas fa-home"></i> Início</b></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#"><i class="fas fa-search"></i> Consultas</a>
-              </li>
-              <li class="nav-item">
                 <a class="nav-link" href="professorFrequencia.php"><i class="fas fa-calendar-alt"></i> Frequência</a>
               </li>
               <li class="nav-item">
@@ -131,9 +128,6 @@
       <ul class="nav nav-tabs">
         <li class="nav-item">
           <a class="nav-link active text-primary" id="nav-active" aria-current="page" href="professor.php"><b><i class="fas fa-home"></i> Início</b></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-dark" href="#"><i class="fas fa-search"></i> Consultas</a>
         </li>
         <li class="nav-item">
           <a class="nav-link text-dark" href="professorFrequencia.php"><i class="fas fa-calendar-alt"></i> Frequência</a>
@@ -182,7 +176,7 @@
                                 <a style='text-decoration: none;' href='#'><i class='fas fa-search'></i> Consultas</a>
                               </li>
                               <li>
-                                <a style='text-decoration: none;' href='#'><i class='fas fa-calendar-alt'></i> Frequência</a>
+                                <a style='text-decoration: none;' href='professorFrequencia.php?turma=".$row['codTurma']."'><i class='fas fa-calendar-alt'></i> Frequência</a>
                               </li>
                               <li>
                                 <a style='text-decoration: none;' href='professorNotas.php?turma=".$row['codTurma']."'><i class='fas fa-file-alt'></i> Notas</a>

@@ -83,9 +83,32 @@
         echo "<td>" . number_format(bcdiv($mt1, 1, 1), 1, ",") . "</td>";
       else
         echo "<td></td>";
-      echo "<td>0</td>";
-      echo "<td>0</td>";
-      echo "<td>0%</td>";
+
+      $stmt2 = $pdo->prepare("select periodo from TurmasTCC where codTurma = :codTurma");
+      $stmt2->bindParam(":codTurma", $_GET["turma"]);
+      $stmt2->execute();
+      $row2 = $stmt2->fetch();
+      $periodo = $row2['periodo'];
+
+      $meiodoano = $periodo . "-07-15";
+      $stmt2 = $pdo->prepare("select * from AulasTCC where codTurma = :codTurma and codDisc = :codDisc and data < :data");
+      $stmt2->bindParam(":codTurma", $_GET["turma"]);
+      $stmt2->bindParam(":codDisc", $row["codDisciplina"]);
+      $stmt2->bindParam(":data", $meiodoano);
+      $stmt2->execute();
+      $numAulas = $stmt2->rowCount();
+      echo "<td>".$numAulas."</td>";
+
+      $stmt2 = $pdo->prepare("select * from PresencasTCC where raAluno = :raAluno and codTurma = :codTurma and codDisciplina = :codDisc and data < :data and presenca = 0");
+      $stmt2->bindParam(":raAluno", $_SESSION["login"]);
+      $stmt2->bindParam(":codTurma", $_GET["turma"]);
+      $stmt2->bindParam(":codDisc", $row["codDisciplina"]);
+      $stmt2->bindParam(":data", $meiodoano);
+      $stmt2->execute();
+      $numFaltas = $stmt2->rowCount();
+      $porcentagem = $numAulas != 0 ? (100 * $numFaltas)/$numAulas : 0;
+      echo "<td>".$numFaltas."</td>";
+      echo "<td>".number_format(bcdiv($porcentagem, 1, 1), 0)."%</td>";
 
       //Segundo Semestre
       $stmt2 = $pdo->prepare("select distinct a.codAtividade, a.descricao, a.data, a.peso, adta.nota from AlunoTurmaDisciplinaAtividadeTCC adta inner join AlunosTCC al on adta.raAluno = al.raAluno inner join TurmasTCC t on adta.codTurma = t.codTurma inner join DisciplinasTCC d on adta.codDisciplina = d.codDisciplina inner join AtividadesTCC a on adta.codAtividade = a.codAtividade where adta.raAluno = :raAluno and adta.codTurma = :codTurma and adta.codDisciplina = :codDisciplina and a.etapa = 2");
@@ -123,9 +146,25 @@
         echo "<td>" . number_format(bcdiv($mt2, 1, 1), 1, ",") . "</td>";
       else
         echo "<td></td>";
-      echo "<td>0</td>";
-      echo "<td>0</td>";
-      echo "<td>0%</td>";
+
+      $stmt2 = $pdo->prepare("select * from AulasTCC where codTurma = :codTurma and codDisc = :codDisc and data > :data");
+      $stmt2->bindParam(":codTurma", $_GET["turma"]);
+      $stmt2->bindParam(":codDisc", $row["codDisciplina"]);
+      $stmt2->bindParam(":data", $meiodoano);
+      $stmt2->execute();
+      $numAulas = $stmt2->rowCount();
+      echo "<td>".$numAulas."</td>";
+
+      $stmt2 = $pdo->prepare("select * from PresencasTCC where raAluno = :raAluno and codTurma = :codTurma and codDisciplina = :codDisc and data > :data and presenca = 0");
+      $stmt2->bindParam(":raAluno", $_SESSION["login"]);
+      $stmt2->bindParam(":codTurma", $_GET["turma"]);
+      $stmt2->bindParam(":codDisc", $row["codDisciplina"]);
+      $stmt2->bindParam(":data", $meiodoano);
+      $stmt2->execute();
+      $numFaltas = $stmt2->rowCount();
+      $porcentagem = $numAulas != 0 ? (100 * $numFaltas)/$numAulas : 0;
+      echo "<td>".$numFaltas."</td>";
+      echo "<td>".number_format(bcdiv($porcentagem, 1, 1), 0)."%</td>";
 
       //Resultado Final
       if($ms1 != null && $ms2 != null) {
@@ -150,7 +189,21 @@
       }
       else
         echo "<td></td>";
-      echo "<td>0%</td>";
+
+      $stmt2 = $pdo->prepare("select * from AulasTCC where codTurma = :codTurma and codDisc = :codDisc");
+      $stmt2->bindParam(":codTurma", $_GET["turma"]);
+      $stmt2->bindParam(":codDisc", $row["codDisciplina"]);
+      $stmt2->execute();
+      $numAulas = $stmt2->rowCount();
+      $stmt2 = $pdo->prepare("select * from PresencasTCC where raAluno = :raAluno and codTurma = :codTurma and codDisciplina = :codDisc and presenca = 0");
+      $stmt2->bindParam(":raAluno", $_SESSION["login"]);
+      $stmt2->bindParam(":codTurma", $_GET["turma"]);
+      $stmt2->bindParam(":codDisc", $row["codDisciplina"]);
+      $stmt2->execute();
+      $numFaltas = $stmt2->rowCount();
+      $porcentagem = $numAulas != 0 ? (100 * $numFaltas)/$numAulas : 0;
+      echo "<td>".number_format(bcdiv($porcentagem, 1, 1), 0)."%</td>";
+
       if($ms1 != null && $ms2 != null) {
         if($rec != null) {
           if($rec > ($ms1+$ms2)/2)
@@ -164,7 +217,19 @@
       else
         echo "<td></td>";
       if($rec != null) {
-        if(((($ms1+$ms2)/2) + $rec)/2)
+        if(((($ms1+$ms2)/2) + $rec)/2 < 6)
+          echo "<td>Reprovado</td>";
+        else if($porcentagem <= 25)
+          echo "<td>Aprovado</td>";
+        else
+          echo "<td>Reprovado</td>";
+      }
+      else if($ms1 != null && $ms2 != null) {
+        if((($ms1+$ms2)/2) < 6)
+          echo "<td>Indefinido</td>";
+        else if($porcentagem <= 25)
+          echo "<td>Aprovado</td>";
+        else
           echo "<td>Reprovado</td>";
       }
       else
@@ -172,8 +237,19 @@
       echo "</tr>";
     }
     echo "</tbody></table></div>";
+
+    $stmt2 = $pdo->prepare("select * from AulasTCC where codTurma = :codTurma");
+    $stmt2->bindParam(":codTurma", $_GET["turma"]);
+    $stmt2->execute();
+    $numAulas = $stmt2->rowCount();
+    $stmt2 = $pdo->prepare("select * from PresencasTCC where raAluno = :raAluno and codTurma = :codTurma and presenca = 1");
+    $stmt2->bindParam(":raAluno", $_SESSION["login"]);
+    $stmt2->bindParam(":codTurma", $_GET["turma"]);
+    $stmt2->execute();
+    $numFaltas = $stmt2->rowCount();
+    $porcentagem = $numAulas != 0 ? (100 * $numFaltas)/$numAulas : 0;
     echo "<div class='text-end mb-3'>
-            <b>Frequência Geral: 100%</b>
+            <b>Frequência Geral: ".number_format(bcdiv($porcentagem, 1, 1), 0)."%</b>
           </div>";
   }
   catch(PDOException $e) {

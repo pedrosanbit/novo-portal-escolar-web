@@ -79,6 +79,12 @@
                         $stmt->bindParam(':ra',$_GET['ra']);
                         $stmt->bindParam(':raNovo',$raNovo);
                         $stmt->execute();
+
+                        $stmt = $pdo->prepare("update UsuariosTCC set usuario = :raNovo where usuario = :ra and tipo = 'aluno'");
+                        $stmt->bindParam(':ra',$_GET['ra']);
+                        $stmt->bindParam(':raNovo',$raNovo);
+                        $stmt->execute();
+                        
                         $raAlterado=1;
                     }
                     else{

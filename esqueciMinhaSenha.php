@@ -13,28 +13,55 @@
   $response = file_get_contents($url);
   $responseKeys = json_decode($response, true);
 
-  if($responseKeys["success"]) {
-    include("conexaoBD.php");
-    $stmt = $pdo->prepare("select * from AlunosTCC where emailAluno = :email");
-    $stmt->bindParam(":email", $email);
-    $stmt->execute();
-    $rows = $stmt->rowCount();
-    if($rows > 0) {
-      $row = $stmt->fetch();
-      $novaSenha = "" . rand(1,9) . rand(1,9) . rand(1,9) . rand(1,9) . rand(1,9) . rand(1,9);
-      include("admin/phpMailer.php");
-      esqueciMinhaSenha($row["emailAluno"], $row["nomeAluno"], $novaSenha);
-      $novaSenha = password_hash($novaSenha, PASSWORD_DEFAULT);
-      $stmt = $pdo->prepare("update UsuariosTCC set senha = :senha where usuario = :usuario");
-      $stmt->bindParam(":senha", $novaSenha);
-      $stmt->bindParam(":usuario", $row["raAluno"]);
+  try {
+    if($responseKeys["success"]) {
+      include("conexaoBD.php");
+      $stmt = $pdo->prepare("select * from AlunosTCC where emailAluno = :email");
+      $stmt->bindParam(":email", $email);
       $stmt->execute();
-      echo "<script>alert('Sua senha redefinida foi enviada ao seu e-mail.')</script>";
-      echo "<script>window.location.replace('http://localhost/php/tcc6/index.php')</script>";
+      $rows = $stmt->rowCount();
+      if($rows > 0) {
+        $row = $stmt->fetch();
+        $novaSenha = "" . rand(1,9) . rand(1,9) . rand(1,9) . rand(1,9) . rand(1,9) . rand(1,9);
+        include("admin/phpMailer.php");
+        esqueciMinhaSenha($row["emailAluno"], $row["nomeAluno"], $novaSenha);
+        $novaSenha = password_hash($novaSenha, PASSWORD_DEFAULT);
+        $stmt = $pdo->prepare("update UsuariosTCC set senha = :senha where usuario = :usuario");
+        $stmt->bindParam(":senha", $novaSenha);
+        $stmt->bindParam(":usuario", $row["raAluno"]);
+        $stmt->execute();
+        echo "<script>alert('Sua senha redefinida foi enviada ao seu e-mail.')</script>";
+        echo "<script>window.location.replace('http://localhost/php/tcc6/index.php')</script>";
+      }
+      else {
+        $stmt = $pdo->prepare("select * from ProfessoresTCC where email = :email");
+        $stmt->bindParam(":email", $email);
+        $stmt->execute();
+        $rows = $stmt->rowCount();
+        if($rows > 0) {
+          $row = $stmt->fetch();
+          $novaSenha = "" . rand(1,9) . rand(1,9) . rand(1,9) . rand(1,9) . rand(1,9) . rand(1,9);
+          include("admin/phpMailer.php");
+          esqueciMinhaSenha($row["email"], $row["nomeProfessor"], $novaSenha);
+          $novaSenha = password_hash($novaSenha, PASSWORD_DEFAULT);
+          $stmt = $pdo->prepare("update UsuariosTCC set senha = :senha where usuario = :usuario");
+          $stmt->bindParam(":senha", $novaSenha);
+          $stmt->bindParam(":usuario", $row["rfProfessor"]);
+          $stmt->execute();
+          echo "<script>alert('Sua senha redefinida foi enviada ao seu e-mail.')</script>";
+          echo "<script>window.location.replace('http://localhost/php/tcc6/index.php')</script>";
+        }
+        else {
+          echo "<script>alert('E-mail não cadastrado.')</script>";
+          echo "<script>window.location.replace('http://localhost/php/tcc6/index.php')</script>";
+        }
+      }
     }
-    else {
-      echo "<script>alert('E-mail não cadastrado.')</script>";
-      echo "<script>window.location.replace('http://localhost/php/tcc6/index.php')</script>";
-    }
+  }
+  catch(PDOException $e) {
+    echo 'Error: ' . $e->getMessage();
+  }
+  finally {
+    $pdo = null;
   }
 ?>

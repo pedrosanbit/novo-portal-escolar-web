@@ -2,19 +2,19 @@
   session_start();
   if(!isset($_SESSION['login']))
     header('location:../index.php');
-  else if($_SESSION['tipo'] != 'prof')
+  else if($_SESSION['tipo'] != 'aluno')
     header('location:../index.php');
 
   include("../conexaoBD.php");
   try {
-    $stmt = $pdo->prepare("select p.rfProfessor, p.nomeProfessor from ProfessoresTCC p where p.rfProfessor = " . $_SESSION['login']);
+    $stmt = $pdo->prepare("select raAluno, nomeAluno from AlunosTCC p where raAluno = " . $_SESSION['login']);
     $stmt->execute();
     $row = $stmt->fetch();
-    if(strpos($row['nomeProfessor']," ")) {
-      $nome = substr($row['nomeProfessor'], 0, strpos($row['nomeProfessor']," "));
+    if(strpos($row['nomeAluno']," ")) {
+      $nome = substr($row['nomeAluno'], 0, strpos($row['nomeAluno']," "));
     }
     else
-      $nome = $row['nomeProfessor'];
+      $nome = $row['nomeAluno'];
   }
   catch(PDOException $e) {
     echo 'Error: ' . $e->getMessage();
@@ -99,20 +99,29 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="professor.php"><i class="fas fa-home"></i> Início</a>
+                <a class="nav-link" aria-current="page" href="aluno.php"><i class="fas fa-home"></i> Início</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="professorFrequencia.php"><i class="fas fa-calendar-alt"></i> Frequência</a>
+                <a class="nav-link" href="alunoPlanoEnsino.php"><i class="fas fa-chalkboard"></i> Plano de Ensino</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="adminTurmas.php"><i class="fas fa-file-alt"></i> Notas</a>
+                <a class="nav-link" href="alunoBoletimAvaliacoes.php"><i class="far fa-file-alt"></i> Boletim de Avaliações</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="professorPlanejamento.php"><i class="fas fa-chalkboard"></i> Planejamento</a>
+                <a class="nav-link" href="alunoBoletimEscolar.php"><i class="fas fa-file-invoice"></i> Boletim Escolar</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="alunoMateriaLecionada.php"><b><i class="fas fa-list"></i> Matéria Lecionada</b></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="aluno"><i class="fas fa-calendar-check"></i> Frequência</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="../logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
               </li>
+              <!--li class="nav-item">
+                <a class="nav-link" href="adminCursos.php"><i class="fas fa-search"></i> Consultas</a>
+              </li-->
             </ul>
             <form class="d-flex text-white">
               <div class="form-check form-switch">
@@ -127,36 +136,44 @@
     <div id="navtabs">
       <ul class="nav nav-tabs">
         <li class="nav-item">
-          <a class="nav-link text-dark" aria-current="page" href="professor.php"><i class="fas fa-home"></i> Início</a>
+          <a class="nav-link text-dark" aria-current="page" href="aluno.php"><i class="fas fa-home"></i> Início</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="professorFrequencia.php"><i class="fas fa-calendar-alt"></i> Frequência</a>
+          <a class="nav-link dark" href="alunoPlanoEnsino.php"><i class="fas fa-chalkboard"></i> Plano de Ensino</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="adminTurmas.php"><i class="fas fa-file-alt"></i> Notas</a>
+          <a class="nav-link text-dark" href="alunoBoletimAvaliacoes.php"><i class="far fa-file-alt"></i> Boletim de Avaliações</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="professorPlanejamento.php"><i class="fas fa-chalkboard"></i> Planejamento</a>
+          <a class="nav-link text-dark" href="alunoBoletimEscolar.php"><i class="fas fa-file-invoice"></i> Boletim Escolar</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link active text-primary" id="nav-active" href="alunoMateriaLecionada.php"><b><i class="fas fa-list"></i> Matéria Lecionada</b></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-dark" href="alunoFrequencia.php"><i class="fas fa-calendar-check"></i> Frequência</a>
+        </li>
+        <!--li class="nav-item">
+          <a class="nav-link text-dark" href="adminCursos.php"><i class="fas fa-search"></i> Consultas</a>
+        </li-->
       </ul>
     </div>
-
     <div class="container mt-3">
       <form method="post">
-        <div class="row">
-          <div class="col-md-4 col-sm-12">
-            <label for="periodo" class="form-label">Período:</label>
-            <select class="form-select" id="periodo" name="periodo" aria-label="Default select example" onchange="submit(periodo.value);">
+        <div class="row mb-3">
+          <div class="col-md-6 col-sm-12 mx-auto">
+            <label for="periodo" class="form-label">Período: </label>
+            <select class="form-select" id="periodo" name="periodo" aria-label="Período" onchange="submit(periodo.value);">
               <?php
                 include("../conexaoBD.php");
                 try {
                   if(isset($_POST["periodo"]) && $_POST["periodo"] != 'null') {
-                    $stmt = $pdo->prepare("select distinct t.periodo from TurmasTCC t inner join LecionaTCC l on t.codTurma = l.codTurma inner join ProfessoresTCC p on l.rfProfessor = p.rfProfessor where p.rfProfessor = " . $_SESSION['login'] . " and t.periodo != " . $_POST["periodo"]);
+                    $stmt = $pdo->prepare("select distinct t.periodo from TurmasTCC t inner join AlunoTurmaTCC alt on t.codTurma = alt.codTurma inner join AlunosTCC a on alt.raAluno = a.raAluno where a.raAluno = " . $_SESSION['login'] . " and t.periodo != " . $_POST["periodo"]);
                     $stmt->execute();
                     echo "<option value='" . $_POST["periodo"] . "'>" . $_POST["periodo"] . "</option>";
                   }
                   else {
-                    $stmt = $pdo->prepare("select distinct t.periodo from TurmasTCC t inner join LecionaTCC l on t.codTurma = l.codTurma inner join ProfessoresTCC p on l.rfProfessor = p.rfProfessor where p.rfProfessor = " . $_SESSION['login'] . " and t.periodo != " . date("Y"));
+                    $stmt = $pdo->prepare("select distinct t.periodo from TurmasTCC t inner join AlunoTurmaTCC alt on t.codTurma = alt.codTurma inner join AlunosTCC a on alt.raAluno = a.raAluno where a.raAluno = " . $_SESSION['login'] . " and t.periodo != " . date("Y"));
                     $stmt->execute();
                     echo "<option value='null'></option>";
                     echo "<option value='" . date("Y") ."'>" . date("Y") ."</option>";
@@ -174,9 +191,11 @@
               ?>
             </select>
           </div>
-          <div class="col-md-4 col-sm-12">
-            <label for="turma" class="form-label">Turma:</label>
-            <select class="form-select" id="turma" name="turma" aria-label="Default select example" onchange="submit(periodo.value, turma.value);">
+        </div>
+        <div class="row mb-4">
+          <div class="col-md-6 col-sm-12 mx-auto">
+            <label for="periodo" class="form-label">Turma: </label>
+            <select class="form-select" id="turma" name="turma" aria-label="Turma">
               <?php
                 if(isset($_POST["periodo"]) && $_POST["periodo"] != 'null') {
                   $periodo = $_POST["periodo"];
@@ -195,7 +214,7 @@
                         if ($row = $stmt->fetch()) {
                           echo "<option value='".$_POST["turma"]."'>".$row["nomeTurma"]."</option>";
                         }
-                        $stmt = $pdo->prepare("select distinct t.codTurma, t.nomeTurma from TurmasTCC t inner join LecionaTCC l on t.codTurma = l.codTurma inner join ProfessoresTCC p on l.rfProfessor = p.rfProfessor where p.rfProfessor = :login and t.periodo = :periodo and t.codTurma != :turma");
+                        $stmt = $pdo->prepare("select distinct t.codTurma, t.nomeTurma from TurmasTCC t inner join AlunoTurmaTCC alt on t.codTurma = alt.codTurma inner join AlunosTCC a on alt.raAluno = a.raAluno where a.raAluno = :login and t.periodo = :periodo and t.codTurma != :turma");
                         $stmt->bindParam(":login",$_SESSION["login"]);
                         $stmt->bindParam(":periodo",$periodo);
                         $stmt->bindParam(":turma",$_POST["turma"]);
@@ -203,15 +222,13 @@
                       }
                       else {
                         unset($_POST["turma"]);
-                        $stmt = $pdo->prepare("select distinct t.codTurma, t.nomeTurma from TurmasTCC t inner join LecionaTCC l on t.codTurma = l.codTurma inner join ProfessoresTCC p on l.rfProfessor = p.rfProfessor where p.rfProfessor = " .  $_SESSION["login"] . " and t.periodo = " . $periodo);
+                        $stmt = $pdo->prepare("select distinct t.codTurma, t.nomeTurma from TurmasTCC t inner join AlunoTurmaTCC alt on t.codTurma = alt.codTurma inner join AlunosTCC a on alt.raAluno = a.raAluno where a.raProfessor = " .  $_SESSION["login"] . " and t.periodo = " . $periodo);
                         $stmt->execute();
-                        echo "<option value='null'></option>";
                       }
                     }
                     else {
-                      $stmt = $pdo->prepare("select distinct t.codTurma, t.nomeTurma from TurmasTCC t inner join LecionaTCC l on t.codTurma = l.codTurma inner join ProfessoresTCC p on l.rfProfessor = p.rfProfessor where p.rfProfessor = " .  $_SESSION["login"] . " and t.periodo = " . $periodo);
+                      $stmt = $pdo->prepare("select distinct t.codTurma, t.nomeTurma from TurmasTCC t inner join AlunoTurmaTCC alt on t.codTurma = alt.codTurma inner join AlunoTurmaTCC a on alt.raAluno = a.raAluno where a.raAluno = " .  $_SESSION["login"] . " and t.periodo = " . $periodo);
                       $stmt->execute();
-                      echo "<option value='null'></option>";
                     }
                     while($row = $stmt->fetch()) {
                       echo "<option value='" . $row['codTurma'] . "'>" . $row['nomeTurma'] . "</option>";
@@ -224,62 +241,21 @@
                     $pdo=null;
                   }
                 }
-                //a
-                /*if(isset($_POST["periodo"]) && $_POST["periodo"] != 'null') {
-                  $periodo = $_POST["periodo"];
-                  include("../conexaoBD.php");
-                  try {
-                    if(isset($_POST["turma"]) && $_POST["turma"] != 'null') {
-                      $stmt = $pdo->prepare("select nomeTurma from TurmasTCC where codTurma = :codTurma");
-                      $stmt->bindParam(":codTurma",$_POST["turma"]);
-                      $stmt->execute();
-                      if ($row = $stmt->fetch()) {
-                        echo "<option value='".$_POST["turma"]."'>".$row["nomeTurma"]."</option>";
-                      }
-                      $stmt = $pdo->prepare("select distinct t.codTurma, t.nomeTurma from TurmasTCC t inner join LecionaTCC l on t.codTurma = l.codTurma inner join ProfessoresTCC p on l.rfProfessor = p.rfProfessor where p.rfProfessor = :login and t.periodo = :periodo and t.codTurma != :turma");
-                      $stmt->bindParam(":login",$_SESSION["login"]);
-                      $stmt->bindParam(":periodo",$periodo);
-                      $stmt->bindParam(":turma",$_POST["turma"]);
-                      $stmt->execute();
-                    }
-                    else {
-                      $stmt = $pdo->prepare("select distinct t.codTurma, t.nomeTurma from TurmasTCC t inner join LecionaTCC l on t.codTurma = l.codTurma inner join ProfessoresTCC p on l.rfProfessor = p.rfProfessor where p.rfProfessor = " .  $_SESSION["login"] . " and t.periodo = " . $periodo);
-                      $stmt->execute();
-                      echo "<option value='null'></option>";
-                    }
-                    while($row = $stmt->fetch()) {
-                      echo "<option value='" . $row['codTurma'] . "'>" . $row['nomeTurma'] . "</option>";
-                    }
-                  }
-                  catch(PDOException $e) {
-                    echo 'Error: ' . $e->getMessage();
-                  }
-                  finally{
-                    $pdo=null;
-                  }
-                }*/
               ?>
-            </select>
-          </div>
-          <div class="col-md-4 col-sm-12">
-            <label for="consulta" class="form-label">Consulta de:</label>
-            <select class="form-select" id="consulta" name="consulta" aria-label="Default select example">
-              <option value="boletimAva">Boletim de avaliações</option>
-              <option value="boletimEsc">Boletim Escolar</option>
-              <option value="diarioClasse">Diário de Classe</option>
-              <option value="horarioAula">Horário de aula </option>
-              <option value="matLecionadaData">Matéria lecionada - Por data </option>
-              <option value="matLecionadaDisc">Matéria lecionada - Por disciplina </option>
-
             </select>
           </div>
         </div>
         <div class="mt-4 text-center">
           <button type="submit" class="btn btn-primary rounded-pill text-white w-25"><b>Buscar</b></button>
         </div>
+        <?php
+          if($_SERVER["REQUEST_METHOD"] == "POST") {
+            if(isset($_POST["periodo"]) && $_POST["periodo"] != 'null' && isset($_POST["turma"])) {
+              echo "<script>window.location.replace('materiaLecionada.php?turma=".$_POST["turma"]."');</script>";
+            }
+          }
+        ?>
       </form>
-      <hr>
-     
     </div>
     <script src="../javascript/admin.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>

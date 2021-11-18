@@ -20,11 +20,12 @@
     else
       $nome = $row['nomeAluno'];
 
-    $stmt = $pdo->prepare("select codTurma, nomeTurma from TurmasTCC where codTurma = :codTurma");
+    $stmt = $pdo->prepare("select codTurma, nomeTurma, periodo from TurmasTCC where codTurma = :codTurma");
     $stmt->bindParam(":codTurma", $_GET["turma"]);
     $stmt->execute();
     $row = $stmt->fetch();
     $nomeTurma = $row['nomeTurma'];
+    $periodo = $row['periodo'];
   }
   catch(PDOException $e) {
     echo 'Error: ' . $e->getMessage();
@@ -121,6 +122,12 @@
                 <a class="nav-link" href="alunoBoletimEscolar.php"><i class="fas fa-file-invoice"></i> Boletim Escolar</a>
               </li>
               <li class="nav-item">
+                <a class="nav-link" href="alunoMateriaLecionada.php"><i class="fas fa-list"></i> Matéria Lecionada</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="alunoFrequencia.php"><i class="fas fa-calendar-check"></i> Frequência</a>
+              </li>
+              <li class="nav-item">
                 <a class="nav-link" href="../logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
               </li>
               <!--li class="nav-item">
@@ -150,6 +157,12 @@
         </li>
         <li class="nav-item">
           <a class="nav-link text-dark" href="alunoBoletimEscolar.php"><i class="fas fa-file-invoice"></i> Boletim Escolar</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-dark" href="alunoMateriaLecionada.php"><i class="fas fa-list"></i> Matéria Lecionada</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-dark" href="alunoFrequencia.php"><i class="fas fa-calendar-check"></i> Frequência</a>
         </li>
         <!--li class="nav-item">
           <a class="nav-link text-dark" href="adminCursos.php"><i class="fas fa-search"></i> Consultas</a>
@@ -266,8 +279,25 @@
             echo "<th colspan='2'>Média na Disciplina</th></thead>";;
             echo "</tr>";
             echo "<tr>";
-            echo "<td>0</td>";
-            echo "<td colspan='2'>0(0.0%)</td>";
+
+            $meiodoano = $periodo . "-07-15";
+            $stmt = $_GET["etapa"] == 1 ? $pdo->prepare("select * from AulasTCC where codTurma = :codTurma and codDisc = :codDisc and data < :data") : $pdo->prepare("select * from AulasTCC where codTurma = :codTurma and codDisc = :codDisc and data > :data");
+            $stmt->bindParam(":codTurma", $_GET["turma"]);
+            $stmt->bindParam(":codDisc", $_POST["disciplina"]);
+            $stmt->bindParam(":data", $meiodoano);
+            $stmt->execute();
+            $numAulas = $stmt->rowCount();
+            echo "<td>".$numAulas."</td>";
+
+            $stmt = $_GET["etapa"] == 1 ? $pdo->prepare("select * from PresencasTCC where raAluno = :raAluno and codTurma = :codTurma and codDisciplina = :codDisc and data < :data and presenca = 0") : $pdo->prepare("select * from PresencasTCC where raAluno = :raAluno and codTurma = :codTurma and codDisciplina = :codDisc and data > :data and presenca = 0");
+            $stmt->bindParam(":raAluno", $_SESSION["login"]);
+            $stmt->bindParam(":codTurma", $_GET["turma"]);
+            $stmt->bindParam(":codDisc", $_POST["disciplina"]);
+            $stmt->bindParam(":data", $meiodoano);
+            $stmt->execute();
+            $numFaltas = $stmt->rowCount();
+            $porcentagem = $numAulas != 0 ? (100 * $numFaltas)/$numAulas : 0;
+            echo "<td colspan='2'>".$numFaltas."(".number_format(bcdiv($porcentagem, 1, 1), 1, ".")."%)</td>";
 
             $stmt = $pdo->prepare("select distinct a.codAtividade, a.descricao, a.data, a.peso, adta.nota from AlunoTurmaDisciplinaAtividadeTCC adta inner join AlunosTCC al on adta.raAluno = al.raAluno inner join TurmasTCC t on adta.codTurma = t.codTurma inner join DisciplinasTCC d on adta.codDisciplina = d.codDisciplina inner join AtividadesTCC a on adta.codAtividade = a.codAtividade where adta.raAluno = :raAluno and adta.codTurma = :codTurma and adta.codDisciplina = :codDisciplina and a.etapa = :etapa");
             $stmt->bindParam(":raAluno", $_SESSION["login"]);
